@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#23382f">
+  <meta name="description" content="Explora Mereon, una demostración de ByAgentX con programas ilustrativos de peso y metabolismo, longevidad y bienestar, carrito local y navegación comercial.">
+  <link rel="canonical" href="https://mereonhealth.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Mereon — Tienda demo de bienestar por ByAgentX">
+  <meta property="og:description" content="Explora Mereon, una demostración de ByAgentX con programas ilustrativos de peso y metabolismo, longevidad y bienestar, carrito local y navegación comercial.">
+  <meta property="og:url" content="https://mereonhealth.com/">
+  <title>Mereon — Tienda demo de bienestar por ByAgentX</title>
+  <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<!-- Configure WhatsApp here only. Expected format: E.164 country code + number, digits only, without + or spaces. Keep empty until a real destination is approved. -->
+<body data-whatsapp-number="">
+  <a class="skip-link" href="#main">Saltar al contenido principal</a>
+
+  <div class="demo-banner" id="demo-banner" role="note">
+    <span class="demo-banner__badge">Demo ByAgentX</span>
+    <p>Mereon es una demostración, no una farmacia, tienda activa ni proveedor médico. No vende, prescribe ni procesa pagos o datos personales.</p>
+  </div>
+
+  <header class="site-header" id="site-header">
+    <a class="brand" href="#inicio" aria-label="Ir al inicio de Mereon">
+      <span class="brand__mark" aria-hidden="true"><span></span></span>
+      <span class="brand__word">Mereon</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Abrir navegación">
+      <span aria-hidden="true"></span><span aria-hidden="true"></span>
+    </button>
+    <nav class="primary-nav" id="primary-nav" aria-label="Navegación principal">
+      <a href="#catalogo">Catálogo</a>
+      <a href="#comparar">Comparar</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#resenas">Reseñas</a>
+      <a href="#preguntas">Preguntas</a>
+    </nav>
+    <button class="header-cart" type="button" data-cart-open aria-label="Abrir carrito, 0 artículos">
+      <svg class="header-cart__icon" viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6.5 8.5h11l1 12h-13l1-12Z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M9 9V6.5a3 3 0 0 1 6 0V9" fill="none" stroke="currentColor" stroke-width="1.7"/></svg><span class="header-cart__label">Carrito</span><span class="cart-badge" data-cart-count hidden>0</span>
+    </button>
+    <button class="header-agent" type="button" data-agent-open>Encuentra tu opción</button>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <img class="hero__image" src="assets/images/hero-guided-shopping.webp" width="1774" height="887" fetchpriority="high" alt="Mujer adulta ficticia abre un paquete sencillo con textiles y ramas verdes en una cocina luminosa">
+      <div class="hero__content">
+        <p class="eyebrow">Pérdida de peso, metabolismo y longevidad</p>
+        <h1 id="hero-title">Bienestar que encaja en tu ritmo.</h1>
+        <p class="hero__lede">Explora programas demo para objetivos de peso, metabolismo, longevidad y bienestar. Compara, arma tu carrito y revisa tu selección sin pago ni datos sensibles.</p>
+        <div class="hero__actions">
+          <button class="button button--primary" type="button" data-agent-open>Hablar con el agente</button>
+          <a class="button button--light" href="#catalogo">Explorar catálogo</a>
+        </div>
+        <div class="hero__price">
+          <strong>Desde $39</strong><span>USD · precio ilustrativo</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="benefit-strip" aria-label="Beneficios de la experiencia demo">
+      <article><strong>Peso y metabolismo primero</strong><span>Rutas de hábitos y bienestar metabólico.</span></article>
+      <article><strong>Precios visibles</strong><span>Un solo precio demo por programa.</span></article>
+      <article><strong>Carrito local</strong><span>Tu selección persiste en este navegador.</span></article>
+      <article><strong>Sin checkout</strong><span>Sin pago, envío ni formularios clínicos.</span></article>
+    </section>
+
+    <section class="catalog section" id="catalogo" aria-labelledby="catalog-title">
+      <div class="section-heading section-heading--split">
+        <div>
+          <p class="eyebrow">Catálogo demo · 12 programas</p>
+          <h2 id="catalog-title">Pérdida de peso y metabolismo, en primer plano.</h2>
+        </div>
+        <p>Una selección ficticia para explorar hábitos, longevidad y bienestar sin promesas clínicas. Los precios son ilustrativos y el carrito no procesa compras.</p>
+      </div>
+
+      <div class="category-filters" role="group" aria-label="Filtrar catálogo por categoría">
+        <button type="button" class="filter is-active" data-filter="all" aria-pressed="true">Todo</button>
+        <button type="button" class="filter filter--priority" data-filter="metabolic" aria-pressed="false">Pérdida de peso y metabolismo</button>
+        <button type="button" class="filter" data-filter="longevity" aria-pressed="false">Anti-aging y longevidad</button>
+        <button type="button" class="filter" data-filter="wellness" aria-pressed="false">Bienestar integral</button>
+        <button type="button" class="filter" data-filter="sleep" aria-pressed="false">Sueño y estrés</button>
+        <button type="button" class="filter" data-filter="recovery" aria-pressed="false">Recuperación</button>
+        <button type="button" class="filter" data-filter="hair" aria-pressed="false">Cabello y piel</button>
+      </div>
+
+      <p class="catalog-status" id="catalog-status" aria-live="polite">12 opciones demo</p>
+      <div class="product-grid" id="product-grid"></div>
+      <noscript><p class="catalog-noscript">Activa JavaScript para ver el catálogo interactivo y usar el carrito. Esta demostración no procesa pagos.</p></noscript>
+      <p class="cart-feedback" id="cart-feedback" role="status" aria-live="polite" aria-atomic="true"></p>
+    </section>
+
+    <section class="compare section" id="comparar" aria-labelledby="compare-title">
+      <div class="section-heading section-heading--split">
+        <div><p class="eyebrow">Compara de un vistazo</p><h2 id="compare-title">El nivel de guía que te acomoda.</h2></div>
+        <p>Las rutas cambian por profundidad de contenido y acompañamiento dentro de esta demostración; ninguna determina decisiones médicas.</p>
+      </div>
+      <section class="compare-table-wrap" tabindex="0" aria-label="Tabla comparativa desplazable">
+        <table class="compare-table">
+          <caption class="sr-only">Comparación de niveles demo</caption>
+          <thead><tr><th scope="col">Incluye</th><th scope="col">Esencial</th><th scope="col">Guiado</th><th scope="col">Integral</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Biblioteca mensual</th><td>Incluida</td><td>Incluida</td><td>Incluida</td></tr>
+            <tr><th scope="row">Planificador personalizable</th><td>Básico</td><td>Completo</td><td>Completo</td></tr>
+            <tr><th scope="row">Material de planificación</th><td>Inicial</td><td>Ampliado</td><td>Completo</td></tr>
+            <tr><th scope="row">Rango ilustrativo</th><td>$39–59</td><td>$69–99</td><td>$119–129</td></tr>
+          </tbody>
+        </table>
+      </section>
+      <button class="button button--primary" type="button" data-agent-open>Comparar conmigo</button>
+    </section>
+
+    <section class="agent-feature" aria-labelledby="agent-feature-title">
+      <div class="agent-feature__copy">
+        <p class="eyebrow eyebrow--light">Agente de ventas demo</p>
+        <h2 id="agent-feature-title">Tres preguntas. Opciones claras.</h2>
+        <p>Cuéntale tu objetivo, el tipo de guía que prefieres y tu presupuesto. El agente compara el catálogo local, explica el ajuste y te lleva directo a la opción.</p>
+        <ul><li>No solicita diagnóstico ni historial médico.</li><li>No guarda respuestas ni usa una API externa.</li><li>Separa navegación comercial de decisiones clínicas.</li></ul>
+        <button class="button button--mint" type="button" data-agent-open>Probar el agente</button>
+      </div>
+      <div class="agent-preview" aria-hidden="true">
+        <div class="agent-preview__top"><span>M</span><div><strong>Asesor Mereon</strong><small>Demo local · disponible ahora</small></div></div>
+        <div class="agent-preview__message">¿Qué te gustaría priorizar en tu rutina?</div>
+        <div class="agent-preview__choices"><span>Pérdida de peso</span><span>Sueño y estrés</span><span>Longevidad</span></div>
+        <div class="agent-preview__result"><small>Coincidencia demo</small><strong>Peso + Bienestar</strong><span>Una ruta de hábitos para explorar.</span></div>
+      </div>
+    </section>
+
+    <section class="journey section" id="como-funciona" aria-labelledby="journey-title">
+      <div class="section-heading section-heading--split">
+        <div><p class="eyebrow">Del descubrimiento al seguimiento</p><h2 id="journey-title">Una experiencia conectada de principio a fin.</h2></div>
+        <p>La demostración enseña cómo una marca podría acompañar la compra sin convertir una conversación comercial en una consulta médica.</p>
+      </div>
+      <ol class="journey-grid">
+        <li><span>01</span><h3>Explora</h3><p>Filtra por prioridad, precio y estilo de acompañamiento.</p></li>
+        <li><span>02</span><h3>Compara</h3><p>Entiende qué cambia entre una ruta esencial, guiada o integral.</p></li>
+        <li><span>03</span><h3>Arma</h3><p>Añade programas a un carrito local, ajusta cantidades y revisa el total demo.</p></li>
+        <li><span>04</span><h3>Conecta</h3><p>Visualiza el futuro puente a WhatsApp, inactivo hasta configurar un número real.</p></li>
+      </ol>
+    </section>
+
+    <section class="service-experience" aria-labelledby="service-title">
+      <div class="service-experience__intro">
+        <p class="eyebrow eyebrow--light">Después de elegir</p>
+        <h2 id="service-title">La confianza vive en los detalles.</h2>
+        <p>Una presentación coherente del portal, la entrega y el soporte hace visible la experiencia completa sin fingir que la operación ya existe.</p>
+      </div>
+      <div class="service-grid">
+        <article class="portal-card">
+          <div class="portal-card__bar"><span>Mereon / Mi rutina</span><span class="status-dot">Vista demo</span></div>
+          <div class="portal-card__body">
+            <p>Buenos días</p><h3>Todo lo importante, en un solo lugar.</h3>
+            <div class="portal-task"><span>01</span><div><strong>Tu foco de esta semana</strong><small>Revisa una rutina de 10 minutos</small></div></div>
+            <div class="portal-task"><span>02</span><div><strong>Contenido guardado</strong><small>3 guías para explorar</small></div></div>
+            <button type="button" disabled>Portal ilustrativo</button>
+          </div>
+        </article>
+        <article class="delivery-card">
+          <img src="assets/images/discreet-package.webp" width="1024" height="576" loading="lazy" alt="Caja y bolsa sencillas sin marca con papel verde y tarjeta azul en blanco sobre piedra clara">
+          <div><p class="eyebrow">Presentación discreta</p><h3>Simple por fuera. Claro por dentro.</h3><p>Una vista editorial de empaque y seguimiento. No representa un envío, producto o promesa de entrega real.</p></div>
+        </article>
+        <article class="support-card">
+          <p class="eyebrow">Soporte pensado</p><h3>Respuestas donde las necesitas.</h3>
+          <div><span>Chat de navegación</span><strong>Inmediato en la demo</strong></div>
+          <div><span>Centro de contenidos</span><strong>Siempre visible</strong></div>
+          <div><span>Decisiones médicas</span><strong>Con profesional autorizado</strong></div>
+          <button class="text-button" type="button" data-agent-open>Preguntar al agente <span aria-hidden="true">→</span></button>
+        </article>
+      </div>
+    </section>
+
+    <section class="team section" id="equipo" aria-labelledby="team-title">
+      <div class="section-heading section-heading--split">
+        <div><p class="eyebrow">Un equipo que se siente humano</p><h2 id="team-title">Orientación con criterio editorial.</h2></div>
+        <p>Estos perfiles muestran cómo podría presentarse un equipo diverso y cercano dentro de una experiencia comercial responsable.</p>
+      </div>
+      <div class="team-grid">
+        <article class="team-card"><img src="assets/images/clinician-amara.webp" width="941" height="1672" loading="lazy" alt="Retrato de Amara Reed, perfil ficticio de demostración"><div><span class="context-label">Perfil ficticio de demostración</span><h3>Amara Reed</h3><p class="team-card__role">Diseño de experiencia de cuidado</p><p>Enfocada en hacer que cada siguiente paso se sienta claro, humano y fácil de comparar.</p></div></article>
+        <article class="team-card"><img src="assets/images/clinician-mateo.webp" width="941" height="1672" loading="lazy" alt="Retrato de Mateo Silva, perfil ficticio de demostración"><div><span class="context-label">Perfil ficticio de demostración</span><h3>Mateo Silva</h3><p class="team-card__role">Contenido de bienestar metabólico</p><p>Convierte temas complejos en rutas de navegación accesibles, sin adelantar decisiones clínicas.</p></div></article>
+        <article class="team-card"><img src="assets/images/clinician-lin.webp" width="941" height="1672" loading="lazy" alt="Retrato de Lin Park, perfil ficticio de demostración"><div><span class="context-label">Perfil ficticio de demostración</span><h3>Lin Park</h3><p class="team-card__role">Experiencia de recuperación</p><p>Organiza hábitos, contenidos y soporte alrededor de rutinas sostenibles y flexibles.</p></div></article>
+      </div>
+    </section>
+
+    <section class="reviews" id="resenas" aria-labelledby="reviews-title">
+      <div class="reviews__image"><img src="assets/images/reviews-community.webp" width="864" height="1821" loading="lazy" alt="Tres adultos ficticios conversan alrededor de una mesa clara"></div>
+      <div class="reviews__content">
+        <div class="review-heading"><p class="eyebrow">Experiencia que se entiende</p><h2 id="reviews-title">Claridad que se nota desde el primer clic.</h2><p class="review-disclosure">Reseñas ilustrativas; no son testimonios de pacientes reales.</p></div>
+        <div class="review-list">
+          <figure class="review"><blockquote>“Encontré una opción dentro de mi presupuesto sin tener que abrir diez pestañas.”</blockquote><figcaption><strong>Marina R.</strong><span class="context-label">Reseña demo</span></figcaption></figure>
+          <figure class="review"><blockquote>“El agente explicó por qué cada ruta encajaba y me llevó directo al catálogo.”</blockquote><figcaption><strong>Diego C.</strong><span class="context-label">Reseña demo</span></figcaption></figure>
+          <figure class="review"><blockquote>“Se siente comercial y completo, pero queda claro cuándo una pregunta necesita a un profesional.”</blockquote><figcaption><strong>Sofía L.</strong><span class="context-label">Reseña demo</span></figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq section" id="preguntas" aria-labelledby="faq-title">
+      <div class="section-heading section-heading--split"><div><p class="eyebrow">Preguntas frecuentes</p><h2 id="faq-title">Antes de explorar.</h2></div><p>Respuestas breves sobre precios, recomendaciones y límites de esta experiencia interactiva.</p></div>
+      <div class="faq-list">
+        <details><summary><span>¿Los precios son reales?</span><span aria-hidden="true">+</span></summary><p>No. Son importes ilustrativos por programa para demostrar jerarquía comercial, comparación y recomendaciones dentro de la página.</p></details>
+        <details><summary><span>¿Qué hace el agente de ventas?</span><span aria-hidden="true">+</span></summary><p>Relaciona objetivo, preferencia y presupuesto con opciones del catálogo demo. Funciona localmente y no envía respuestas a ningún servidor.</p></details>
+        <details><summary><span>¿Puedo comprar o pagar aquí?</span><span aria-hidden="true">+</span></summary><p>No. Puedes armar y guardar un carrito demo en este navegador, pero no existe pago, cuenta, formulario de contacto ni envío.</p></details>
+        <details><summary><span>¿El carrito envía algo por WhatsApp?</span><span aria-hidden="true">+</span></summary><p>Todavía no. El número está pendiente de configuración. Cuando exista un destino real y validado, el botón preparará un mensaje con la selección; nunca cobrará ni solicitará datos médicos.</p></details>
+        <details><summary><span>¿El agente puede decirme qué tratamiento necesito?</span><span aria-hidden="true">+</span></summary><p>No. Puede orientar sobre categorías y programas demo. Diagnóstico, elegibilidad, medicamentos y decisiones de tratamiento corresponden a un profesional autorizado.</p></details>
+        <details><summary><span>¿Qué pasa si escribo una emergencia?</span><span aria-hidden="true">+</span></summary><p>El agente detiene la orientación comercial y dirige a servicios de emergencia locales o atención profesional inmediata.</p></details>
+        <details><summary><span>¿Las personas y reseñas son reales?</span><span aria-hidden="true">+</span></summary><p>No. Los perfiles y reseñas están identificados localmente como contenido ficticio o ilustrativo de demostración.</p></details>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <p class="eyebrow eyebrow--light">Tu selección, a tu ritmo</p><h2 id="closing-title">Arma tu carrito demo con claridad.</h2>
+      <p>Explora los doce programas, ajusta cantidades y revisa el total. WhatsApp seguirá inactivo hasta que exista un número real configurado.</p>
+      <div><a class="button button--mint" href="#catalogo">Explorar programas</a><button class="button button--ghost" type="button" data-cart-open>Revisar carrito <span class="cart-badge cart-badge--light" data-cart-count hidden>0</span></button></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div><a class="brand brand--footer" href="#inicio" aria-label="Ir al inicio de Mereon"><span class="brand__mark" aria-hidden="true"><span></span></span><span class="brand__word">Mereon</span></a><p>Una demostración de comercio conversacional creada por ByAgentX.</p></div>
+    <nav aria-label="Navegación de pie de página"><a href="#catalogo">Catálogo</a><a href="#comparar">Comparar</a><a href="#como-funciona">Experiencia</a><a href="#preguntas">Preguntas</a></nav>
+    <p class="site-footer__meta"><span>© 2026 ByAgentX</span><span>Contenido y precios ilustrativos · Carrito local · Sin pagos</span></p>
+  </footer>
+
+  <div class="cart-overlay" data-cart-overlay hidden></div>
+  <aside class="shopping-cart" id="shopping-cart" role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-describedby="cart-description" hidden>
+    <header class="shopping-cart__header">
+      <div><p class="eyebrow">Selección demo</p><h2 id="cart-title">Tu carrito</h2></div>
+      <button type="button" class="panel-close" data-cart-close aria-label="Cerrar carrito">×</button>
+    </header>
+    <p class="shopping-cart__intro" id="cart-description">Revisa programas y cantidades. No se procesa pago, envío ni información personal.</p>
+    <div class="cart-items" id="cart-items" aria-live="polite"></div>
+    <footer class="cart-summary">
+      <div class="cart-total"><span>Subtotal / total demo</span><strong id="cart-subtotal">$0 USD</strong></div>
+      <p class="cart-total__note">Importe ilustrativo · sin impuestos, envío ni cobro</p>
+      <button class="cart-checkout" id="cart-checkout" type="button">WhatsApp próximamente</button>
+      <p class="cart-whatsapp-status" id="cart-whatsapp-status" role="status" aria-live="polite">Número pendiente de configurar. Puedes seguir revisando tu carrito.</p>
+      <button class="cart-continue" type="button" data-cart-close>Seguir explorando</button>
+    </footer>
+  </aside>
+
+  <div class="agent-overlay" data-agent-overlay hidden></div>
+  <aside class="sales-agent" id="sales-agent" role="dialog" aria-modal="true" aria-labelledby="agent-title" hidden>
+    <header class="sales-agent__header">
+      <div class="agent-identity"><span aria-hidden="true">M</span><div><h2 id="agent-title">Asesor Mereon</h2><p><i aria-hidden="true"></i> Demo local · no guarda ni envía datos</p></div></div>
+      <div class="agent-controls"><button type="button" data-agent-reset aria-label="Reiniciar conversación">↻</button><button type="button" data-agent-close aria-label="Cerrar agente">×</button></div>
+    </header>
+    <div class="agent-boundary">Solo navegación de productos y bienestar. No compartas datos personales o médicos.</div>
+    <div class="agent-log" id="agent-log" role="log" aria-live="polite" aria-relevant="additions"></div>
+    <div class="agent-quick" id="agent-quick" role="group" aria-label="Respuestas rápidas"></div>
+    <div class="agent-input-row">
+      <label class="sr-only" for="agent-input">Escribe una respuesta no sensible</label>
+      <input id="agent-input" type="text" inputmode="text" autocomplete="off" maxlength="180" placeholder="Respuesta general; sin nombres ni datos…">
+      <button id="agent-send" type="button" aria-label="Enviar respuesta">↑</button>
+    </div>
+    <p class="agent-privacy">Tus respuestas viven solo en esta ventana y se borran al cerrarla.</p>
+  </aside>
+</body>
+</html>

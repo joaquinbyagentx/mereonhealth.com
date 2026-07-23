@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Mereon concept mark</title>
+  <desc id="desc">Three intersecting lines inside a circle</desc>
+  <rect width="64" height="64" rx="32" fill="#101b24"/>
+  <circle cx="32" cy="32" r="24" fill="none" stroke="#a9e5ce" stroke-width="2"/>
+  <path d="M32 14v36M16.4 23l31.2 18M47.6 23L16.4 41" fill="none" stroke="#a9e5ce" stroke-width="2" stroke-linecap="round"/>
+</svg>
