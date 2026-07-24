@@ -1,12 +1,12 @@
 # Mereon Health
 
-Sitio público de pre-lanzamiento de Mereon Health para México. Presenta el enfoque de calidad, las áreas de portafolio bajo evaluación y el canal oficial para proveedores y alianzas.
+Sitio comercial de Mereon Health para consumidores en México. Presenta la marca, las colecciones de bienestar y una guía interactiva de exploración basada únicamente en opciones predeterminadas.
 
-## Estado operativo
+## Alcance
 
-- Mereon está en fase de sourcing, validación de proveedores y preparación regulatoria.
-- El sitio no procesa ventas, pagos, recetas, expedientes, formularios clínicos ni envíos.
-- No afirma licencias, proveedores aprobados, productos registrados ni relaciones comerciales que todavía no existan.
+- Experiencia estática en español, sin dependencias externas.
+- Catálogo navegable por categorías y guía de preferencias generales.
+- Sin formularios, cuentas, pagos, expedientes ni captura de información sensible.
 - Contacto oficial: `partnerships@mereonhealth.com`.
 
 ## Deployment
@@ -25,5 +25,5 @@ Después abrir `http://127.0.0.1:8000/`.
 
 - `index.html`: contenido y estructura pública.
 - `styles.css`: diseño responsive.
-- `script.js`: navegación móvil y año del footer.
+- `script.js`: filtros, navegación móvil y guía de exploración.
 - `assets/`: recursos visuales locales.

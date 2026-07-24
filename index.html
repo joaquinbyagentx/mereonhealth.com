@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#19352c">
-  <meta name="description" content="Mereon Health prepara una plataforma de bienestar para México con proveedores verificados, trazabilidad por lote y criterios claros de calidad.">
+  <meta name="theme-color" content="#172720">
+  <meta name="description" content="Descubre Mereon: programas de bienestar, metabolismo, longevidad, sueño, recuperación y autocuidado diseñados para acompañar tu ritmo.">
   <link rel="canonical" href="https://mereonhealth.com/">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_MX">
-  <meta property="og:title" content="Mereon Health — Calidad verificable para bienestar en México">
-  <meta property="og:description" content="Plataforma de bienestar en pre-lanzamiento. Evaluamos proveedores, manufactura, trazabilidad y operación regulatoria para México.">
+  <meta property="og:title" content="Mereon — Bienestar diseñado para tu vida">
+  <meta property="og:description" content="Explora programas de bienestar pensados para tus prioridades, tu ritmo y tu manera de cuidarte.">
   <meta property="og:url" content="https://mereonhealth.com/">
   <meta property="og:image" content="https://mereonhealth.com/assets/images/hero-guided-shopping.webp">
-  <title>Mereon Health — Calidad verificable para bienestar en México</title>
+  <title>Mereon — Bienestar diseñado para tu vida</title>
   <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
@@ -20,13 +20,13 @@
 <body>
   <a class="skip-link" href="#main">Saltar al contenido principal</a>
 
-  <div class="launch-banner" role="note">
-    <span>Pre-lanzamiento · México</span>
-    <p>Mereon está integrando proveedores y preparando su operación. Aún no hay venta, prescripción ni atención clínica activa.</p>
+  <div class="launch-banner" id="launch-banner" role="note">
+    <span class="launch-banner__badge">Pre-lanzamiento</span>
+    <p>Estamos seleccionando proveedores y preparando nuestra operación. La venta y la atención médica aún no están activas.</p>
   </div>
 
   <header class="site-header" id="site-header">
-    <a class="brand" href="#inicio" aria-label="Ir al inicio de Mereon Health">
+    <a class="brand" href="#inicio" aria-label="Ir al inicio de Mereon">
       <span class="brand__mark" aria-hidden="true"><span></span></span>
       <span class="brand__word">Mereon</span>
     </a>
@@ -34,159 +34,189 @@
       <span aria-hidden="true"></span><span aria-hidden="true"></span>
     </button>
     <nav class="primary-nav" id="primary-nav" aria-label="Navegación principal">
-      <a href="#enfoque">Enfoque</a>
-      <a href="#calidad">Estándares</a>
-      <a href="#modelo">Modelo</a>
-      <a href="#alianzas">Alianzas</a>
+      <a href="#programas">Programas</a>
+      <a href="#colecciones">Colecciones</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#filosofia">Filosofía</a>
       <a href="#preguntas">Preguntas</a>
     </nav>
-    <a class="header-cta" href="mailto:partnerships@mereonhealth.com?subject=Alianza%20con%20Mereon%20Health">Contacto</a>
+    <button class="header-guide" type="button" data-guide-open>Encuentra tu rutina</button>
   </header>
 
   <main id="main" tabindex="-1">
     <section class="hero" id="inicio" aria-labelledby="hero-title">
-      <img class="hero__image" src="assets/images/hero-guided-shopping.webp" width="1774" height="887" fetchpriority="high" alt="Escena editorial de bienestar en una cocina luminosa">
-      <div class="hero__veil" aria-hidden="true"></div>
+      <img class="hero__image" src="assets/images/program-metabolic.webp" width="1024" height="576" fetchpriority="high" alt="Mujer preparando alimentos frescos en una cocina luminosa">
       <div class="hero__content">
-        <p class="eyebrow eyebrow--light">Health platform · México</p>
-        <h1 id="hero-title">Bienestar serio empieza con proveedores serios.</h1>
-        <p class="hero__lede">Mereon Health está construyendo una plataforma de bienestar para México con calidad documentada, trazabilidad por lote y una operación comercial responsable.</p>
+        <p class="eyebrow">Metabolismo, longevidad y bienestar diario</p>
+        <h1 id="hero-title">Bienestar que encaja en tu ritmo.</h1>
+        <p class="hero__lede">Descubre rutas claras para construir hábitos, organizar tus prioridades y cuidar lo que importa, con una experiencia diseñada alrededor de ti.</p>
         <div class="hero__actions">
-          <a class="button button--mint" href="#enfoque">Conocer el enfoque</a>
-          <a class="button button--ghost" href="#alianzas">Explorar una alianza</a>
+          <button class="button button--primary" type="button" data-guide-open>Encontrar mi rutina</button>
+          <a class="button button--light" href="#programas">Explorar programas</a>
         </div>
-        <ul class="hero__proof" aria-label="Principios de Mereon">
-          <li><strong>México</strong><span>mercado inicial</span></li>
-          <li><strong>Quality-first</strong><span>antes que volumen</span></li>
-          <li><strong>Por lote</strong><span>documentación trazable</span></li>
-        </ul>
+        <p class="hero__signature">Tu prioridad. Tu ritmo. Tu manera de cuidarte.</p>
       </div>
     </section>
 
-    <section class="trust-strip" aria-label="Estado y prioridades del proyecto">
-      <article><span>01</span><div><strong>Pre-lanzamiento real</strong><p>Preparación comercial y operativa en curso.</p></div></article>
-      <article><span>02</span><div><strong>Calidad verificable</strong><p>GMP, COA, identidad, pureza y trazabilidad.</p></div></article>
-      <article><span>03</span><div><strong>Supply chain responsable</strong><p>Proveedores y rutas regulatorias evaluadas.</p></div></article>
-      <article><span>04</span><div><strong>Sin atajos</strong><p>Nada research-use-only para uso en pacientes.</p></div></article>
+    <section class="benefit-strip" aria-label="Principios de la experiencia Mereon">
+      <article><strong>Rutas claras</strong><span>Opciones fáciles de entender y comparar.</span></article>
+      <article><strong>Hábitos sostenibles</strong><span>Ideas pensadas para la vida cotidiana.</span></article>
+      <article><strong>Todo en un lugar</strong><span>Metabolismo, descanso, movimiento y más.</span></article>
+      <article><strong>Privacidad por diseño</strong><span>Explora sin formularios ni datos sensibles.</span></article>
     </section>
 
-    <section class="section focus" id="enfoque" aria-labelledby="focus-title">
+    <section class="catalog section" id="programas" aria-labelledby="catalog-title">
       <div class="section-heading section-heading--split">
         <div>
-          <p class="eyebrow">Portafolio en evaluación</p>
-          <h2 id="focus-title">Cuatro áreas. Un mismo estándar.</h2>
+          <p class="eyebrow">Programas Mereon</p>
+          <h2 id="catalog-title">Empieza por lo que quieres sentir.</h2>
         </div>
-        <p>Estamos definiendo una oferta inicial de bienestar para México. Las categorías siguientes representan áreas de evaluación y no productos actualmente disponibles para compra.</p>
+        <p>Explora rutas de bienestar organizadas por prioridad y estilo de vida. Cada programa reúne ideas, herramientas y estructura para ayudarte a crear una rutina propia.</p>
       </div>
-      <div class="focus-grid">
-        <article class="focus-card focus-card--large">
-          <img src="assets/images/catalog-metabolic-essentials.webp" width="1536" height="1024" loading="eager" alt="Composición editorial de hábitos, nutrición y seguimiento">
-          <div><span>Prioridad inicial</span><h3>Salud metabólica</h3><p>Soluciones de hábitos, nutrición y acompañamiento con límites claros entre bienestar y atención médica.</p></div>
+
+      <div class="category-filters" role="group" aria-label="Filtrar programas por categoría">
+        <button type="button" class="filter is-active" data-filter="all" aria-pressed="true">Todo</button>
+        <button type="button" class="filter filter--priority" data-filter="metabolic" aria-pressed="false">Metabolismo</button>
+        <button type="button" class="filter" data-filter="longevity" aria-pressed="false">Longevidad</button>
+        <button type="button" class="filter" data-filter="wellness" aria-pressed="false">Bienestar diario</button>
+        <button type="button" class="filter" data-filter="sleep" aria-pressed="false">Sueño y calma</button>
+        <button type="button" class="filter" data-filter="recovery" aria-pressed="false">Movimiento</button>
+        <button type="button" class="filter" data-filter="hair" aria-pressed="false">Cabello y piel</button>
+      </div>
+
+      <p class="catalog-status" id="catalog-status" aria-live="polite">9 programas</p>
+      <div class="product-grid" id="product-grid">
+        <article class="product-card product-card--featured" id="program-balance-metabolico" data-category="metabolic" data-goals="metabolic wellness" data-styles="guided integral">
+          <div class="product-card__media"><img src="assets/images/catalog-metabolic-essentials.webp" width="1024" height="1024" loading="eager" alt="Composición de alimentos, botella y cuaderno para una rutina cotidiana"><span class="product-card__tag">Ruta destacada</span></div>
+          <div class="product-card__body"><p class="product-card__category">Metabolismo</p><h3>Balance Metabólico</h3><p class="product-card__fit">Una ruta para ordenar alimentación, movimiento, descanso y constancia.</p><ul><li>Mapa semanal de hábitos</li><li>Objetivos simples y flexibles</li></ul><button type="button" data-guide-open data-goal="metabolic">Explorar esta ruta <span aria-hidden="true">→</span></button></div>
         </article>
-        <article class="focus-card">
-          <img src="assets/images/catalog-longevity-editorial.webp" width="1536" height="1024" loading="lazy" alt="Composición editorial asociada con longevidad y bienestar">
-          <div><span>Exploración</span><h3>Longevidad</h3><p>Productos y servicios con evidencia, documentación y comunicación responsable.</p></div>
+        <article class="product-card" id="program-base-diaria" data-category="wellness" data-goals="wellness metabolic" data-styles="simple flexible">
+          <div class="product-card__media"><img src="assets/images/catalog-daily-wellness.webp" width="1024" height="1024" loading="lazy" alt="Objetos de descanso y organización sobre una superficie clara"></div>
+          <div class="product-card__body"><p class="product-card__category">Bienestar diario</p><h3>Base Diaria</h3><p class="product-card__fit">Pequeños rituales para sumar intención a tus días sin complicarlos.</p><ul><li>Plan semanal sencillo</li><li>Ideas de pausas y movimiento</li></ul><button type="button" data-guide-open data-goal="wellness">Explorar esta ruta <span aria-hidden="true">→</span></button></div>
         </article>
-        <article class="focus-card">
-          <img src="assets/images/catalog-recovery-kit.webp" width="1536" height="1024" loading="lazy" alt="Elementos de recuperación y movimiento sobre una superficie clara">
-          <div><span>Rutina</span><h3>Recuperación</h3><p>Movimiento, descanso y soporte cotidiano dentro de una experiencia simple.</p></div>
+        <article class="product-card" id="program-longevidad-cotidiana" data-category="longevity" data-goals="longevity wellness" data-styles="guided integral">
+          <div class="product-card__media"><img src="assets/images/catalog-longevity-editorial.webp" width="1024" height="1024" loading="lazy" alt="Composición editorial con vidrio, piedra mineral y romero"></div>
+          <div class="product-card__body"><p class="product-card__category">Longevidad</p><h3>Longevidad Cotidiana</h3><p class="product-card__fit">Convierte una visión de largo plazo en elecciones que caben en el presente.</p><ul><li>Prioridades mensuales</li><li>Lecturas y prácticas seleccionadas</li></ul><button type="button" data-guide-open data-goal="longevity">Explorar esta ruta <span aria-hidden="true">→</span></button></div>
         </article>
-        <article class="focus-card">
-          <img src="assets/images/catalog-daily-wellness.webp" width="1536" height="1024" loading="lazy" alt="Composición editorial de bienestar diario">
-          <div><span>Base</span><h3>Bienestar diario</h3><p>Categorías de entrada con calidad consistente, información clara y trazabilidad.</p></div>
+        <article class="product-card" id="program-sueno-calma" data-category="sleep" data-goals="sleep wellness" data-styles="simple guided">
+          <div class="product-card__media"><img src="assets/images/program-womens.webp" width="1024" height="576" loading="lazy" alt="Dos mujeres conversando en un espacio cálido y sereno"></div>
+          <div class="product-card__body"><p class="product-card__category">Sueño y calma</p><h3>Sueño + Calma</h3><p class="product-card__fit">Organiza un cierre del día con espacio para la pausa y la calma.</p><ul><li>Ritual nocturno adaptable</li><li>Prácticas breves de relajación</li></ul><button type="button" data-guide-open data-goal="sleep">Explorar esta ruta <span aria-hidden="true">→</span></button></div>
+        </article>
+        <article class="product-card" id="program-movimiento-diario" data-category="recovery" data-goals="recovery wellness" data-styles="simple flexible">
+          <div class="product-card__media"><img src="assets/images/program-recovery.webp" width="1024" height="576" loading="lazy" alt="Persona realizando una rutina suave de movilidad"></div>
+          <div class="product-card__body"><p class="product-card__category">Movimiento</p><h3>Movimiento Diario</h3><p class="product-card__fit">Más movimiento posible, con sesiones breves que se adaptan a tu agenda.</p><ul><li>Secuencias de movilidad</li><li>Ritmo semanal personalizable</li></ul><button type="button" data-guide-open data-goal="recovery">Explorar esta ruta <span aria-hidden="true">→</span></button></div>
+        </article>
+        <article class="product-card" id="program-recuperacion-activa" data-category="recovery" data-goals="recovery" data-styles="guided integral">
+          <div class="product-card__media"><img src="assets/images/catalog-recovery-kit.webp" width="1024" height="1024" loading="lazy" alt="Accesorios de movimiento y recuperación en una composición clara"></div>
+          <div class="product-card__body"><p class="product-card__category">Recuperación</p><h3>Recuperación Activa</h3><p class="product-card__fit">Equilibra esfuerzo, movilidad y recuperación dentro de una misma rutina.</p><ul><li>Calendario de recuperación</li><li>Guías para días activos</li></ul><button type="button" data-guide-open data-goal="recovery">Explorar esta ruta <span aria-hidden="true">→</span></button></div>
+        </article>
+        <article class="product-card" id="program-ritual-cabello-piel" data-category="hair" data-goals="hair wellness" data-styles="simple flexible">
+          <div class="product-card__media"><img src="assets/images/program-hair-skin.webp" width="1024" height="576" loading="lazy" alt="Mujer junto a una ventana con luz suave"></div>
+          <div class="product-card__body"><p class="product-card__category">Cabello y piel</p><h3>Ritual Cabello + Piel</h3><p class="product-card__fit">Dale orden y constancia a una rutina de autocuidado que se sienta tuya.</p><ul><li>Ritual visual paso a paso</li><li>Calendario mensual editable</li></ul><button type="button" data-guide-open data-goal="hair">Explorar esta ruta <span aria-hidden="true">→</span></button></div>
+        </article>
+        <article class="product-card" id="program-bienestar-integral" data-category="wellness" data-goals="wellness longevity" data-styles="guided integral">
+          <div class="product-card__media"><img src="assets/images/program-longevity.webp" width="1024" height="576" loading="lazy" alt="Formas de vidrio en tonos azules sobre una superficie mineral"></div>
+          <div class="product-card__body"><p class="product-card__category">Bienestar integral</p><h3>Bienestar Integral</h3><p class="product-card__fit">Reúne energía, descanso, movimiento y organización en una visión completa.</p><ul><li>Planificador de prioridades</li><li>Biblioteca de rutinas</li></ul><button type="button" data-guide-open data-goal="wellness">Explorar esta ruta <span aria-hidden="true">→</span></button></div>
+        </article>
+        <article class="product-card" id="program-energia-en-ritmo" data-category="wellness" data-goals="wellness recovery" data-styles="simple guided">
+          <div class="product-card__media"><img src="assets/images/program-mens.webp" width="1024" height="576" loading="lazy" alt="Persona observando la costa al amanecer"></div>
+          <div class="product-card__body"><p class="product-card__category">Energía cotidiana</p><h3>Energía en Ritmo</h3><p class="product-card__fit">Organiza tus momentos de enfoque, pausa y movimiento a lo largo del día.</p><ul><li>Mapa diario de energía</li><li>Pausas con intención</li></ul><button type="button" data-guide-open data-goal="wellness">Explorar esta ruta <span aria-hidden="true">→</span></button></div>
         </article>
       </div>
     </section>
 
-    <section class="quality" id="calidad" aria-labelledby="quality-title">
-      <div class="quality__intro">
-        <p class="eyebrow eyebrow--light">Nuestro estándar de evaluación</p>
-        <h2 id="quality-title">La confianza se documenta.</h2>
-        <p>No tratamos un logo, una promesa comercial o un COA aislado como prueba suficiente. Cada relación debe sostenerse con documentación vigente y verificable.</p>
-        <a class="text-link" href="mailto:partnerships@mereonhealth.com?subject=Documentaci%C3%B3n%20de%20calidad%20para%20Mereon">Compartir capacidades <span aria-hidden="true">→</span></a>
-      </div>
-      <div class="quality-grid">
-        <article><span>01</span><h3>Manufactura y cumplimiento</h3><p>Evidencia GMP y autorizaciones aplicables al producto, instalación y mercado de destino.</p></article>
-        <article><span>02</span><h3>COA por lote</h3><p>Identidad, potencia o concentración, pureza, impurezas y especificaciones relevantes.</p></article>
-        <article><span>03</span><h3>Trazabilidad</h3><p>Origen, lotes, cadena de custodia, condiciones de almacenamiento y capacidad de retiro.</p></article>
-        <article><span>04</span><h3>Validación independiente</h3><p>Métodos analíticos y pruebas de terceros cuando el riesgo o la categoría lo requieren.</p></article>
-        <article><span>05</span><h3>Operación logística</h3><p>Vida útil, empaque, estabilidad, cadena fría, lead times y continuidad de suministro.</p></article>
-        <article><span>06</span><h3>Comunicación responsable</h3><p>Sin claims no sustentados, sin confundir suplementos con medicamentos y sin uso clínico de materiales RUO.</p></article>
-      </div>
-    </section>
-
-    <section class="section model" id="modelo" aria-labelledby="model-title">
+    <section class="collections section" id="colecciones" aria-labelledby="collections-title">
       <div class="section-heading section-heading--split">
-        <div><p class="eyebrow">Modelo de trabajo</p><h2 id="model-title">De la capacidad declarada a una relación operable.</h2></div>
-        <p>El proceso separa descubrimiento comercial, validación documental y habilitación regulatoria. Una conversación inicial no equivale a aprobación de proveedor.</p>
+        <div><p class="eyebrow">Elige tu nivel de estructura</p><h2 id="collections-title">Una experiencia tan ligera o completa como quieras.</h2></div>
+        <p>Compara el tipo de acompañamiento que mejor encaja con tu momento. Puedes empezar simple y explorar rutas con más profundidad cuando lo necesites.</p>
+      </div>
+      <div class="collection-grid">
+        <article><span>01</span><p class="collection-grid__label">Esencial</p><h3>Lo importante, sin ruido.</h3><ul><li>Una prioridad principal</li><li>Rutina semanal simple</li><li>Herramientas fáciles de usar</li></ul></article>
+        <article class="collection-grid__featured"><span>02</span><p class="collection-grid__label">Guiado</p><h3>Más claridad para avanzar.</h3><ul><li>Objetivos organizados</li><li>Ritmo y recordatorios</li><li>Contenido seleccionado</li></ul><button type="button" data-guide-open>Encontrar mi opción</button></article>
+        <article><span>03</span><p class="collection-grid__label">Integral</p><h3>Una visión conectada.</h3><ul><li>Varias prioridades</li><li>Planificación completa</li><li>Seguimiento de hábitos</li></ul></article>
+      </div>
+    </section>
+
+    <section class="guide-feature" aria-labelledby="guide-feature-title">
+      <div class="guide-feature__copy">
+        <p class="eyebrow eyebrow--light">Guía de exploración</p>
+        <h2 id="guide-feature-title">Dos elecciones. Una ruta más clara.</h2>
+        <p>Elige tu prioridad y el estilo de rutina que prefieres. Mereon te mostrará programas afines para que compares con calma.</p>
+        <ul><li>Respuestas rápidas y sencillas.</li><li>Recomendaciones basadas en tus preferencias.</li><li>Un atajo directo a los programas relevantes.</li></ul>
+        <button class="button button--mint" type="button" data-guide-open>Empezar ahora</button>
+      </div>
+      <div class="guide-preview" aria-hidden="true">
+        <div class="guide-preview__top"><span>M</span><div><strong>Guía Mereon</strong><small>Encuentra tu punto de partida</small></div></div>
+        <div class="guide-preview__message">¿Qué te gustaría priorizar?</div>
+        <div class="guide-preview__choices"><span>Más energía</span><span>Mejor descanso</span><span>Movimiento</span></div>
+        <div class="guide-preview__result"><small>Tu ruta</small><strong>Base Diaria</strong><span>Una forma sencilla de empezar.</span></div>
+      </div>
+    </section>
+
+    <section class="journey section" id="como-funciona" aria-labelledby="journey-title">
+      <div class="section-heading section-heading--split">
+        <div><p class="eyebrow">Cómo funciona</p><h2 id="journey-title">Del descubrimiento a una rutina propia.</h2></div>
+        <p>Navega a tu manera o deja que la guía acorte el camino. La experiencia está pensada para ayudarte a comparar sin abrumarte.</p>
       </div>
       <ol class="journey-grid">
-        <li><span>01</span><h3>Descubrir</h3><p>Capacidad, portafolio, mercados atendidos, MOQ, lead times y modelo comercial.</p></li>
-        <li><span>02</span><h3>Verificar</h3><p>Licencias, GMP, historial regulatorio, COA, métodos, calidad y referencias.</p></li>
-        <li><span>03</span><h3>Diseñar</h3><p>Ruta de registro, importación, almacenamiento, distribución y farmacovigilancia cuando aplique.</p></li>
-        <li><span>04</span><h3>Integrar</h3><p>Contrato, especificaciones, pruebas de aceptación, trazabilidad y lanzamiento controlado.</p></li>
+        <li><span>01</span><h3>Explora</h3><p>Descubre categorías a partir de lo que quieres priorizar.</p></li>
+        <li><span>02</span><h3>Afina</h3><p>Elige cuánto orden y acompañamiento prefieres en tu rutina.</p></li>
+        <li><span>03</span><h3>Compara</h3><p>Revisa programas afines con información directa y fácil de leer.</p></li>
+        <li><span>04</span><h3>Hazlo tuyo</h3><p>Vuelve a tus opciones y encuentra la combinación que mejor te representa.</p></li>
       </ol>
-      <div class="model-note"><strong>Estado actual:</strong> Mereon se encuentra en las fases de descubrimiento y verificación de proveedores. No hay productos farmacéuticos a la venta ni relaciones comerciales que deban inferirse de este sitio.</div>
     </section>
 
-    <section class="partners" id="alianzas" aria-labelledby="partners-title">
-      <div class="partners__copy">
-        <p class="eyebrow eyebrow--light">Suppliers & partnerships</p>
-        <h2 id="partners-title">Buscamos capacidades reales, no catálogos genéricos.</h2>
-        <p>Estamos abriendo conversaciones con organizaciones que puedan respaldar una entrada responsable al mercado mexicano.</p>
-        <div class="partner-types">
-          <article><strong>Distribución en México</strong><span>Producto terminado, registro sanitario, almacenamiento y cobertura autorizada.</span></article>
-          <article><strong>API y manufactura</strong><span>API GMP, desarrollo analítico, formulación y scale-up documentado.</span></article>
-          <article><strong>Fill-finish y empaque</strong><span>Operaciones estériles, viales o jeringas, liofilización, serialización y estabilidad.</span></article>
-          <article><strong>Regulatorio y logística</strong><span>COFEPRIS, importación, cadena fría, 3PL, laboratorio y farmacovigilancia.</span></article>
+    <section class="experience" id="filosofia" aria-labelledby="experience-title">
+      <div class="experience__image"><img src="assets/images/catalog-daily-wellness.webp" width="1024" height="1024" loading="lazy" alt="Objetos de descanso y organización en una composición serena"></div>
+      <div class="experience__copy">
+        <p class="eyebrow">La experiencia Mereon</p>
+        <h2 id="experience-title">Cuidarte también debería sentirse bien.</h2>
+        <p>Creemos en experiencias serenas, información directa y decisiones sin presión. Cada detalle está pensado para hacer del bienestar una parte más natural de tu vida.</p>
+        <div class="experience__principles">
+          <article><span>01</span><div><h3>Claridad primero</h3><p>Lenguaje simple y opciones fáciles de comparar.</p></div></article>
+          <article><span>02</span><div><h3>Diseño con intención</h3><p>Una experiencia visual cálida, práctica y consistente.</p></div></article>
+          <article><span>03</span><div><h3>Tu ritmo importa</h3><p>Rutas flexibles para distintas prioridades y momentos.</p></div></article>
         </div>
       </div>
-      <aside class="contact-card" aria-label="Contacto de alianzas">
-        <span class="contact-card__badge">Canal oficial</span>
-        <h3>Conversemos con contexto.</h3>
-        <p>Para evaluar una posible relación, incluye:</p>
-        <ul>
-          <li>capacidad o portafolio relevante;</li>
-          <li>mercados y sitios de manufactura;</li>
-          <li>certificaciones o inspecciones vigentes;</li>
-          <li>MOQ, lead time y etapa mínima del proyecto;</li>
-          <li>contacto comercial y de calidad.</li>
-        </ul>
-        <a class="button button--dark" href="mailto:partnerships@mereonhealth.com?subject=Supplier%20inquiry%20for%20Mereon%20Health&body=Empresa%3A%0ACapacidad%20o%20producto%3A%0AMercados%20y%20sitios%3A%0ACertificaciones%3A%0AMOQ%20y%20lead%20time%3A%0AContacto%3A">partnerships@mereonhealth.com</a>
-        <small>Consultas comerciales y de sourcing. No es un canal de atención médica.</small>
-      </aside>
     </section>
 
-    <section class="section faq" id="preguntas" aria-labelledby="faq-title">
-      <div class="section-heading section-heading--split">
-        <div><p class="eyebrow">Preguntas frecuentes</p><h2 id="faq-title">Claridad desde el principio.</h2></div>
-        <p>El sitio comunica la etapa real del proyecto y los límites actuales de la operación.</p>
-      </div>
+    <section class="manifesto" aria-labelledby="manifesto-title">
+      <div class="manifesto__image"><img src="assets/images/reviews-community.webp" width="864" height="1821" loading="lazy" alt="Personas compartiendo una conversación alrededor de una mesa"></div>
+      <div class="manifesto__content"><p class="eyebrow">Bienestar para la vida real</p><h2 id="manifesto-title">Menos perfección. Más constancia.</h2><p>Tu bienestar no necesita verse como el de nadie más. Mereon reúne caminos distintos para ayudarte a encontrar una rutina que se sienta posible, personal y duradera.</p><a class="text-link" href="#programas">Descubrir programas <span aria-hidden="true">→</span></a></div>
+    </section>
+
+    <section class="faq section" id="preguntas" aria-labelledby="faq-title">
+      <div class="section-heading section-heading--split"><div><p class="eyebrow">Preguntas frecuentes</p><h2 id="faq-title">Antes de empezar.</h2></div><p>Respuestas breves para navegar las colecciones y encontrar una ruta que encaje contigo.</p></div>
       <div class="faq-list">
-        <details open><summary><span>¿Mereon ya vende productos?</span><span aria-hidden="true">+</span></summary><p>No. Mereon está en pre-lanzamiento e integración de proveedores. Todavía no procesa compras, pagos, recetas, expedientes ni envíos.</p></details>
-        <details><summary><span>¿Mereon es una farmacia o proveedor médico?</span><span aria-hidden="true">+</span></summary><p>No en esta etapa. Cualquier futura actividad regulada dependerá de registros, licencias, responsables sanitarios y relaciones autorizadas aplicables en México.</p></details>
-        <details><summary><span>¿Qué proveedores pueden contactar?</span><span aria-hidden="true">+</span></summary><p>Distribuidores autorizados, fabricantes de producto terminado, API/CDMO, fill-finish, laboratorios analíticos, 3PL/cadena fría y especialistas regulatorios con evidencia verificable.</p></details>
-        <details><summary><span>¿Aceptan materiales research-use-only?</span><span aria-hidden="true">+</span></summary><p>No para productos destinados a pacientes o consumidores. Mereon separa estrictamente materiales de investigación de productos fabricados y autorizados para su uso previsto.</p></details>
-        <details><summary><span>¿Una consulta comercial aprueba al proveedor?</span><span aria-hidden="true">+</span></summary><p>No. La conversación inicial sirve para entender encaje y capacidad. La aprobación requiere revisión comercial, técnica, documental, regulatoria y de calidad.</p></details>
-        <details><summary><span>¿Cómo contacto a Mereon?</span><span aria-hidden="true">+</span></summary><p>Escribe a <a href="mailto:partnerships@mereonhealth.com">partnerships@mereonhealth.com</a>. El canal está activo para alianzas y sourcing.</p></details>
+        <details open><summary><span>¿Por dónde empiezo?</span><span aria-hidden="true">+</span></summary><p>Puedes explorar el catálogo por categoría o usar la guía para relacionar una prioridad general con los programas más afines.</p></details>
+        <details><summary><span>¿Cómo se organizan los programas?</span><span aria-hidden="true">+</span></summary><p>Cada ruta combina una prioridad de bienestar con un nivel de estructura: esencial, guiado o integral.</p></details>
+        <details><summary><span>¿Puedo explorar más de una categoría?</span><span aria-hidden="true">+</span></summary><p>Sí. Los filtros te permiten recorrer todas las categorías y comparar enfoques complementarios a tu propio ritmo.</p></details>
+        <details><summary><span>¿Qué información usa la guía?</span><span aria-hidden="true">+</span></summary><p>Solo las opciones generales que eliges en pantalla, como prioridad y estilo de rutina. No hay campos de texto ni solicitud de información personal.</p></details>
       </div>
     </section>
 
     <section class="closing" aria-labelledby="closing-title">
-      <p class="eyebrow eyebrow--light">Mereon Health · México</p>
-      <h2 id="closing-title">Construimos la confianza antes de construir el catálogo.</h2>
-      <p>Si tu organización puede aportar calidad documentada, suministro confiable o una ruta regulatoria sólida, queremos conocerla.</p>
-      <a class="button button--mint" href="mailto:partnerships@mereonhealth.com?subject=Partnership%20with%20Mereon%20Health">Iniciar conversación</a>
+      <p class="eyebrow eyebrow--light">Tu bienestar, a tu manera</p><h2 id="closing-title">Encuentra una rutina que sí se sienta tuya.</h2>
+      <p>Empieza por una prioridad, compara posibilidades y descubre una forma más clara de cuidarte.</p>
+      <div><button class="button button--mint" type="button" data-guide-open>Encontrar mi rutina</button><a class="button button--ghost" href="#programas">Explorar programas</a></div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div>
-      <a class="brand brand--footer" href="#inicio" aria-label="Ir al inicio de Mereon Health"><span class="brand__mark" aria-hidden="true"><span></span></span><span class="brand__word">Mereon</span></a>
-      <p>Plataforma de bienestar en pre-lanzamiento para México.</p>
-    </div>
-    <nav aria-label="Navegación de pie de página"><a href="#enfoque">Enfoque</a><a href="#calidad">Estándares</a><a href="#alianzas">Alianzas</a><a href="#preguntas">Preguntas</a></nav>
-    <p class="site-footer__meta"><span>© <span id="year">2026</span> Mereon Health</span><a href="mailto:partnerships@mereonhealth.com">partnerships@mereonhealth.com</a><span>Pre-lanzamiento · Sin venta activa</span></p>
+    <div><a class="brand brand--footer" href="#inicio" aria-label="Ir al inicio de Mereon"><span class="brand__mark" aria-hidden="true"><span></span></span><span class="brand__word">Mereon</span></a><p>Bienestar con intención, claridad y buen diseño.</p></div>
+    <nav aria-label="Navegación de pie de página"><a href="#programas">Programas</a><a href="#colecciones">Colecciones</a><a href="#como-funciona">Cómo funciona</a><a href="#preguntas">Preguntas</a></nav>
+    <p class="site-footer__meta"><span>© <span id="year">2026</span> Mereon Health</span><a href="mailto:partnerships@mereonhealth.com">partnerships@mereonhealth.com</a></p>
   </footer>
+
+  <div class="guide-overlay" data-guide-overlay hidden></div>
+  <aside class="routine-guide" id="routine-guide" role="dialog" aria-modal="true" aria-labelledby="guide-title" hidden>
+    <header class="routine-guide__header">
+      <div class="guide-identity"><span aria-hidden="true">M</span><div><h2 id="guide-title">Guía Mereon</h2><p>Encuentra tu punto de partida</p></div></div>
+      <div class="guide-controls"><button type="button" data-guide-reset aria-label="Reiniciar guía">↻</button><button type="button" data-guide-close aria-label="Cerrar guía">×</button></div>
+    </header>
+    <div class="guide-progress" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="guide-log" id="guide-log" role="log" aria-live="polite" aria-relevant="additions"></div>
+    <div class="guide-choices" id="guide-choices" role="group" aria-label="Opciones de la guía"></div>
+  </aside>
 </body>
 </html>
