@@ -21,7 +21,7 @@
     wellness: 'Bienestar diario',
     sleep: 'Sueño y calma',
     recovery: 'Movimiento y recuperación',
-    hair: 'Cabello y piel'
+    peptides: 'Péptidos y healthy aging'
   };
 
   const styleLabels = {

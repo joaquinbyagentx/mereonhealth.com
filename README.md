@@ -1,13 +1,12 @@
 # Mereon Health
 
-Sitio comercial de Mereon Health para consumidores en México. Presenta la marca, las colecciones de bienestar y una guía interactiva de exploración basada únicamente en opciones predeterminadas.
+Sitio comercial de Mereon Health para consumidores en México. Presenta la marca, sus pilares de bienestar funcional y una guía interactiva de exploración basada únicamente en opciones predeterminadas.
 
 ## Alcance
 
 - Experiencia estática en español, sin dependencias externas.
 - Catálogo navegable por categorías y guía de preferencias generales.
 - Sin formularios, cuentas, pagos, expedientes ni captura de información sensible.
-- Contacto oficial: `partnerships@mereonhealth.com`.
 
 ## Deployment
 
