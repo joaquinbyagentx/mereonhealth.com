@@ -1,15 +1,29 @@
-# Mereon
+# Mereon Health
 
-Mereon is a static, Spanish-language conversational-commerce demonstration created by ByAgentX. It is not a pharmacy, active store, medical provider, prescriber, or payment processor; all programs and prices are illustrative.
+Sitio público de pre-lanzamiento de Mereon Health para México. Presenta el enfoque de calidad, las áreas de portafolio bajo evaluación y el canal oficial para proveedores y alianzas.
 
-## Source lineage
+## Estado operativo
 
-The site was extracted from the tracked production files under `projects/farmacia/` at ByAgentX source commit `3835335cee4eb80af917fb6b14c26312d5b5b69b`. The files were moved to this repository root and adapted only for root-domain metadata and GitHub Pages deployment.
+- Mereon está en fase de sourcing, validación de proveedores y preparación regulatoria.
+- El sitio no procesa ventas, pagos, recetas, expedientes, formularios clínicos ni envíos.
+- No afirma licencias, proveedores aprobados, productos registrados ni relaciones comerciales que todavía no existan.
+- Contacto oficial: `partnerships@mereonhealth.com`.
 
 ## Deployment
 
-GitHub Pages publishes the `main` branch from the repository root. `CNAME` configures the custom domain `mereonhealth.com`. The site is dependency-free and can be previewed locally with any static HTTP server, for example:
+GitHub Pages publica la rama `main` desde la raíz del repositorio. `CNAME` configura `mereonhealth.com`.
+
+Preview local:
 
 ```sh
 python3 -m http.server 8000
 ```
+
+Después abrir `http://127.0.0.1:8000/`.
+
+## Archivos principales
+
+- `index.html`: contenido y estructura pública.
+- `styles.css`: diseño responsive.
+- `script.js`: navegación móvil y año del footer.
+- `assets/`: recursos visuales locales.
