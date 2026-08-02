@@ -1,15 +1,15 @@
 export const PRICING_CONFIG = Object.freeze({
   fxMxnCentavosPerUsd: 1750,
   landedUpliftBasisPoints: 1300,
-  targetMarginBasisPoints: 4500,
-  acceptedMarginRangeBasisPoints: Object.freeze([4000, 5000]),
-  cleanPriceIncrementCentavos: 5000,
+  targetProfitMarkupBasisPoints: 3500,
+  acceptedProfitMarkupRangeBasisPoints: Object.freeze([3450, 3550]),
+  cleanPriceIncrementCentavos: 1000,
   ivaBasisPoints: 1600,
   maxQuantity: 20
 });
 
 export const SHIPPING_OPTIONS = Object.freeze([
-  Object.freeze({ id: 'standard', label: 'Estándar nacional', priceCentavos: 19900 }),
+  Object.freeze({ id: 'standard', label: 'Estándar nacional', priceCentavos: 25000 }),
   Object.freeze({ id: 'express', label: 'Express nacional', priceCentavos: 34900 })
 ]);
 
@@ -31,8 +31,9 @@ export function calculateBasePriceCentavos(sourceUsdCents) {
   requireNonNegativeInteger(sourceUsdCents, 'Costo fuente USD');
   const numerator = sourceUsdCents
     * PRICING_CONFIG.fxMxnCentavosPerUsd
-    * (10_000 + PRICING_CONFIG.landedUpliftBasisPoints);
-  const denominator = 100 * (10_000 - PRICING_CONFIG.targetMarginBasisPoints);
+    * (10_000 + PRICING_CONFIG.landedUpliftBasisPoints)
+    * (10_000 + PRICING_CONFIG.targetProfitMarkupBasisPoints);
+  const denominator = 100 * 10_000 * 10_000;
   const cleanUnits = roundDivide(
     numerator,
     denominator * PRICING_CONFIG.cleanPriceIncrementCentavos
@@ -40,7 +41,7 @@ export function calculateBasePriceCentavos(sourceUsdCents) {
   return cleanUnits * PRICING_CONFIG.cleanPriceIncrementCentavos;
 }
 
-export function calculateGrossMarginBasisPoints(sourceUsdCents, basePriceCentavos) {
+export function calculateProfitMarkupBasisPoints(sourceUsdCents, basePriceCentavos) {
   requireNonNegativeInteger(sourceUsdCents, 'Costo fuente USD');
   requireNonNegativeInteger(basePriceCentavos, 'Precio base');
   if (basePriceCentavos === 0) throw new RangeError('Precio base debe ser mayor a cero');
@@ -49,9 +50,9 @@ export function calculateGrossMarginBasisPoints(sourceUsdCents, basePriceCentavo
     * PRICING_CONFIG.fxMxnCentavosPerUsd
     * (10_000 + PRICING_CONFIG.landedUpliftBasisPoints);
   const landedDenominator = 100 * 10_000;
-  const grossNumerator = basePriceCentavos * landedDenominator - landedNumerator;
-  if (grossNumerator < 0) return -roundDivide(-grossNumerator * 10_000, basePriceCentavos * landedDenominator);
-  return roundDivide(grossNumerator * 10_000, basePriceCentavos * landedDenominator);
+  const profitNumerator = basePriceCentavos * landedDenominator - landedNumerator;
+  if (profitNumerator < 0) return -roundDivide(-profitNumerator * 10_000, landedNumerator);
+  return roundDivide(profitNumerator * 10_000, landedNumerator);
 }
 
 export function calculateCheckoutTotals(lines, shippingCentavos) {
@@ -66,14 +67,18 @@ export function calculateCheckoutTotals(lines, shippingCentavos) {
     return subtotal + lineTotal;
   }, 0);
   requireNonNegativeInteger(productSubtotalCentavos, 'Subtotal');
-  const taxableBaseCentavos = productSubtotalCentavos + shippingCentavos;
-  const ivaCentavos = roundDivide(taxableBaseCentavos * PRICING_CONFIG.ivaBasisPoints, 10_000);
+  const finalTotalCentavos = productSubtotalCentavos + shippingCentavos;
+  const ivaCentavos = roundDivide(
+    finalTotalCentavos * PRICING_CONFIG.ivaBasisPoints,
+    10_000 + PRICING_CONFIG.ivaBasisPoints
+  );
+  const taxableBaseCentavos = finalTotalCentavos - ivaCentavos;
   return {
     productSubtotalCentavos,
     shippingCentavos,
     taxableBaseCentavos,
     ivaCentavos,
-    finalTotalCentavos: taxableBaseCentavos + ivaCentavos
+    finalTotalCentavos
   };
 }
 

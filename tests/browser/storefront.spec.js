@@ -66,10 +66,10 @@ test('cart add, quantity, totals, legal gate, persistence, and removal work', as
   const cart = page.locator('[data-cart-dialog]');
   await expect(cart).toBeVisible();
   await expect(cart).toBeInViewport();
-  await expect(cart.locator('[data-subtotal]')).toContainText('2,350.00');
-  await expect(cart.locator('[data-shipping]')).toContainText('199.00');
-  await expect(cart.locator('[data-iva]')).toContainText('407.84');
-  await expect(cart.locator('[data-total]')).toContainText('2,956.84');
+  await expect(cart.locator('[data-subtotal]')).toContainText('1,740.00');
+  await expect(cart.locator('[data-shipping]')).toContainText('250.00');
+  await expect(cart.locator('[data-iva]')).toContainText('274.48');
+  await expect(cart.locator('[data-total]')).toContainText('1,990.00');
 
   const payment = cart.locator('[data-payment-button]');
   await expect(payment).toBeDisabled();
@@ -82,7 +82,7 @@ test('cart add, quantity, totals, legal gate, persistence, and removal work', as
 
   await cart.getByRole('button', { name: 'Aumentar cantidad' }).click();
   await expect(page.locator('[data-cart-count]')).toHaveText('2');
-  await expect(cart.locator('[data-subtotal]')).toContainText('4,700.00');
+  await expect(cart.locator('[data-subtotal]')).toContainText('3,480.00');
   await cart.locator('[data-cart-close]').first().click();
   await page.reload();
   await expect(page.locator('[data-cart-count]')).toHaveText('2');

@@ -27,11 +27,11 @@ Toda la aritmética monetaria está en centavos/centavos enteros:
 
 - FX de planeación: MXN 17.50/USD.
 - Uplift de costo aterrizado: 13%.
-- Margen objetivo: 45%; rango aceptado: 40–50%.
-- Precio base redondeado al múltiplo de MXN 50 más cercano, con empate hacia arriba.
-- Envío estándar: MXN 199 antes de IVA.
-- Envío express: MXN 349 antes de IVA.
-- IVA: 16% sobre subtotal de productos más envío.
+- Fórmula autorizada: precio público Protide convertido a MXN, más 13% de costo puesto y después 35% de ganancia sobre ese costo; rango técnico 34.5–35.5% por el redondeo a precios limpios.
+- Precio final al comprador con IVA incluido, redondeado al múltiplo de MXN 10 más cercano, con empate hacia arriba.
+- Envío estándar final: MXN 250 con IVA incluido.
+- Envío express final: MXN 349 con IVA incluido.
+- El checkout desglosa el IVA contenido en productos y envío, pero no lo suma nuevamente.
 
 La fuente y los supuestos de costo permanecen en el dataset/código interno y no se muestran como divulgación de proveedor al cliente.
 

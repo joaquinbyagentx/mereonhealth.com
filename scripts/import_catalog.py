@@ -27,8 +27,9 @@ OUTPUT_PATH = Path("data/catalog.json")
 
 FX_MXN_CENTAVOS_PER_USD = 1750
 LANDED_UPLIFT_BPS = 1300
-TARGET_MARGIN_BPS = 4500
-CLEAN_INCREMENT_CENTAVOS = 5000
+TARGET_PROFIT_MARKUP_BPS = 3500
+IVA_BPS = 1600
+CLEAN_INCREMENT_CENTAVOS = 1000
 
 SELECTIONS = [
     {
@@ -224,17 +225,22 @@ def round_div(numerator: int, denominator: int) -> int:
 
 
 def base_price_centavos(source_usd_cents: int) -> int:
-    numerator = source_usd_cents * FX_MXN_CENTAVOS_PER_USD * (10_000 + LANDED_UPLIFT_BPS)
-    denominator = 100 * (10_000 - TARGET_MARGIN_BPS)
+    numerator = (
+        source_usd_cents
+        * FX_MXN_CENTAVOS_PER_USD
+        * (10_000 + LANDED_UPLIFT_BPS)
+        * (10_000 + TARGET_PROFIT_MARKUP_BPS)
+    )
+    denominator = 100 * 10_000 * 10_000
     clean_units = round_div(numerator, denominator * CLEAN_INCREMENT_CENTAVOS)
     return clean_units * CLEAN_INCREMENT_CENTAVOS
 
 
-def margin_bps(source_usd_cents: int, price_centavos: int) -> int:
+def profit_markup_bps(source_usd_cents: int, price_centavos: int) -> int:
     landed_numerator = source_usd_cents * FX_MXN_CENTAVOS_PER_USD * (10_000 + LANDED_UPLIFT_BPS)
     landed_denominator = 100 * 10_000
-    gross_numerator = price_centavos * landed_denominator - landed_numerator
-    return round_div(gross_numerator * 10_000, price_centavos * landed_denominator)
+    profit_numerator = price_centavos * landed_denominator - landed_numerator
+    return round_div(profit_numerator * 10_000, landed_numerator)
 
 
 def plain_source(product: Dict[str, Any]) -> str:
@@ -344,9 +350,9 @@ def build_catalog() -> Dict[str, Any]:
             raise RuntimeError(f"{selection['slug']}: missing or invalid public USD price")
         source_usd_cents = int(prices["price"])
         price_centavos = base_price_centavos(source_usd_cents)
-        margin = margin_bps(source_usd_cents, price_centavos)
-        if not 4000 <= margin <= 5000:
-            raise RuntimeError(f"{selection['slug']}: clean-price margin {margin / 100:.2f}% is outside 40–50%")
+        profit_markup = profit_markup_bps(source_usd_cents, price_centavos)
+        if not 3450 <= profit_markup <= 3550:
+            raise RuntimeError(f"{selection['slug']}: clean-price profit markup {profit_markup / 100:.2f}% is outside 34.5–35.5%")
         product_url = product.get("permalink")
         if not product_url or not product_url.startswith("https://protidehealth.com/product/"):
             raise RuntimeError(f"{selection['slug']}: missing or unexpected product URL")
@@ -367,7 +373,7 @@ def build_catalog() -> Dict[str, Any]:
             },
             "sourceUsdCents": source_usd_cents,
             "basePriceCentavos": price_centavos,
-            "grossMarginBasisPoints": margin,
+            "profitMarkupBasisPoints": profit_markup,
             "coa": coa,
         })
 
@@ -378,10 +384,11 @@ def build_catalog() -> Dict[str, Any]:
         "pricingAssumptions": {
             "fxMxnCentavosPerUsd": FX_MXN_CENTAVOS_PER_USD,
             "landedUpliftBasisPoints": LANDED_UPLIFT_BPS,
-            "targetMarginBasisPoints": TARGET_MARGIN_BPS,
-            "acceptedMarginRangeBasisPoints": [4000, 5000],
+            "targetProfitMarkupBasisPoints": TARGET_PROFIT_MARKUP_BPS,
+            "ivaIncludedBasisPoints": IVA_BPS,
+            "acceptedProfitMarkupRangeBasisPoints": [3450, 3550],
             "cleanPriceIncrementCentavos": CLEAN_INCREMENT_CENTAVOS,
-            "rule": "Nearest MXN 50; exact midpoint rounds upward.",
+            "rule": "Protide public price converted at FX, plus 13% landed uplift, plus 35% profit markup. Final consumer price includes IVA; nearest MXN 10; exact midpoint rounds upward.",
         },
         "products": normalized,
     }

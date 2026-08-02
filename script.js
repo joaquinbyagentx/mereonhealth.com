@@ -78,7 +78,7 @@ function renderCatalog() {
         <h3>${escapeHtml(product.name)}</h3>
         <p class="product-card__presentation">${escapeHtml(product.presentation)}</p>
         <span class="status-badge ${product.status === 'available' ? '' : 'status-badge--pending'}">${statusLabel(product)}</span>
-        <div class="product-price"><strong>${price}</strong><small>Precio antes de IVA y envío</small></div>
+        <div class="product-price"><strong>${price}</strong><small>Precio final con IVA incluido · envío por separado</small></div>
         <div class="product-actions">
           <button class="button button--primary" type="button" data-add="${escapeHtml(product.code)}" ${purchasable ? '' : 'disabled'}>Agregar</button>
           <button class="details-button" type="button" data-detail="${escapeHtml(product.code)}" aria-label="Ver detalle de ${escapeHtml(product.name)}">↗</button>

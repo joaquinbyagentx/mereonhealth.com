@@ -50,11 +50,13 @@ class StaticSiteTests(unittest.TestCase):
         self.assertRegex(self.html, r"data-payment-button disabled")
 
     def test_checkout_lines_are_in_required_order(self):
-        labels = ["Subtotal de productos", "Envío", "IVA (16%)", "Total final"]
+        labels = ["Subtotal de productos", "Envío", "IVA incluido (16%)", "Total final"]
         totals = self.html.split('<dl class="totals"', 1)[1].split('</dl>', 1)[0]
         positions = [totals.index(label) for label in labels]
         self.assertEqual(positions, sorted(positions))
-        self.assertIn("taxableBaseCentavos * PRICING_CONFIG.ivaBasisPoints", (ROOT / "pricing.js").read_text())
+        pricing = (ROOT / "pricing.js").read_text()
+        self.assertIn("finalTotalCentavos * PRICING_CONFIG.ivaBasisPoints", pricing)
+        self.assertIn("10_000 + PRICING_CONFIG.ivaBasisPoints", pricing)
 
     def test_catalog_is_canonical_and_complete(self):
         products = self.catalog["products"]
