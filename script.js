@@ -1,283 +1,288 @@
-(() => {
-  'use strict';
+import {
+  SHIPPING_OPTIONS,
+  calculateCheckoutTotals,
+  formatMxn,
+  normalizeCart,
+  updateQuantity
+} from './pricing.js';
+import { paymentAdapter } from './payment-adapter.js';
 
-  document.documentElement.classList.add('js');
+const CART_KEY = 'mereon-research-cart-v1';
+const SHORT_NOTICE = 'Material de investigación. No es medicamento ni suplemento.';
+const FULL_NOTICE = 'Este compuesto se comercializa exclusivamente como material de investigación y referencia analítica. No ha sido evaluado ni aprobado por COFEPRIS o FDA para indicaciones terapéuticas. Mereon Health no proporciona diagnóstico, prescripción, administración, dosificación ni instrucciones de uso. El comprador es responsable de su almacenamiento, manejo y cumplimiento de las disposiciones aplicables.';
+const BLEND_CODES = new Set(['CJCIPA-5-5', 'GLOW-70', 'KLOW-80', 'WOLVERINE-10-10']);
+const TONES = [
+  ['#5d9784', '#d6f5e8'], ['#8e745d', '#f0ddcb'], ['#546f81', '#d9e9f1'],
+  ['#6c7f62', '#e4efd5'], ['#8e6677', '#f1dbe3'], ['#577d78', '#d8efea']
+];
 
-  const navToggle = document.querySelector('.nav-toggle');
-  const nav = document.querySelector('#primary-nav');
-  const filters = [...document.querySelectorAll('[data-filter]')];
-  const cards = [...document.querySelectorAll('.product-card')];
-  const catalogStatus = document.querySelector('#catalog-status');
-  const guide = document.querySelector('#routine-guide');
-  const guideOverlay = document.querySelector('[data-guide-overlay]');
-  const guideLog = document.querySelector('#guide-log');
-  const guideChoices = document.querySelector('#guide-choices');
-  const guideProgress = [...document.querySelectorAll('.guide-progress span')];
-  const year = document.querySelector('#year');
+const grid = document.querySelector('[data-product-grid]');
+const catalogStatus = document.querySelector('[data-catalog-status]');
+const productDialog = document.querySelector('[data-product-dialog]');
+const productDetail = document.querySelector('[data-product-detail]');
+const cartDialog = document.querySelector('[data-cart-dialog]');
+const cartItems = document.querySelector('[data-cart-items]');
+const cartCount = document.querySelector('[data-cart-count]');
+const cartTrigger = document.querySelector('[data-cart-open]');
+const legalAccept = document.querySelector('[data-legal-accept]');
+const paymentButton = document.querySelector('[data-payment-button]');
+const paymentState = document.querySelector('[data-payment-state]');
+const checkoutForm = document.querySelector('[data-checkout-form]');
+const toast = document.querySelector('[data-toast]');
 
-  const goalLabels = {
-    metabolic: 'Metabolismo y hábitos',
-    longevity: 'Longevidad cotidiana',
-    wellness: 'Bienestar diario',
-    sleep: 'Sueño y calma',
-    recovery: 'Movimiento y recuperación',
-    peptides: 'Péptidos y healthy aging'
-  };
+let catalog = [];
+let productByCode = new Map();
+let cart = [];
+let shippingId = 'standard';
+let activeFilter = 'all';
+let toastTimer;
 
-  const styleLabels = {
-    simple: 'Quiero algo sencillo',
-    guided: 'Prefiero más estructura',
-    flexible: 'Quiero comparar opciones',
-    integral: 'Busco una visión completa'
-  };
+function escapeHtml(value) {
+  return String(value).replace(/[&<>'"]/g, (character) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+  })[character]);
+}
 
-  const state = { step: 'goal', goal: null, style: null };
-  let returnFocus = null;
+function isPurchasable(product) {
+  return product.status === 'available' || product.status === 'coa_pending';
+}
 
-  const createElement = (tag, className, text) => {
-    const element = document.createElement(tag);
-    if (className) element.className = className;
-    if (text !== undefined) element.textContent = text;
-    return element;
-  };
+function statusLabel(product) {
+  if (product.status === 'evaluation') return 'En evaluación';
+  if (product.status === 'coa_pending') return 'COA pendiente';
+  return 'Disponible';
+}
 
-  const closeNav = () => {
-    nav?.classList.remove('is-open');
-    navToggle?.setAttribute('aria-expanded', 'false');
-    navToggle?.setAttribute('aria-label', 'Abrir navegación');
-  };
+function visualMarkup(product, index) {
+  const [tone, light] = TONES[index % TONES.length];
+  const shortName = product.name.replace(' blend', '').slice(0, 18);
+  return `<div class="product-visual" data-index="${String(index + 1).padStart(2, '0')}" style="--tone:${tone};--tone-light:${light}">
+    <div class="product-vial" aria-hidden="true"><span class="product-vial__label"><b>MEREON</b><span>${escapeHtml(shortName)}</span></span></div>
+  </div>`;
+}
 
-  const applyFilter = (filter) => {
-    const selected = filter.dataset.filter;
-    let visibleCount = 0;
-    filters.forEach((item) => {
-      const active = item === filter;
-      item.classList.toggle('is-active', active);
-      item.setAttribute('aria-pressed', String(active));
+function renderCatalog() {
+  const products = catalog.filter((product) => activeFilter === 'all'
+    || (activeFilter === 'blend' ? BLEND_CODES.has(product.code) : !BLEND_CODES.has(product.code)));
+  grid.innerHTML = products.map((product) => {
+    const index = catalog.findIndex((item) => item.code === product.code);
+    const purchasable = isPurchasable(product);
+    const price = purchasable ? formatMxn(product.basePriceCentavos) : 'Precio por confirmar';
+    const coaAction = product.coa
+      ? `<a class="coa-card-link" href="${escapeHtml(product.coa.url)}" target="_blank" rel="noopener noreferrer" aria-label="Ver COA de referencia de ${escapeHtml(product.name)} en sitio externo">Ver COA <span aria-hidden="true">↗</span></a>`
+      : '<span class="coa-card-link coa-card-link--disabled" aria-disabled="true">COA pendiente de asignación/publicación para este lote</span>';
+    return `<article class="product-card" data-kind="${BLEND_CODES.has(product.code) ? 'blend' : 'single'}">
+      ${visualMarkup(product, index)}
+      <div class="product-card__body">
+        <div class="product-card__meta"><span>${BLEND_CODES.has(product.code) ? 'Mezcla de referencia' : 'Compuesto de referencia'}</span><span>${escapeHtml(product.code)}</span></div>
+        <h3>${escapeHtml(product.name)}</h3>
+        <p class="product-card__presentation">${escapeHtml(product.presentation)}</p>
+        <span class="status-badge ${product.status === 'available' ? '' : 'status-badge--pending'}">${statusLabel(product)}</span>
+        <div class="product-price"><strong>${price}</strong><small>Precio antes de IVA y envío</small></div>
+        <div class="product-actions">
+          <button class="button button--primary" type="button" data-add="${escapeHtml(product.code)}" ${purchasable ? '' : 'disabled'}>Agregar</button>
+          <button class="details-button" type="button" data-detail="${escapeHtml(product.code)}" aria-label="Ver detalle de ${escapeHtml(product.name)}">↗</button>
+        </div>
+        ${coaAction}
+        <p class="card-notice">${SHORT_NOTICE}</p>
+      </div>
+    </article>`;
+  }).join('');
+  catalogStatus.textContent = `${products.length} de ${catalog.length} referencias`;
+}
+
+function readStoredCart() {
+  try {
+    return JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+  } catch {
+    return [];
+  }
+}
+
+function persistCart() {
+  try {
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  } catch {
+    showToast('No fue posible guardar el carrito en este navegador.');
+  }
+}
+
+function cartLines() {
+  return cart.map((line) => {
+    const product = productByCode.get(line.code);
+    return product && isPurchasable(product)
+      ? { product, quantity: line.quantity, unitPriceCentavos: product.basePriceCentavos }
+      : null;
+  }).filter(Boolean);
+}
+
+function renderShipping() {
+  document.querySelector('[data-shipping-options]').innerHTML = SHIPPING_OPTIONS.map((option) => `
+    <label class="shipping-option">
+      <input type="radio" name="shipping" value="${option.id}" ${option.id === shippingId ? 'checked' : ''}>
+      <span>${option.label}</span><strong>${formatMxn(option.priceCentavos)}</strong>
+    </label>`).join('');
+}
+
+function renderCart() {
+  const lines = cartLines();
+  const totalQuantity = lines.reduce((sum, line) => sum + line.quantity, 0);
+  cartCount.textContent = String(totalQuantity);
+  cartTrigger.setAttribute('aria-label', `Abrir carrito, ${totalQuantity} ${totalQuantity === 1 ? 'artículo' : 'artículos'}`);
+  cartItems.innerHTML = lines.length ? lines.map(({ product, quantity }) => `
+    <article class="cart-item">
+      <div class="cart-item__swatch" aria-hidden="true">${escapeHtml(product.name.slice(0, 5).toUpperCase())}</div>
+      <div><h4>${escapeHtml(product.name)}</h4><p>${escapeHtml(product.presentation)}</p>
+        <div class="cart-item__controls" aria-label="Cantidad de ${escapeHtml(product.name)}">
+          <button type="button" data-quantity="${escapeHtml(product.code)}" data-value="${quantity - 1}" aria-label="Reducir cantidad">−</button>
+          <span aria-live="polite">${quantity}</span>
+          <button type="button" data-quantity="${escapeHtml(product.code)}" data-value="${quantity + 1}" aria-label="Aumentar cantidad">+</button>
+          <button type="button" data-remove="${escapeHtml(product.code)}">Quitar</button>
+        </div>
+      </div>
+      <strong>${formatMxn(product.basePriceCentavos * quantity)}</strong>
+    </article>`).join('') : '<div class="empty-cart"><p>Tu selección está vacía.</p><button class="button" type="button" data-cart-close>Explorar catálogo</button></div>';
+
+  const shipping = lines.length
+    ? SHIPPING_OPTIONS.find((option) => option.id === shippingId)?.priceCentavos ?? SHIPPING_OPTIONS[0].priceCentavos
+    : 0;
+  const totals = calculateCheckoutTotals(lines, shipping);
+  document.querySelector('[data-subtotal]').textContent = formatMxn(totals.productSubtotalCentavos);
+  document.querySelector('[data-shipping]').textContent = formatMxn(totals.shippingCentavos);
+  document.querySelector('[data-iva]').textContent = formatMxn(totals.ivaCentavos);
+  document.querySelector('[data-total]').textContent = formatMxn(totals.finalTotalCentavos);
+  document.querySelectorAll('input[name="shipping"]').forEach((input) => { input.disabled = !lines.length; });
+  paymentButton.disabled = !lines.length || !legalAccept.checked;
+}
+
+function changeQuantity(code, quantity) {
+  cart = updateQuantity(cart, code, quantity);
+  persistCart();
+  renderCart();
+}
+
+function addToCart(code) {
+  const product = productByCode.get(code);
+  if (!product || !isPurchasable(product)) return;
+  const existing = cart.find((line) => line.code === code);
+  changeQuantity(code, (existing?.quantity || 0) + 1);
+  showToast(`${product.name} se agregó a tu selección.`);
+}
+
+function showToast(message) {
+  toast.textContent = message;
+  toast.classList.add('is-visible');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 2600);
+}
+
+function renderDetail(product) {
+  const index = catalog.findIndex((item) => item.code === product.code);
+  const coa = product.coa;
+  const coaMarkup = coa ? `<div class="coa-box">
+      <h3>${escapeHtml(coa.label)}</h3>
+      <dl class="coa-meta"><dt>Lote de la fuente</dt><dd>${escapeHtml(coa.lot)}</dd><dt>Laboratorio publicado</dt><dd>${escapeHtml(coa.lab)}</dd><dt>Métodos publicados</dt><dd>${escapeHtml(coa.methods.join(' · '))}</dd></dl>
+      <a href="${escapeHtml(coa.url)}" target="_blank" rel="noopener noreferrer">Ver COA en sitio externo <span aria-hidden="true">↗</span></a>
+      <p class="external-note">Documento público de referencia del catálogo fuente. No corresponde todavía a un lote Mereon y no implica afiliación, autorización o reventa oficial.</p>
+    </div>` : `<div class="coa-box"><h3>COA pendiente</h3><p>COA pendiente de asignación/publicación para este lote.</p><span class="button" aria-disabled="true">Ver COA no disponible</span></div>`;
+  productDetail.innerHTML = `<div class="product-detail__layout">
+    <div class="product-detail__visual">${visualMarkup(product, index)}</div>
+    <div class="product-detail__copy">
+      <button class="icon-button" type="button" data-detail-close aria-label="Cerrar detalle" style="float:right">×</button>
+      <p class="eyebrow">${escapeHtml(product.code)}</p><h2 id="detail-title">${escapeHtml(product.name)}</h2>
+      <p class="product-detail__presentation">${escapeHtml(product.presentation)}</p>
+      <p class="product-detail__research">${escapeHtml(product.researchContext)}</p>
+      ${coaMarkup}
+      <div class="legal-notice"><strong>Uso exclusivo de investigación</strong><p>${FULL_NOTICE}</p></div>
+      <div class="product-detail__actions"><button class="button button--primary" type="button" data-add="${escapeHtml(product.code)}" ${isPurchasable(product) ? '' : 'disabled'}>${isPurchasable(product) ? `Agregar · ${formatMxn(product.basePriceCentavos)}` : 'En evaluación'}</button></div>
+      <p class="card-notice">${SHORT_NOTICE}</p>
+    </div>
+  </div>`;
+  productDialog.showModal();
+}
+
+function closeOnBackdrop(dialog, event) {
+  if (event.target === dialog) dialog.close();
+}
+
+grid.addEventListener('click', (event) => {
+  const add = event.target.closest('[data-add]');
+  const detail = event.target.closest('[data-detail]');
+  if (add) addToCart(add.dataset.add);
+  if (detail) renderDetail(productByCode.get(detail.dataset.detail));
+});
+
+productDetail.addEventListener('click', (event) => {
+  const add = event.target.closest('[data-add]');
+  if (event.target.closest('[data-detail-close]')) productDialog.close();
+  if (add) addToCart(add.dataset.add);
+});
+productDialog.addEventListener('click', (event) => closeOnBackdrop(productDialog, event));
+cartDialog.addEventListener('click', (event) => closeOnBackdrop(cartDialog, event));
+
+cartTrigger.addEventListener('click', () => {
+  paymentState.textContent = 'Pedido no enviado. La integración de pago permanece inactiva.';
+  cartDialog.showModal();
+});
+document.addEventListener('click', (event) => {
+  if (event.target.closest('[data-cart-close]')) cartDialog.close();
+});
+cartItems.addEventListener('click', (event) => {
+  const quantity = event.target.closest('[data-quantity]');
+  const remove = event.target.closest('[data-remove]');
+  if (quantity) changeQuantity(quantity.dataset.quantity, Number(quantity.dataset.value));
+  if (remove) changeQuantity(remove.dataset.remove, 0);
+});
+document.querySelector('[data-shipping-options]').addEventListener('change', (event) => {
+  if (event.target.matches('input[name="shipping"]')) {
+    shippingId = event.target.value;
+    renderCart();
+  }
+});
+legalAccept.addEventListener('change', renderCart);
+checkoutForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  if (!legalAccept.checked || !cartLines().length) return;
+  const result = await paymentAdapter.createOrder();
+  paymentState.textContent = result.message;
+});
+
+document.querySelectorAll('[data-filter]').forEach((button) => {
+  button.addEventListener('click', () => {
+    activeFilter = button.dataset.filter;
+    document.querySelectorAll('[data-filter]').forEach((candidate) => {
+      const active = candidate === button;
+      candidate.classList.toggle('is-active', active);
+      candidate.setAttribute('aria-pressed', String(active));
     });
-    cards.forEach((card) => {
-      const visible = selected === 'all' || card.dataset.category === selected;
-      card.hidden = !visible;
-      if (visible) visibleCount += 1;
-    });
-    catalogStatus.textContent = `${visibleCount} ${visibleCount === 1 ? 'programa' : 'programas'}`;
-  };
-
-  const addGuideMessage = (text, type = 'guide') => {
-    const message = createElement('div', `guide-message guide-message--${type}`, text);
-    guideLog.append(message);
-    guideLog.scrollTop = guideLog.scrollHeight;
-    return message;
-  };
-
-  const setProgress = (step) => {
-    const active = { goal: 1, style: 2, results: 3 }[step] || 1;
-    guideProgress.forEach((item, index) => item.classList.toggle('is-active', index < active));
-  };
-
-  const setChoices = (choices) => {
-    const fragment = document.createDocumentFragment();
-    choices.forEach(({ value, label }) => {
-      const button = createElement('button', '', label);
-      button.type = 'button';
-      button.dataset.choice = value;
-      fragment.append(button);
-    });
-    guideChoices.replaceChildren(fragment);
-  };
-
-  const focusFirstChoice = () => requestAnimationFrame(() => guideChoices.querySelector('button')?.focus());
-
-  const askGoal = () => {
-    state.step = 'goal';
-    setProgress('goal');
-    addGuideMessage('¿Qué te gustaría priorizar en este momento?');
-    setChoices(Object.entries(goalLabels).map(([value, label]) => ({ value, label })));
-    focusFirstChoice();
-  };
-
-  const askStyle = () => {
-    state.step = 'style';
-    setProgress('style');
-    addGuideMessage('¿Cómo prefieres construir tu rutina?');
-    setChoices(Object.entries(styleLabels).map(([value, label]) => ({ value, label })));
-    focusFirstChoice();
-  };
-
-  const matchingCards = () => {
-    const sameGoal = cards.filter((card) => card.dataset.goals.split(' ').includes(state.goal));
-    const sameStyle = sameGoal.filter((card) => card.dataset.styles.split(' ').includes(state.style));
-    return (sameStyle.length ? sameStyle : sameGoal).slice(0, 3);
-  };
-
-  const showResults = () => {
-    state.step = 'results';
-    setProgress('results');
-    addGuideMessage('Estas rutas pueden ser un buen punto de partida para ti.');
-    const results = createElement('div', 'guide-results');
-    matchingCards().forEach((card, index) => {
-      const result = createElement('article', 'guide-result');
-      result.append(createElement('small', '', index === 0 ? 'Mejor coincidencia' : 'También puede interesarte'));
-      result.append(createElement('strong', '', card.querySelector('h3').textContent));
-      result.append(createElement('p', '', card.querySelector('.product-card__fit').textContent));
-      const action = createElement('button', '', 'Ver programa');
-      action.type = 'button';
-      action.dataset.visitProgram = card.id;
-      result.append(action);
-      results.append(result);
-    });
-    guideLog.append(results);
-    setChoices([{ value: 'restart', label: 'Empezar de nuevo' }, { value: 'browse', label: 'Ver todos los programas' }]);
-    guideLog.scrollTop = guideLog.scrollHeight;
-    requestAnimationFrame(() => results.querySelector('button')?.focus());
-  };
-
-  const resetGuide = ({ focus = true } = {}) => {
-    Object.assign(state, { step: 'goal', goal: null, style: null });
-    guideLog.replaceChildren();
-    guideChoices.replaceChildren();
-    addGuideMessage('Hola. Vamos a encontrar una ruta que encaje con tus prioridades.');
-    askGoal();
-    if (!focus) document.activeElement?.blur();
-  };
-
-  const closeGuide = ({ restore = true } = {}) => {
-    if (!guide || guide.hidden) return;
-    guide.hidden = true;
-    guideOverlay.hidden = true;
-    document.body.classList.remove('guide-open');
-    if (restore && returnFocus instanceof HTMLElement && document.contains(returnFocus)) returnFocus.focus();
-    returnFocus = null;
-  };
-
-  const openGuide = (trigger) => {
-    if (!guide || !guideOverlay) return;
-    returnFocus = trigger instanceof HTMLElement ? trigger : document.activeElement;
-    closeNav();
-    guide.hidden = false;
-    guideOverlay.hidden = false;
-    document.body.classList.add('guide-open');
-    guideLog.replaceChildren();
-    guideChoices.replaceChildren();
-    addGuideMessage('Hola. Vamos a encontrar una ruta que encaje con tus prioridades.');
-    const presetGoal = trigger?.dataset.goal;
-    if (presetGoal && goalLabels[presetGoal]) {
-      state.goal = presetGoal;
-      addGuideMessage(goalLabels[presetGoal], 'user');
-      askStyle();
-    } else {
-      Object.assign(state, { step: 'goal', goal: null, style: null });
-      askGoal();
-    }
-    requestAnimationFrame(() => guide.querySelector('[data-guide-close]')?.focus());
-  };
-
-  const visitProgram = (id) => {
-    const card = document.getElementById(id);
-    if (!card) return;
-    const allFilter = filters.find((filter) => filter.dataset.filter === 'all');
-    if (allFilter) applyFilter(allFilter);
-    closeGuide({ restore: false });
-    cards.forEach((item) => item.classList.remove('is-recommended'));
-    card.classList.add('is-recommended');
-    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    card.tabIndex = -1;
-    requestAnimationFrame(() => card.focus({ preventScroll: true }));
-    window.setTimeout(() => card.classList.remove('is-recommended'), 5000);
-  };
-
-  const handleChoice = (button) => {
-    const { choice } = button.dataset;
-    if (choice === 'restart') {
-      resetGuide();
-      return;
-    }
-    if (choice === 'browse') {
-      const allFilter = filters.find((filter) => filter.dataset.filter === 'all');
-      if (allFilter) applyFilter(allFilter);
-      closeGuide({ restore: false });
-      document.querySelector('#programas')?.scrollIntoView({ behavior: 'smooth' });
-      return;
-    }
-    addGuideMessage(button.textContent, 'user');
-    if (state.step === 'goal' && goalLabels[choice]) {
-      state.goal = choice;
-      askStyle();
-    } else if (state.step === 'style' && styleLabels[choice]) {
-      state.style = choice;
-      showResults();
-    }
-  };
-
-  navToggle?.addEventListener('click', () => {
-    const open = navToggle.getAttribute('aria-expanded') !== 'true';
-    navToggle.setAttribute('aria-expanded', String(open));
-    navToggle.setAttribute('aria-label', open ? 'Cerrar navegación' : 'Abrir navegación');
-    nav?.classList.toggle('is-open', open);
+    renderCatalog();
   });
+});
 
-  nav?.addEventListener('click', (event) => {
-    if (event.target instanceof HTMLAnchorElement) closeNav();
-  });
+window.addEventListener('storage', (event) => {
+  if (event.key !== CART_KEY) return;
+  cart = normalizeCart(readStoredCart(), new Set(catalog.filter(isPurchasable).map((product) => product.code)));
+  renderCart();
+});
 
-  document.addEventListener('click', (event) => {
-    const target = event.target instanceof Element ? event.target : null;
-    if (!target) return;
-    const filter = target.closest('[data-filter]');
-    if (filter) {
-      applyFilter(filter);
-      return;
-    }
-    const guideOpen = target.closest('[data-guide-open]');
-    if (guideOpen) {
-      openGuide(guideOpen);
-      return;
-    }
-    if (target.closest('[data-guide-close]')) {
-      closeGuide();
-      return;
-    }
-    if (target.closest('[data-guide-reset]')) {
-      resetGuide();
-      return;
-    }
-    const choice = target.closest('[data-choice]');
-    if (choice) {
-      handleChoice(choice);
-      return;
-    }
-    const visit = target.closest('[data-visit-program]');
-    if (visit) visitProgram(visit.dataset.visitProgram);
-  });
+document.querySelector('[data-year]').textContent = String(new Date().getFullYear());
+renderShipping();
 
-  guideOverlay?.addEventListener('click', () => closeGuide());
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      if (guide && !guide.hidden) closeGuide();
-      else closeNav();
-      return;
-    }
-    if (event.key !== 'Tab' || !guide || guide.hidden) return;
-    const focusable = [...guide.querySelectorAll('button:not(:disabled), a[href]')].filter((element) => element.offsetParent !== null);
-    if (!focusable.length) return;
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    if (!guide.contains(document.activeElement)) {
-      event.preventDefault();
-      first.focus();
-    } else if (event.shiftKey && document.activeElement === first) {
-      event.preventDefault();
-      last.focus();
-    } else if (!event.shiftKey && document.activeElement === last) {
-      event.preventDefault();
-      first.focus();
-    }
-  });
-
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 1080) closeNav();
-  }, { passive: true });
-
-  if (year) year.textContent = String(new Date().getFullYear());
-})();
+try {
+  const response = await fetch('./data/catalog.json', { cache: 'no-store' });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  const payload = await response.json();
+  if (!Array.isArray(payload.products) || payload.products.length !== 12) throw new Error('Catálogo incompleto');
+  catalog = payload.products;
+  productByCode = new Map(catalog.map((product) => [product.code, product]));
+  const knownCodes = new Set(catalog.filter(isPurchasable).map((product) => product.code));
+  cart = normalizeCart(readStoredCart(), knownCodes);
+  persistCart();
+  renderCatalog();
+  renderCart();
+} catch (error) {
+  console.error('Catalog initialization failed:', error);
+  catalogStatus.textContent = 'Catálogo temporalmente no disponible';
+  grid.innerHTML = '<p class="error-panel">No pudimos validar el catálogo. Por seguridad, precios y compra permanecen desactivados.</p>';
+  renderCart();
+}

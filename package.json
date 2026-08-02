@@ -1,0 +1,14 @@
+{
+  "name": "mereon-research-catalog",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/catalog.test.mjs && python3 tests/static_checks.py && python3 tests/importer_test.py",
+    "test:browser": "playwright test",
+    "catalog:import": "python3 scripts/import_catalog.py",
+    "catalog:check": "python3 scripts/import_catalog.py --check"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1"
+  }
+}
