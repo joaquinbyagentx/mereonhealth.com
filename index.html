@@ -76,6 +76,10 @@
           <button class="catalog-explainer-link" type="button" data-research-open aria-haspopup="dialog" aria-controls="research-explainer">¿Qué significa?</button>
         </div>
       </div>
+      <aside class="catalog-context" aria-label="Contexto de las descripciones de investigación">
+        <strong>Contexto de investigación</strong>
+        <p>Las descripciones presentan áreas estudiadas en investigación preclínica y no establecen eficacia, seguridad ni una indicación terapéutica. Los materiales ofrecidos por Mereon son exclusivamente para investigación y referencia analítica; no están destinados a consumo, administración o uso diagnóstico, terapéutico o veterinario.</p>
+      </aside>
       <div class="catalog-toolbar" aria-label="Filtros de catálogo">
         <button type="button" class="filter is-active" data-filter="all" aria-pressed="true">Todos</button>
         <button type="button" class="filter" data-filter="single" aria-pressed="false">Compuestos</button>
@@ -111,6 +115,7 @@
         <details open><summary>¿Qué significa Mereon Verified™?</summary><p>Identifica referencias con COA publicado y revisable bajo los criterios Mereon de origen, pruebas independientes, identidad, pureza y trazabilidad. Las referencias pendientes no muestran el sello.</p></details>
         <details><summary>¿Qué es un COA?</summary><p>Es el certificado de análisis que documenta datos como identidad, pureza, métodos y resultados de la muestra.</p></details>
         <details><summary>¿El precio incluye IVA y envío?</summary><p>Precios incluyen IVA. Envío se calcula al pagar.</p></details>
+        <details data-research-faq><summary><span id="research-explainer-title" role="heading" aria-level="3">¿Qué significa “péptido de investigación”?</span></summary><div class="research-dialog__copy"><p>Algunas moléculas de nuestro catálogo continúan siendo estudiadas por la comunidad científica en etapas preclínicas o clínicas. Otras comparten ingredientes activos con medicamentos ya autorizados en determinadas presentaciones y jurisdicciones.</p><p>La clasificación de investigación corresponde específicamente al material ofrecido por Mereon y no implica registro sanitario, equivalencia farmacéutica ni aprobación para una indicación terapéutica. Consulta la ficha técnica y la documentación de cada producto para conocer su condición particular.</p></div></details>
       </div>
     </section>
   </main>
@@ -132,11 +137,7 @@
         <p class="eyebrow">Información del catálogo</p>
         <button class="icon-button" type="button" data-research-close aria-label="Cerrar explicación" autofocus>×</button>
       </header>
-      <h2 id="research-explainer-title">¿Qué significa “péptido de investigación”?</h2>
-      <div class="research-dialog__copy">
-        <p>Algunas moléculas de nuestro catálogo continúan siendo estudiadas por la comunidad científica en etapas preclínicas o clínicas. Otras comparten ingredientes activos con medicamentos ya autorizados en determinadas presentaciones y jurisdicciones.</p>
-        <p>La clasificación de investigación corresponde específicamente al material ofrecido por Mereon y no implica registro sanitario, equivalencia farmacéutica ni aprobación para una indicación terapéutica. Consulta la ficha técnica y la documentación de cada producto para conocer su condición particular.</p>
-      </div>
+      <div data-research-dialog-content></div>
     </div>
   </dialog>
 

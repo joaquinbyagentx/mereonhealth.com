@@ -19,20 +19,37 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   const errors = await trackRuntimeFailures(page);
   await page.goto('/');
   await expect(page.locator('.product-card')).toHaveCount(12);
+  await expect(page.locator('.product-card .product-card__research-area')).toHaveCount(12);
   await expect(page.locator('.product-card .mereon-verified-badge')).toHaveCount(10);
   await expect(page.locator('[data-catalog-status]')).toContainText('12 de 12');
+  const catalogPayload = await page.request.get('/data/catalog.json').then((response) => response.json());
+  for (const product of catalogPayload.products) {
+    const card = page.locator(`.product-card:has([data-detail="${product.code}"])`);
+    await expect(card.locator('.product-card__research-area')).toHaveText(product.researchArea);
+  }
+  const clarification = 'Las descripciones presentan áreas estudiadas en investigación preclínica y no establecen eficacia, seguridad ni una indicación terapéutica. Los materiales ofrecidos por Mereon son exclusivamente para investigación y referencia analítica; no están destinados a consumo, administración o uso diagnóstico, terapéutico o veterinario.';
+  await expect(page.getByText(clarification, { exact: true })).toHaveCount(1);
+  const faqItems = page.locator('.faq__items > details');
+  await expect(faqItems).toHaveCount(4);
+  await expect(faqItems.last().locator('summary')).toHaveText('¿Qué significa “péptido de investigación”?');
+  await expect(faqItems.last().locator('p')).toHaveText([
+    'Algunas moléculas de nuestro catálogo continúan siendo estudiadas por la comunidad científica en etapas preclínicas o clínicas. Otras comparten ingredientes activos con medicamentos ya autorizados en determinadas presentaciones y jurisdicciones.',
+    'La clasificación de investigación corresponde específicamente al material ofrecido por Mereon y no implica registro sanitario, equivalencia farmacéutica ni aprobación para una indicación terapéutica. Consulta la ficha técnica y la documentación de cada producto para conocer su condición particular.'
+  ]);
   const researchTrigger = page.getByRole('button', { name: '¿Qué significa?' });
   await expect(researchTrigger).toBeVisible();
   await researchTrigger.click();
   const researchDialog = page.locator('[data-research-dialog]');
   await expect(researchDialog).toBeInViewport();
   await expect(researchDialog.getByRole('button', { name: 'Cerrar explicación' })).toBeFocused();
+  await expect(researchDialog.locator('summary')).toHaveAttribute('tabindex', '-1');
   await expect(researchDialog.getByRole('heading')).toHaveText('¿Qué significa “péptido de investigación”?');
   await expect(researchDialog).toContainText('Algunas moléculas de nuestro catálogo continúan siendo estudiadas por la comunidad científica en etapas preclínicas o clínicas. Otras comparten ingredientes activos con medicamentos ya autorizados en determinadas presentaciones y jurisdicciones.');
   await expect(researchDialog).toContainText('La clasificación de investigación corresponde específicamente al material ofrecido por Mereon y no implica registro sanitario, equivalencia farmacéutica ni aprobación para una indicación terapéutica. Consulta la ficha técnica y la documentación de cada producto para conocer su condición particular.');
   await page.keyboard.press('Escape');
   await expect(researchDialog).not.toBeVisible();
   await expect(researchTrigger).toBeFocused();
+  await expect(page.locator('.faq__items > details').last().locator('summary')).not.toHaveAttribute('tabindex');
   await researchTrigger.click();
   await researchDialog.getByRole('button', { name: 'Cerrar explicación' }).click();
   await expect(researchDialog).not.toBeVisible();
@@ -41,6 +58,7 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   await researchDialog.evaluate((dialog) => dialog.dispatchEvent(new MouseEvent('click', { bubbles: true })));
   await expect(researchDialog).not.toBeVisible();
   await expect(researchTrigger).toBeFocused();
+  await expect(page.locator('.faq__items > details').last().locator('summary')).toHaveText('¿Qué significa “péptido de investigación”?');
   await expect(page.locator('.coa-card-link[href]')).toHaveCount(10);
   await expect(page.locator('.coa-card-link--disabled')).toHaveCount(2);
   for (const link of await page.locator('.coa-card-link[href]').all()) {
@@ -82,6 +100,15 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   await expect(page.locator('[data-product-dialog] .mereon-verified-note')).toContainText('Estado documental del lote');
   await page.keyboard.press('Escape');
   await expect(page.locator('[data-product-dialog]')).not.toBeVisible();
+
+  for (const product of catalogPayload.products) {
+    await page.locator(`[data-detail="${product.code}"]`).click();
+    const detail = page.locator('[data-product-dialog]');
+    await expect(detail.locator('.product-detail__research-label')).toHaveText('Área de investigación');
+    await expect(detail.locator('.product-detail__research-area')).toHaveText(product.researchArea);
+    await expect(detail.locator('.product-detail__research-description')).toHaveText(product.researchDescription);
+    await detail.locator('[data-detail-close]').click();
+  }
 
   const cartButton = page.locator('[data-cart-open]');
   await cartButton.focus();

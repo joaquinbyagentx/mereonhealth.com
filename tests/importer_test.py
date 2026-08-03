@@ -17,6 +17,28 @@ SPEC.loader.exec_module(IMPORTER)
 
 
 class ImporterSecurityTests(unittest.TestCase):
+    def test_importer_research_copy_matches_canonical_catalog_exactly(self):
+        catalog = json.loads((ROOT / "data" / "catalog.json").read_text(encoding="utf-8"))
+        expected = [
+            {
+                "code": product["code"],
+                "researchArea": product["researchArea"],
+                "researchDescription": product["researchDescription"],
+            }
+            for product in catalog["products"]
+        ]
+        actual = [
+            {
+                "code": selection["code"],
+                "researchArea": selection["researchArea"],
+                "researchDescription": selection["researchDescription"],
+            }
+            for selection in IMPORTER.SELECTIONS
+        ]
+
+        self.assertEqual(len(actual), 12)
+        self.assertEqual(actual, expected)
+
     def test_cross_origin_redirect_fails_before_body_is_read(self):
         class RedirectedResponse:
             status = 200

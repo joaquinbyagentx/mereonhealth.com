@@ -18,6 +18,9 @@ const productDialog = document.querySelector('[data-product-dialog]');
 const productDetail = document.querySelector('[data-product-detail]');
 const researchDialog = document.querySelector('[data-research-dialog]');
 const researchTrigger = document.querySelector('[data-research-open]');
+const researchFaq = document.querySelector('[data-research-faq]');
+const researchFaqHome = researchFaq.parentElement;
+const researchDialogContent = document.querySelector('[data-research-dialog-content]');
 const cartDialog = document.querySelector('[data-cart-dialog]');
 const cartItems = document.querySelector('[data-cart-items]');
 const cartCount = document.querySelector('[data-cart-count]');
@@ -116,6 +119,7 @@ function renderCatalog() {
         ${verificationBadge}
         <h3>${escapeHtml(product.name)}</h3>
         <p class="product-card__presentation">${escapeHtml(product.presentation)}</p>
+        <p class="product-card__research"><span>Área de investigación</span><strong class="product-card__research-area">${escapeHtml(product.researchArea)}</strong></p>
         <p class="supplier-line"><span>${escapeHtml(product.brandSupplier.role)}</span><strong>${escapeHtml(product.brandSupplier.brand)}</strong></p>
         <span class="status-badge ${product.status === 'available' ? '' : 'status-badge--pending'}">${statusLabel(product)}</span>
         <div class="product-price"><strong>${price}</strong><small>IVA incluido · envío al pagar</small></div>
@@ -238,7 +242,11 @@ function renderDetail(product) {
       <p class="product-detail__presentation">${escapeHtml(product.presentation)}</p>
       ${verificationMarkup}
       <dl class="supplier-detail"><dt>${escapeHtml(product.brandSupplier.role)}</dt><dd>${escapeHtml(product.brandSupplier.brand)}</dd><dt>Ficha pública de la fuente</dt><dd><a href="${escapeHtml(product.source.productUrl)}" target="_blank" rel="noopener noreferrer">Ver producto en Ascension Peptides <span aria-hidden="true">↗</span></a></dd><dt>Plataforma comercial</dt><dd>Mereon Health</dd></dl>
-      <p class="product-detail__research">${escapeHtml(product.researchContext)}</p>
+      <section class="product-detail__research" aria-labelledby="detail-research-label">
+        <p class="product-detail__research-label" id="detail-research-label">Área de investigación</p>
+        <h3 class="product-detail__research-area">${escapeHtml(product.researchArea)}</h3>
+        <p class="product-detail__research-description">${escapeHtml(product.researchDescription)}</p>
+      </section>
       ${coaMarkup}
       <div class="product-detail__actions"><button class="button button--primary" type="button" data-add="${escapeHtml(product.code)}" ${isPurchasable(product) ? '' : 'disabled'}>${isPurchasable(product) ? `Agregar · ${formatMxn(product.basePriceCentavos)}` : 'En evaluación'}</button></div>
     </div>
@@ -266,8 +274,18 @@ productDialog.addEventListener('click', (event) => closeOnBackdrop(productDialog
 researchDialog.addEventListener('click', (event) => closeOnBackdrop(researchDialog, event));
 cartDialog.addEventListener('click', (event) => closeOnBackdrop(cartDialog, event));
 
-researchTrigger.addEventListener('click', () => researchDialog.showModal());
+researchTrigger.addEventListener('click', () => {
+  researchFaq.open = true;
+  researchFaq.querySelector('summary')?.setAttribute('tabindex', '-1');
+  researchDialogContent.append(researchFaq);
+  researchDialog.showModal();
+});
 researchDialog.querySelector('[data-research-close]').addEventListener('click', () => researchDialog.close());
+researchDialog.addEventListener('close', () => {
+  researchFaq.querySelector('summary')?.removeAttribute('tabindex');
+  researchFaq.open = false;
+  researchFaqHome.append(researchFaq);
+});
 researchDialog.addEventListener('close', () => researchTrigger.focus());
 
 cartTrigger.addEventListener('click', () => {

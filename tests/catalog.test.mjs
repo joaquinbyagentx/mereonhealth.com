@@ -13,6 +13,21 @@ import {
 import catalog from '../data/catalog.json' with { type: 'json' };
 import { paymentAdapter } from '../payment-adapter.js';
 
+const EXPECTED_RESEARCH_COPY = {
+  'BPC-157': ['Reparación de tejidos', 'Investigado en modelos preclínicos para entender cómo responden los tejidos después de un daño y cómo se organizan durante su reparación, con especial interés en tejidos digestivos, musculares y conectivos.'],
+  'TB-500': ['Movimiento celular y reparación de tejidos', 'Péptido relacionado con thymosin beta-4, investigado en modelos preclínicos para entender cómo se desplazan y organizan las células durante la respuesta de músculos, tendones y otros tejidos ante un daño.'],
+  'MOTS-C': ['Energía celular y metabolismo', 'Péptido derivado de una secuencia mitocondrial, investigado para entender cómo las células utilizan la energía y responden ante cambios metabólicos y situaciones de estrés celular.'],
+  'GHK-Cu': ['Piel, colágeno y tejido conectivo', 'Tripéptido capaz de unirse al cobre, investigado para entender su participación en la formación de colágeno y en la respuesta de la piel y otros tejidos conectivos durante procesos de renovación y reparación.'],
+  'CJC-1295 No-DAC + Ipamorelin': ['Señales hormonales y metabolismo', 'Mezcla de dos péptidos investigada para entender las señales que regulan la liberación de hormona de crecimiento y su relación con el metabolismo, el uso de energía y el mantenimiento de los tejidos.'],
+  'Thymosin Alpha 1': ['Respuesta inmunológica', 'Investigado para entender cómo se comunican y coordinan las células del sistema inmunológico ante distintas señales y condiciones experimentales.'],
+  Tesamorelin: ['Regulación hormonal', 'Análogo peptídico investigado para entender cómo se regula la liberación de hormona de crecimiento y cómo estas señales se relacionan con diferentes procesos metabólicos.'],
+  Epithalon: ['Envejecimiento celular y telómeros', 'Tetrapéptido investigado en modelos preclínicos para entender los cambios que ocurren en las células con el paso del tiempo y el papel de los telómeros en el mantenimiento celular.'],
+  KPV: ['Respuesta inflamatoria', 'Tripéptido investigado para entender cómo responden las células ante señales inflamatorias, especialmente en modelos relacionados con la piel y los tejidos del sistema digestivo.'],
+  GLOW: ['Piel, colágeno y reparación de tejidos', 'Combina GHK-Cu, BPC-157 y TB-500, péptidos investigados en modelos preclínicos para entender la formación de colágeno, la organización celular y la respuesta de la piel y otros tejidos durante su reparación.'],
+  KLOW: ['Reparación de tejidos y respuesta inflamatoria', 'Combina GHK-Cu, BPC-157, TB-500 y KPV. Se investiga en modelos preclínicos para entender cómo se organizan los tejidos durante su reparación y cómo responden las células ante señales inflamatorias.'],
+  'Wolverine Stack': ['Músculos, tendones y tejido conectivo', 'Combina BPC-157 y TB-500, dos péptidos investigados en modelos preclínicos para entender la respuesta de músculos, tendones y tejido conectivo después de una lesión, daño o esfuerzo.']
+};
+
 test('pricing configuration preserves the exact landed-cost formula and adds no extra IVA multiplier', () => {
   assert.equal(PRICING_CONFIG.fxMxnTenThousandthsPerUsd, 173_207);
   assert.equal(PRICING_CONFIG.landedUpliftBasisPoints, 1300);
@@ -37,6 +52,20 @@ test('catalog has 12 unique Ascension SKUs and every price derives from the exac
     const profitMarkup = calculateProfitMarkupBasisPoints(product.sourceUsdCents, price);
     assert.equal(profitMarkup, product.profitMarkupBasisPoints, product.code);
     assert.ok(profitMarkup >= 3700 && profitMarkup <= 4300, `${product.code}: ${profitMarkup}`);
+  }
+});
+
+test('all 12 products have the approved exact research areas and descriptions', () => {
+  assert.equal(Object.keys(EXPECTED_RESEARCH_COPY).length, 12);
+  assert.deepEqual(
+    Object.fromEntries(catalog.products.map(({ name, researchArea, researchDescription }) => [
+      name,
+      [researchArea, researchDescription]
+    ])),
+    EXPECTED_RESEARCH_COPY
+  );
+  for (const product of catalog.products) {
+    assert.equal('researchContext' in product, false, `${product.code} retains a stale description field`);
   }
 });
 

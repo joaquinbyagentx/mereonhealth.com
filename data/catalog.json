@@ -22,7 +22,8 @@
       "name": "BPC-157",
       "presentation": "10 mg",
       "status": "coa_pending",
-      "researchContext": "Péptido sintético de 15 aminoácidos estudiado en modelos preclínicos de señalización y respuesta tisular; la evidencia no establece beneficios clínicos.",
+      "researchArea": "Reparación de tejidos",
+      "researchDescription": "Investigado en modelos preclínicos para entender cómo responden los tejidos después de un daño y cómo se organizan durante su reparación, con especial interés en tejidos digestivos, musculares y conectivos.",
       "brandSupplier": {
         "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
@@ -62,7 +63,8 @@
       "name": "TB-500",
       "presentation": "5 mg",
       "status": "available",
-      "researchContext": "Péptido sintético relacionado con thymosin beta-4, investigado en sistemas preclínicos de dinámica celular; sin indicaciones terapéuticas aprobadas.",
+      "researchArea": "Movimiento celular y reparación de tejidos",
+      "researchDescription": "Péptido relacionado con thymosin beta-4, investigado en modelos preclínicos para entender cómo se desplazan y organizan las células durante la respuesta de músculos, tendones y otros tejidos ante un daño.",
       "brandSupplier": {
         "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
@@ -106,7 +108,8 @@
       "name": "MOTS-C",
       "presentation": "10 mg",
       "status": "available",
-      "researchContext": "Péptido derivado de una secuencia mitocondrial investigado en modelos preclínicos de señalización metabólica; sin extrapolación a resultados en personas.",
+      "researchArea": "Energía celular y metabolismo",
+      "researchDescription": "Péptido derivado de una secuencia mitocondrial, investigado para entender cómo las células utilizan la energía y responden ante cambios metabólicos y situaciones de estrés celular.",
       "brandSupplier": {
         "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
@@ -150,7 +153,8 @@
       "name": "GHK-Cu",
       "presentation": "100 mg · 3 mL",
       "status": "coa_pending",
-      "researchContext": "Complejo tripeptídico de cobre utilizado como referencia en investigación bioquímica; no se presenta como medicamento, cosmético ni tratamiento.",
+      "researchArea": "Piel, colágeno y tejido conectivo",
+      "researchDescription": "Tripéptido capaz de unirse al cobre, investigado para entender su participación en la formación de colágeno y en la respuesta de la piel y otros tejidos conectivos durante procesos de renovación y reparación.",
       "brandSupplier": {
         "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
@@ -190,7 +194,8 @@
       "name": "CJC-1295 No-DAC + Ipamorelin",
       "presentation": "CJC-1295 No DAC 5 mg + Ipamorelin 5 mg · 10 mg total",
       "status": "available",
-      "researchContext": "Mezcla de dos péptidos estudiada como material analítico en modelos de señalización; no implica eficacia, seguridad o uso clínico.",
+      "researchArea": "Señales hormonales y metabolismo",
+      "researchDescription": "Mezcla de dos péptidos investigada para entender las señales que regulan la liberación de hormona de crecimiento y su relación con el metabolismo, el uso de energía y el mantenimiento de los tejidos.",
       "brandSupplier": {
         "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
@@ -237,7 +242,8 @@
       "name": "Thymosin Alpha 1",
       "presentation": "10 mg",
       "status": "available",
-      "researchContext": "Péptido sintético empleado en investigación de vías inmunológicas in vitro y preclínicas; esta descripción no constituye una indicación terapéutica.",
+      "researchArea": "Respuesta inmunológica",
+      "researchDescription": "Investigado para entender cómo se comunican y coordinan las células del sistema inmunológico ante distintas señales y condiciones experimentales.",
       "brandSupplier": {
         "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
@@ -284,7 +290,8 @@
       "name": "Tesamorelin",
       "presentation": "5 mg",
       "status": "available",
-      "researchContext": "Análogo peptídico sintético estudiado en investigación de señalización endocrina; el material se ofrece exclusivamente para investigación y referencia.",
+      "researchArea": "Regulación hormonal",
+      "researchDescription": "Análogo peptídico investigado para entender cómo se regula la liberación de hormona de crecimiento y cómo estas señales se relacionan con diferentes procesos metabólicos.",
       "brandSupplier": {
         "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
@@ -328,7 +335,8 @@
       "name": "Epithalon",
       "presentation": "10 mg",
       "status": "available",
-      "researchContext": "Tetrapéptido sintético investigado en modelos preclínicos de biología celular; no hay promesa de resultados ni recomendación de uso.",
+      "researchArea": "Envejecimiento celular y telómeros",
+      "researchDescription": "Tetrapéptido investigado en modelos preclínicos para entender los cambios que ocurren en las células con el paso del tiempo y el papel de los telómeros en el mantenimiento celular.",
       "brandSupplier": {
         "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
@@ -375,7 +383,8 @@
       "name": "KPV",
       "presentation": "10 mg",
       "status": "available",
-      "researchContext": "Tripéptido sintético utilizado en estudios preclínicos de señalización; sus contextos de investigación no demuestran resultados clínicos.",
+      "researchArea": "Respuesta inflamatoria",
+      "researchDescription": "Tripéptido investigado para entender cómo responden las células ante señales inflamatorias, especialmente en modelos relacionados con la piel y los tejidos del sistema digestivo.",
       "brandSupplier": {
         "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
@@ -422,7 +431,8 @@
       "name": "GLOW",
       "presentation": "GHK-Cu 50 mg + BPC-157 10 mg + TB-500 10 mg · 70 mg total",
       "status": "available",
-      "researchContext": "Mezcla analítica de GHK-Cu, BPC-157 y TB-500 para investigación controlada; el nombre comercial no describe un resultado esperado.",
+      "researchArea": "Piel, colágeno y reparación de tejidos",
+      "researchDescription": "Combina GHK-Cu, BPC-157 y TB-500, péptidos investigados en modelos preclínicos para entender la formación de colágeno, la organización celular y la respuesta de la piel y otros tejidos durante su reparación.",
       "brandSupplier": {
         "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
@@ -469,7 +479,8 @@
       "name": "KLOW",
       "presentation": "GHK-Cu 50 mg + BPC-157 10 mg + TB-500 10 mg + KPV 10 mg · 80 mg total",
       "status": "available",
-      "researchContext": "Mezcla analítica de cuatro péptidos para comparación y caracterización en laboratorio; no es un protocolo ni una promesa de efecto.",
+      "researchArea": "Reparación de tejidos y respuesta inflamatoria",
+      "researchDescription": "Combina GHK-Cu, BPC-157, TB-500 y KPV. Se investiga en modelos preclínicos para entender cómo se organizan los tejidos durante su reparación y cómo responden las células ante señales inflamatorias.",
       "brandSupplier": {
         "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
@@ -513,7 +524,8 @@
       "name": "Wolverine Stack",
       "presentation": "BPC-157 10 mg + TB-500 10 mg · 20 mg total",
       "status": "available",
-      "researchContext": "Mezcla analítica de BPC-157 y TB-500 para investigación preclínica controlada; el nombre comercial no afirma recuperación ni otro resultado.",
+      "researchArea": "Músculos, tendones y tejido conectivo",
+      "researchDescription": "Combina BPC-157 y TB-500, dos péptidos investigados en modelos preclínicos para entender la respuesta de músculos, tendones y tejido conectivo después de una lesión, daño o esfuerzo.",
       "brandSupplier": {
         "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",

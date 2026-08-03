@@ -47,7 +47,8 @@ SELECTIONS = [
         "sourceTitle": "BPC-157 (10mg)",
         "presentation": "10 mg",
         "coa": None,
-        "research": "Péptido sintético de 15 aminoácidos estudiado en modelos preclínicos de señalización y respuesta tisular; la evidencia no establece beneficios clínicos.",
+        "researchArea": "Reparación de tejidos",
+        "researchDescription": "Investigado en modelos preclínicos para entender cómo responden los tejidos después de un daño y cómo se organizan durante su reparación, con especial interés en tejidos digestivos, musculares y conectivos.",
     },
     {
         "code": "TB500-5",
@@ -60,7 +61,8 @@ SELECTIONS = [
             "sha256": "92cdd2245957fb01cd54c4abd6827dab6db3d7e8ac1c99bb1dcddf53351232f2",
             "lot": "31-01260229", "lab": "MZ Biolabs", "methods": ["HPLC", "LC-MS"],
         },
-        "research": "Péptido sintético relacionado con thymosin beta-4, investigado en sistemas preclínicos de dinámica celular; sin indicaciones terapéuticas aprobadas.",
+        "researchArea": "Movimiento celular y reparación de tejidos",
+        "researchDescription": "Péptido relacionado con thymosin beta-4, investigado en modelos preclínicos para entender cómo se desplazan y organizan las células durante la respuesta de músculos, tendones y otros tejidos ante un daño.",
     },
     {
         "code": "MOTSC-10",
@@ -73,7 +75,8 @@ SELECTIONS = [
             "sha256": "ace1d6f18d530a19c807f1aed83487ec3a52196a0e7b37dd4c2d828831b9a9f1",
             "lot": "24-01260229", "lab": "MZ Biolabs", "methods": ["HPLC", "LC-MS"],
         },
-        "research": "Péptido derivado de una secuencia mitocondrial investigado en modelos preclínicos de señalización metabólica; sin extrapolación a resultados en personas.",
+        "researchArea": "Energía celular y metabolismo",
+        "researchDescription": "Péptido derivado de una secuencia mitocondrial, investigado para entender cómo las células utilizan la energía y responden ante cambios metabólicos y situaciones de estrés celular.",
     },
     {
         "code": "GHKCU-100-3ML",
@@ -82,7 +85,8 @@ SELECTIONS = [
         "sourceTitle": "GHK-CU (100MG) 3mL",
         "presentation": "100 mg · 3 mL",
         "coa": None,
-        "research": "Complejo tripeptídico de cobre utilizado como referencia en investigación bioquímica; no se presenta como medicamento, cosmético ni tratamiento.",
+        "researchArea": "Piel, colágeno y tejido conectivo",
+        "researchDescription": "Tripéptido capaz de unirse al cobre, investigado para entender su participación en la formación de colágeno y en la respuesta de la piel y otros tejidos conectivos durante procesos de renovación y reparación.",
     },
     {
         "code": "CJCIPA-5-5",
@@ -95,7 +99,8 @@ SELECTIONS = [
             "sha256": "83fea5f4667f68af48c882197ef11786f1f0499618e4dd44f2946cab57e5d209",
             "lot": "06-05260628", "lab": "Kovera Labs", "methods": ["RP-HPLC", "LC-MS", "endotoxinas", "esterilidad", "metales pesados"],
         },
-        "research": "Mezcla de dos péptidos estudiada como material analítico en modelos de señalización; no implica eficacia, seguridad o uso clínico.",
+        "researchArea": "Señales hormonales y metabolismo",
+        "researchDescription": "Mezcla de dos péptidos investigada para entender las señales que regulan la liberación de hormona de crecimiento y su relación con el metabolismo, el uso de energía y el mantenimiento de los tejidos.",
     },
     {
         "code": "TA1-10",
@@ -108,7 +113,8 @@ SELECTIONS = [
             "sha256": "9b1b2ffb3c9dad063ab7534c4dde4220219e003f9234834e0b85b0e8b3fa312e",
             "lot": "33-05260628", "lab": "Kovera Labs", "methods": ["RP-HPLC", "LC-MS", "endotoxinas", "esterilidad", "metales pesados"],
         },
-        "research": "Péptido sintético empleado en investigación de vías inmunológicas in vitro y preclínicas; esta descripción no constituye una indicación terapéutica.",
+        "researchArea": "Respuesta inmunológica",
+        "researchDescription": "Investigado para entender cómo se comunican y coordinan las células del sistema inmunológico ante distintas señales y condiciones experimentales.",
     },
     {
         "code": "TESA-5",
@@ -121,7 +127,8 @@ SELECTIONS = [
             "sha256": "de121018334ead3efaba870acf1814f235c12ed32fd578a782f77f349a2985a4",
             "lot": "32-01260229", "lab": "MZ Biolabs", "methods": ["HPLC", "LC-MS"],
         },
-        "research": "Análogo peptídico sintético estudiado en investigación de señalización endocrina; el material se ofrece exclusivamente para investigación y referencia.",
+        "researchArea": "Regulación hormonal",
+        "researchDescription": "Análogo peptídico investigado para entender cómo se regula la liberación de hormona de crecimiento y cómo estas señales se relacionan con diferentes procesos metabólicos.",
     },
     {
         "code": "EPITHALON-10",
@@ -134,7 +141,8 @@ SELECTIONS = [
             "sha256": "cf40aad2b791b54b63223d9955350696530fd82cf9c404bef8c7148548931f2c",
             "lot": "15-05260628", "lab": "Kovera Labs", "methods": ["RP-HPLC", "LC-MS", "endotoxinas", "esterilidad", "metales pesados"],
         },
-        "research": "Tetrapéptido sintético investigado en modelos preclínicos de biología celular; no hay promesa de resultados ni recomendación de uso.",
+        "researchArea": "Envejecimiento celular y telómeros",
+        "researchDescription": "Tetrapéptido investigado en modelos preclínicos para entender los cambios que ocurren en las células con el paso del tiempo y el papel de los telómeros en el mantenimiento celular.",
     },
     {
         "code": "KPV-10",
@@ -147,7 +155,8 @@ SELECTIONS = [
             "sha256": "ee84f58b6204e85449ba57fe40f131f5bcfd986536638a3f7210d8f78863fe7d",
             "lot": "20-05260628", "lab": "Kovera Labs", "methods": ["RP-HPLC", "LC-MS", "endotoxinas", "esterilidad", "metales pesados"],
         },
-        "research": "Tripéptido sintético utilizado en estudios preclínicos de señalización; sus contextos de investigación no demuestran resultados clínicos.",
+        "researchArea": "Respuesta inflamatoria",
+        "researchDescription": "Tripéptido investigado para entender cómo responden las células ante señales inflamatorias, especialmente en modelos relacionados con la piel y los tejidos del sistema digestivo.",
     },
     {
         "code": "GLOW-70",
@@ -160,7 +169,8 @@ SELECTIONS = [
             "sha256": "7a9ed6b6444ca1b8ab0f48bb29aeacbac60ae96b58265d1c208ac6376c573d21",
             "lot": "07-05260628", "lab": "Kovera Labs", "methods": ["RP-HPLC", "LC-MS", "endotoxinas", "esterilidad", "metales pesados"],
         },
-        "research": "Mezcla analítica de GHK-Cu, BPC-157 y TB-500 para investigación controlada; el nombre comercial no describe un resultado esperado.",
+        "researchArea": "Piel, colágeno y reparación de tejidos",
+        "researchDescription": "Combina GHK-Cu, BPC-157 y TB-500, péptidos investigados en modelos preclínicos para entender la formación de colágeno, la organización celular y la respuesta de la piel y otros tejidos durante su reparación.",
     },
     {
         "code": "KLOW-80",
@@ -173,7 +183,8 @@ SELECTIONS = [
             "sha256": "c531a1bf872704c931579eaadf491db5bbabd2fda1ff83a5e93feee4315e6447",
             "lot": "46-01260229", "lab": "MZ Biolabs", "methods": ["HPLC", "LC-MS"],
         },
-        "research": "Mezcla analítica de cuatro péptidos para comparación y caracterización en laboratorio; no es un protocolo ni una promesa de efecto.",
+        "researchArea": "Reparación de tejidos y respuesta inflamatoria",
+        "researchDescription": "Combina GHK-Cu, BPC-157, TB-500 y KPV. Se investiga en modelos preclínicos para entender cómo se organizan los tejidos durante su reparación y cómo responden las células ante señales inflamatorias.",
     },
     {
         "code": "WOLVERINE-10-10",
@@ -186,7 +197,8 @@ SELECTIONS = [
             "sha256": "a18c0610b972b5a3ea2172c54b8f2a7f5d0c9a1eea98fea3fdfc6891f31b77e7",
             "lot": "08-05260628", "lab": "Kovera Labs", "methods": ["RP-HPLC", "LC-MS", "endotoxinas", "esterilidad", "metales pesados"],
         },
-        "research": "Mezcla analítica de BPC-157 y TB-500 para investigación preclínica controlada; el nombre comercial no afirma recuperación ni otro resultado.",
+        "researchArea": "Músculos, tendones y tejido conectivo",
+        "researchDescription": "Combina BPC-157 y TB-500, dos péptidos investigados en modelos preclínicos para entender la respuesta de músculos, tendones y tejido conectivo después de una lesión, daño o esfuerzo.",
     },
 ]
 
@@ -426,7 +438,8 @@ def build_catalog() -> Dict[str, Any]:
             "name": selection["name"],
             "presentation": selection["presentation"],
             "status": status,
-            "researchContext": selection["research"],
+            "researchArea": selection["researchArea"],
+            "researchDescription": selection["researchDescription"],
             "brandSupplier": {
                 "brand": "Ascension Peptides",
                 "role": "Marca / proveedor de referencia",

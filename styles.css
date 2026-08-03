@@ -160,6 +160,9 @@ h1 em { color: var(--mint); font-style: normal; }
 .product-card__body > .mereon-verified-badge { margin-bottom: 14px; }
 .product-card h3 { margin: 0 0 8px; font: 500 clamp(20px, 2vw, 26px)/1.18 'Manrope'; letter-spacing: -.03em; }
 .product-card__presentation { color: var(--muted); font-size: 13px; min-height: 42px; margin: 0 0 24px; }
+.product-card__research { margin: -10px 0 22px; padding: 14px 0; border-block: 1px solid var(--line); }
+.product-card__research span { display: block; margin-bottom: 6px; color: var(--rust); font-size: 9px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+.product-card__research strong { display: block; font: 500 13px/1.4 'Manrope'; }
 .supplier-line { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: -12px 0 16px; padding-bottom: 12px; border-bottom: 1px solid var(--line); font-size: 10px; color: var(--muted); }
 .supplier-line strong { color: var(--ink); font-size: 11px; text-align: right; }
 .product-price { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--line); }
@@ -234,15 +237,18 @@ dialog::backdrop { background: rgba(5,19,15,.74); backdrop-filter: blur(5px); }
 .product-detail__visual { min-height: 570px; background: var(--ink-2); display: grid; place-items: center; overflow: hidden; position: relative; }
 .product-detail__visual > .product-visual { width: 100%; height: 100%; }
 .product-detail__visual .product-vial { transform: scale(1.5); }
-.product-detail__copy { padding: clamp(25px,5vw,60px); max-height: calc(100dvh - 30px); overflow-y: auto; }
+.product-detail__copy { min-width: 0; padding: clamp(25px,5vw,60px); max-height: calc(100dvh - 30px); overflow-y: auto; }
 .product-detail__copy h2 { font-size: clamp(39px,5vw,63px); margin-right: 40px; }
 .product-detail__presentation { color: var(--muted); }
 .mereon-verified-note { margin: 18px 0; padding: 15px; border: 1px solid rgba(111,82,28,.22); background: #f6eed8; }
 .mereon-verified-note p { margin: 11px 0 0; color: #594d36; font-size: 12px; line-height: 1.55; }
 .supplier-detail { display: grid; grid-template-columns: minmax(120px,.8fr) 1fr; gap: 6px 16px; margin: 18px 0; padding: 15px 0; border-block: 1px solid var(--line); font-size: 12px; }
 .supplier-detail dt { color: var(--muted); }
-.supplier-detail dd { margin: 0; font-weight: 700; }
+.supplier-detail dd { min-width: 0; margin: 0; overflow-wrap: anywhere; font-weight: 700; }
 .product-detail__research { border-block: 1px solid var(--line); padding: 20px 0; }
+.product-detail__research-label { margin: 0 0 8px; color: var(--rust); font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+.product-detail__research-area { margin: 0 0 12px; font: 500 20px/1.3 'Manrope'; }
+.product-detail__research-description { margin: 0; color: var(--muted); line-height: 1.68; }
 .coa-box { padding: 18px; margin: 22px 0; background: var(--mint-light); }
 .coa-box h3 { margin: 0 0 12px; font: 600 16px 'Manrope'; }
 .coa-meta { margin: 0 0 14px; display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; font-size: 12px; }
@@ -256,7 +262,10 @@ dialog::backdrop { background: rgba(5,19,15,.74); backdrop-filter: blur(5px); }
 .research-dialog__shell { position: relative; max-height: calc(100dvh - 30px); overflow-y: auto; padding: clamp(30px, 6vw, 68px); }
 .research-dialog__header { display: flex; justify-content: space-between; align-items: start; gap: 24px; }
 .research-dialog__header .eyebrow { color: var(--rust); }
-.research-dialog h2 { max-width: 650px; margin-top: clamp(26px, 4vw, 42px); font-size: clamp(38px, 5vw, 60px); line-height: 1.02; }
+.research-dialog [data-research-faq] { border: 0; }
+.research-dialog [data-research-faq] > summary { pointer-events: none; list-style: none; padding: clamp(26px, 4vw, 42px) 0 0; font: 400 clamp(38px, 5vw, 60px)/1.02 'Manrope', sans-serif; letter-spacing: -.055em; }
+.research-dialog [data-research-faq] > summary::-webkit-details-marker { display: none; }
+.research-dialog [data-research-faq] > summary::after { display: none; }
 .research-dialog__copy { margin-top: clamp(30px, 5vw, 48px); padding-top: 25px; border-top: 1px solid var(--line); }
 .research-dialog__copy p { margin: 0; color: var(--muted); font-size: clamp(15px, 1.5vw, 17px); line-height: 1.72; }
 .research-dialog__copy p + p { margin-top: 22px; }

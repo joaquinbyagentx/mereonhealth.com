@@ -15,6 +15,10 @@ RESEARCH_EXPLAINER = [
     "Algunas moléculas de nuestro catálogo continúan siendo estudiadas por la comunidad científica en etapas preclínicas o clínicas. Otras comparten ingredientes activos con medicamentos ya autorizados en determinadas presentaciones y jurisdicciones.",
     "La clasificación de investigación corresponde específicamente al material ofrecido por Mereon y no implica registro sanitario, equivalencia farmacéutica ni aprobación para una indicación terapéutica. Consulta la ficha técnica y la documentación de cada producto para conocer su condición particular.",
 ]
+CATALOG_CLARIFICATION = (
+    "Las descripciones presentan áreas estudiadas en investigación preclínica y no establecen eficacia, seguridad ni una indicación terapéutica. "
+    "Los materiales ofrecidos por Mereon son exclusivamente para investigación y referencia analítica; no están destinados a consumo, administración o uso diagnóstico, terapéutico o veterinario."
+)
 
 
 class SiteParser(HTMLParser):
@@ -59,15 +63,24 @@ class StaticSiteTests(unittest.TestCase):
         self.assertRegex(self.html, r"data-payment-button disabled")
 
     def test_research_peptide_explainer_is_exact_and_accessible(self):
-        explainer = self.html.split('id="research-explainer"', 1)[1].split('</dialog>', 1)[0]
         for phrase in RESEARCH_EXPLAINER:
-            self.assertEqual(explainer.count(phrase), 1)
+            self.assertEqual(self.html.count(phrase), 1)
+        faq_items = self.html.split('<div class="faq__items"', 1)[1].split('</div>\n    </section>', 1)[0]
+        self.assertTrue(faq_items.rstrip().endswith('</details>'))
+        final_faq = faq_items.rsplit('<details', 1)[1]
+        for phrase in RESEARCH_EXPLAINER:
+            self.assertEqual(final_faq.count(phrase), 1)
         self.assertIn('data-research-open aria-haspopup="dialog" aria-controls="research-explainer"', self.html)
         self.assertIn('aria-labelledby="research-explainer-title"', self.html)
-        self.assertIn('data-research-close aria-label="Cerrar explicación" autofocus', explainer)
+        self.assertIn('data-research-close aria-label="Cerrar explicación" autofocus', self.html)
         self.assertIn("researchDialog.showModal()", self.js)
         self.assertIn("researchDialog.close()", self.js)
         self.assertIn("researchDialog.addEventListener('close', () => researchTrigger.focus())", self.js)
+
+    def test_catalog_clarification_appears_exactly_once(self):
+        self.assertEqual(self.html.count(CATALOG_CLARIFICATION), 1)
+        catalog = self.html.split('<section class="catalog section"', 1)[1].split('</section>', 1)[0]
+        self.assertIn(CATALOG_CLARIFICATION, catalog)
 
     def test_mereon_verified_is_consistent_across_catalog_and_quality_copy(self):
         required = [
