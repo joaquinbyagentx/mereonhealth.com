@@ -358,12 +358,26 @@ def build_catalog() -> Dict[str, Any]:
             raise RuntimeError(f"{selection['slug']}: missing or unexpected product URL")
         coa = coa_metadata(product_url, selection["coa"], fetched_at)
         status = "available" if coa else "coa_pending"
+        images = product.get("images") or []
+        image_index = 1 if selection["code"] == "GHKCU-50" else 0
+        if len(images) <= image_index:
+            raise RuntimeError(f"{selection['slug']}: missing matching public product image")
+        source_image = images[image_index]
+        source_image_url = source_image.get("src", "")
+        if not source_image_url.startswith("https://protidehealth.com/wp-content/uploads/"):
+            raise RuntimeError(f"{selection['slug']}: unexpected product image URL")
+        image_filename = f"{selection['code'].lower()}.png"
         normalized.append({
             "code": selection["code"],
             "name": selection["name"],
             "presentation": selection["presentation"],
             "status": status,
             "researchContext": selection["research"],
+            "brandSupplier": {
+                "brand": "Protide Health",
+                "role": "Marca / proveedor de referencia",
+                "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial.",
+            },
             "source": {
                 "catalogUrl": API_URL,
                 "productUrl": product_url,
@@ -374,6 +388,12 @@ def build_catalog() -> Dict[str, Any]:
             "sourceUsdCents": source_usd_cents,
             "basePriceCentavos": price_centavos,
             "profitMarkupBasisPoints": profit_markup,
+            "image": {
+                "assetPath": f"assets/images/products/{image_filename}",
+                "sourceUrl": source_image_url,
+                "alt": f"Fotografía de referencia de {selection['name']} {selection['presentation']}",
+                "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización.",
+            },
             "coa": coa,
         })
 

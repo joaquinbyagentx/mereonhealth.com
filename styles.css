@@ -104,6 +104,11 @@ h1 em { color: var(--mint); font-style: normal; }
 .product-visual { min-height: 292px; padding: 30px; display: grid; place-items: center; background: var(--ink-2); position: relative; overflow: hidden; }
 .product-visual::before { content: ''; position: absolute; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, var(--tone-light, #d5f4e8), var(--tone, #5a8d7e) 48%, transparent 70%); opacity: .7; }
 .product-visual::after { content: attr(data-index); position: absolute; right: 18px; top: 12px; color: rgba(255,255,255,.4); font: 500 11px 'Manrope'; }
+.product-visual--photo { margin: 0; padding: 0; background: #f4f1e9; }
+.product-visual--photo::before { display: none; }
+.product-visual--photo::after { color: rgba(16,42,35,.42); z-index: 2; }
+.product-visual--photo img { width: 100%; height: 100%; min-height: 292px; object-fit: cover; object-position: center; }
+.product-visual--photo figcaption { position: absolute; z-index: 2; left: 10px; right: 10px; bottom: 8px; padding: 5px 7px; color: rgba(16,42,35,.7); background: rgba(252,250,245,.9); font-size: 8px; line-height: 1.25; }
 .product-vial { position: relative; z-index: 2; width: 100px; height: 185px; border: 1px solid rgba(255,255,255,.8); border-radius: 10px 10px 18px 18px; background: linear-gradient(90deg, rgba(255,255,255,.11), rgba(255,255,255,.55), rgba(255,255,255,.08)); box-shadow: 9px 16px 22px rgba(0,0,0,.3); }
 .product-vial::before { content: ''; position: absolute; width: 80px; height: 31px; left: 9px; top: -23px; border-radius: 5px 5px 1px 1px; background: repeating-linear-gradient(90deg,#d5d5d0 0 4px,#a7aaa4 4px 6px); }
 .product-vial__label { position: absolute; left: 6px; right: 6px; top: 59px; min-height: 74px; background: rgba(252,250,245,.94); padding: 10px 8px; display: flex; flex-direction: column; color: var(--ink); }
@@ -113,6 +118,8 @@ h1 em { color: var(--mint); font-style: normal; }
 .product-card__meta { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 13px; color: var(--rust); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
 .product-card h3 { margin: 0 0 8px; font: 500 clamp(20px, 2vw, 26px)/1.18 'Manrope'; letter-spacing: -.03em; }
 .product-card__presentation { color: var(--muted); font-size: 13px; min-height: 42px; margin: 0 0 24px; }
+.supplier-line { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: -12px 0 16px; padding-bottom: 12px; border-bottom: 1px solid var(--line); font-size: 10px; color: var(--muted); }
+.supplier-line strong { color: var(--ink); font-size: 11px; text-align: right; }
 .product-price { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--line); }
 .product-price strong { display: block; font: 500 25px 'Manrope'; }
 .product-price small { color: var(--muted); font-size: 10px; }
@@ -182,6 +189,9 @@ dialog::backdrop { background: rgba(5,19,15,.74); backdrop-filter: blur(5px); }
 .product-detail__copy { padding: clamp(25px,5vw,60px); max-height: calc(100dvh - 30px); overflow-y: auto; }
 .product-detail__copy h2 { font-size: clamp(39px,5vw,63px); margin-right: 40px; }
 .product-detail__presentation { color: var(--muted); }
+.supplier-detail { display: grid; grid-template-columns: minmax(120px,.8fr) 1fr; gap: 6px 16px; margin: 18px 0; padding: 15px 0; border-block: 1px solid var(--line); font-size: 12px; }
+.supplier-detail dt { color: var(--muted); }
+.supplier-detail dd { margin: 0; font-weight: 700; }
 .product-detail__research { border-block: 1px solid var(--line); padding: 20px 0; }
 .coa-box { padding: 18px; margin: 22px 0; background: var(--mint-light); }
 .coa-box h3 { margin: 0 0 12px; font: 600 16px 'Manrope'; }

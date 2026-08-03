@@ -68,6 +68,16 @@ class StaticSiteTests(unittest.TestCase):
                 self.assertIsInstance(product["sourceUsdCents"], int)
                 self.assertIsInstance(product["basePriceCentavos"], int)
                 self.assertGreater(product["basePriceCentavos"], 0)
+                image = product["image"]
+                self.assertTrue(image["assetPath"].startswith("assets/images/products/"))
+                self.assertTrue((ROOT / image["assetPath"]).is_file())
+                self.assertTrue(image["sourceUrl"].startswith("https://protidehealth.com/wp-content/uploads/"))
+                self.assertIn("no implica afiliación o autorización", image["notice"])
+                self.assertEqual(product["brandSupplier"]["brand"], "Protide Health")
+                self.assertIn("no implica afiliación", product["brandSupplier"]["notice"])
+        self.assertIn('product.image?.assetPath', self.js)
+        self.assertIn('Fotografía de referencia de la fuente', self.js)
+        self.assertIn('Plataforma comercial', self.js)
 
     def test_coa_links_and_metadata_are_fail_closed(self):
         for product in self.catalog["products"]:

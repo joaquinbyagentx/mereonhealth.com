@@ -56,6 +56,12 @@ function statusLabel(product) {
 function visualMarkup(product, index) {
   const [tone, light] = TONES[index % TONES.length];
   const shortName = product.name.replace(' blend', '').slice(0, 18);
+  if (product.image?.assetPath) {
+    return `<figure class="product-visual product-visual--photo" data-index="${String(index + 1).padStart(2, '0')}" style="--tone:${tone};--tone-light:${light}">
+      <img src="${escapeHtml(product.image.assetPath)}" alt="${escapeHtml(product.image.alt)}" loading="lazy" width="800" height="533">
+      <figcaption>Fotografía de referencia de la fuente · presentación indicada en ficha</figcaption>
+    </figure>`;
+  }
   return `<div class="product-visual" data-index="${String(index + 1).padStart(2, '0')}" style="--tone:${tone};--tone-light:${light}">
     <div class="product-vial" aria-hidden="true"><span class="product-vial__label"><b>MEREON</b><span>${escapeHtml(shortName)}</span></span></div>
   </div>`;
@@ -77,6 +83,7 @@ function renderCatalog() {
         <div class="product-card__meta"><span>${BLEND_CODES.has(product.code) ? 'Mezcla de referencia' : 'Compuesto de referencia'}</span><span>${escapeHtml(product.code)}</span></div>
         <h3>${escapeHtml(product.name)}</h3>
         <p class="product-card__presentation">${escapeHtml(product.presentation)}</p>
+        <p class="supplier-line"><span>${escapeHtml(product.brandSupplier.role)}</span><strong>${escapeHtml(product.brandSupplier.brand)}</strong></p>
         <span class="status-badge ${product.status === 'available' ? '' : 'status-badge--pending'}">${statusLabel(product)}</span>
         <div class="product-price"><strong>${price}</strong><small>Precio final con IVA incluido · envío por separado</small></div>
         <div class="product-actions">
@@ -191,6 +198,7 @@ function renderDetail(product) {
       <button class="icon-button" type="button" data-detail-close aria-label="Cerrar detalle" style="float:right">×</button>
       <p class="eyebrow">${escapeHtml(product.code)}</p><h2 id="detail-title">${escapeHtml(product.name)}</h2>
       <p class="product-detail__presentation">${escapeHtml(product.presentation)}</p>
+      <dl class="supplier-detail"><dt>${escapeHtml(product.brandSupplier.role)}</dt><dd>${escapeHtml(product.brandSupplier.brand)}</dd><dt>Plataforma comercial</dt><dd>Mereon Health</dd></dl>
       <p class="product-detail__research">${escapeHtml(product.researchContext)}</p>
       ${coaMarkup}
       <div class="legal-notice"><strong>Uso exclusivo de investigación</strong><p>${FULL_NOTICE}</p></div>
