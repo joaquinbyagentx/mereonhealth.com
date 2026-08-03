@@ -33,6 +33,14 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   await page.keyboard.press('Escape');
   await expect(researchDialog).not.toBeVisible();
   await expect(researchTrigger).toBeFocused();
+  await researchTrigger.click();
+  await researchDialog.getByRole('button', { name: 'Cerrar explicación' }).click();
+  await expect(researchDialog).not.toBeVisible();
+  await expect(researchTrigger).toBeFocused();
+  await researchTrigger.click();
+  await researchDialog.evaluate((dialog) => dialog.dispatchEvent(new MouseEvent('click', { bubbles: true })));
+  await expect(researchDialog).not.toBeVisible();
+  await expect(researchTrigger).toBeFocused();
   await expect(page.locator('.coa-card-link[href]')).toHaveCount(10);
   await expect(page.locator('.coa-card-link--disabled')).toHaveCount(2);
   for (const link of await page.locator('.coa-card-link[href]').all()) {

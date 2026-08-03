@@ -268,6 +268,7 @@ cartDialog.addEventListener('click', (event) => closeOnBackdrop(cartDialog, even
 
 researchTrigger.addEventListener('click', () => researchDialog.showModal());
 researchDialog.querySelector('[data-research-close]').addEventListener('click', () => researchDialog.close());
+researchDialog.addEventListener('close', () => researchTrigger.focus());
 
 cartTrigger.addEventListener('click', () => {
   cartDialog.showModal();

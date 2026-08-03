@@ -67,6 +67,7 @@ class StaticSiteTests(unittest.TestCase):
         self.assertIn('data-research-close aria-label="Cerrar explicación" autofocus', explainer)
         self.assertIn("researchDialog.showModal()", self.js)
         self.assertIn("researchDialog.close()", self.js)
+        self.assertIn("researchDialog.addEventListener('close', () => researchTrigger.focus())", self.js)
 
     def test_mereon_verified_is_consistent_across_catalog_and_quality_copy(self):
         required = [
