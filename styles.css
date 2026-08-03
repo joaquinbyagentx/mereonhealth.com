@@ -136,15 +136,26 @@ h1 em { color: var(--mint); font-style: normal; }
 
 .quality { background: var(--ink); color: white; display: grid; grid-template-columns: minmax(300px, .8fr) minmax(400px, 1.1fr); gap: 11vw; }
 .quality__intro { position: sticky; top: 50px; align-self: start; }
-.quality h2 { max-width: 650px; font-size: clamp(48px, 5vw, 76px); }
-.quality__intro > p:not(.eyebrow) { color: rgba(255,255,255,.62); max-width: 570px; margin: 28px 0; }
+.quality h2 { max-width: 650px; font-size: clamp(46px, 4.7vw, 72px); }
+.quality__intro > p:not(.eyebrow) { color: rgba(255,255,255,.62); max-width: 570px; margin: 23px 0; }
 .quality__intro a { color: var(--mint); text-underline-offset: 5px; }
+.verified-mark { width: fit-content; display: flex; align-items: center; gap: 13px; margin: 18px 0 30px; color: var(--mint); }
+.verified-mark > span { display: grid; place-items: center; width: 56px; height: 56px; border: 1px solid currentColor; border-radius: 50%; font: 600 20px 'Manrope'; }
+.verified-mark strong { font: 600 17px/1.05 'Manrope'; letter-spacing: -.025em; }
+.verified-promise { padding: 18px 0 18px 22px; border-left: 2px solid var(--mint); color: white !important; font: 400 18px/1.5 'Manrope'; }
+.verified-promise strong { color: var(--mint); }
+.verified-status { display: grid; grid-template-columns: 18px 1fr; gap: 8px; padding: 13px 15px; border: 1px solid rgba(255,255,255,.22); color: rgba(255,255,255,.7) !important; font-size: 12px; }
+.verified-status i { color: #e0b764; font-style: normal; }
+.verified-status span { min-width: 0; }
+.verified-status strong { color: white; }
 .evidence-list { padding: 0; margin: 0; list-style: none; }
-.evidence-list li { padding: 28px 0; border-top: 1px solid rgba(255,255,255,.19); display: grid; grid-template-columns: 54px 1fr; gap: 20px; }
+.evidence-list li { padding: 26px 0; border-top: 1px solid rgba(255,255,255,.19); display: grid; grid-template-columns: 54px 1fr; gap: 20px; }
 .evidence-list li:last-child { border-bottom: 1px solid rgba(255,255,255,.19); }
 .evidence-list > li > span { color: var(--mint); font-size: 11px; }
+.evidence-list li > div { position: relative; padding-right: 42px; }
 .evidence-list h3 { margin: 0 0 7px; font: 500 21px 'Manrope'; }
 .evidence-list p { margin: 0; color: rgba(255,255,255,.58); }
+.evidence-list b { position: absolute; top: 0; right: 3px; display: grid; place-items: center; width: 25px; height: 25px; border: 1px solid rgba(166,247,207,.35); border-radius: 50%; color: var(--mint); font-size: 12px; }
 .buyer-guide { background: var(--paper); }
 .guide-grid { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); }
 .guide-grid article { padding: 34px; border: 1px solid var(--line); margin-right: -1px; }

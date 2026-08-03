@@ -49,6 +49,24 @@ class StaticSiteTests(unittest.TestCase):
         self.assertIn(REQUIRED_ACCEPTANCE, self.html)
         self.assertRegex(self.html, r"data-payment-button disabled")
 
+    def test_mereon_verified_is_lot_specific_and_complete(self):
+        required = [
+            "Mereon Verified™",
+            "COA del lote",
+            "HPLC",
+            "LC-MS",
+            "Endotoxinas",
+            "Laboratorio independiente",
+            "Inspección visual",
+            "QR verificable",
+            "Fecha de recepción",
+        ]
+        for phrase in required:
+            self.assertIn(phrase, self.html)
+        self.assertIn("La reputación del fabricante, por sí sola, no sustituye la verificación.", self.html)
+        self.assertIn("ningún producto recibe este sello mientras su expediente de lote permanezca incompleto o pendiente", self.html)
+        self.assertNotIn("status-badge--verified", self.js)
+
     def test_checkout_lines_are_in_required_order(self):
         labels = ["Subtotal de productos", "Envío", "IVA incluido (16%)", "Total final"]
         totals = self.html.split('<dl class="totals"', 1)[1].split('</dl>', 1)[0]
