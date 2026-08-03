@@ -71,9 +71,11 @@ class StaticSiteTests(unittest.TestCase):
                 image = product["image"]
                 self.assertTrue(image["assetPath"].startswith("assets/images/products/"))
                 self.assertTrue((ROOT / image["assetPath"]).is_file())
-                self.assertTrue(image["sourceUrl"].startswith("https://protidehealth.com/wp-content/uploads/"))
+                image_source = urlparse(image["sourceUrl"])
+                self.assertEqual(image_source.scheme, "https")
+                self.assertIn(image_source.netloc, {"protidehealth.com", "cdn11.bigcommerce.com"})
                 self.assertIn("no implica afiliación o autorización", image["notice"])
-                self.assertEqual(product["brandSupplier"]["brand"], "Protide Health")
+                self.assertIn(product["brandSupplier"]["brand"], {"Protide Health", "Limitless Biotech"})
                 self.assertIn("no implica afiliación", product["brandSupplier"]["notice"])
         self.assertIn('product.image?.assetPath', self.js)
         self.assertIn('Fotografía de referencia de la fuente', self.js)
@@ -90,6 +92,14 @@ class StaticSiteTests(unittest.TestCase):
                 self.assertTrue(parsed.path.startswith("/certificates/"))
                 self.assertEqual(coa["kind"], "source-reference")
                 self.assertTrue(coa["lot"] and coa["lab"] and coa["methods"])
+            elif product["status"] == "coa_pending":
+                self.assertIsNotNone(coa)
+                self.assertEqual(coa["kind"], "pending")
+                self.assertIsNone(coa["url"])
+                self.assertIsNone(coa["lot"])
+                self.assertIsNone(coa["lab"])
+                self.assertEqual(coa["methods"], [])
+                self.assertEqual(coa["label"], "COA pendiente de asignación/publicación para este lote.")
             else:
                 self.assertIsNone(coa)
         self.assertIn("COA pendiente de asignación/publicación para este lote", self.js)

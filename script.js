@@ -74,7 +74,7 @@ function renderCatalog() {
     const index = catalog.findIndex((item) => item.code === product.code);
     const purchasable = isPurchasable(product);
     const price = purchasable ? formatMxn(product.basePriceCentavos) : 'Precio por confirmar';
-    const coaAction = product.coa
+    const coaAction = product.coa?.url
       ? `<a class="coa-card-link" href="${escapeHtml(product.coa.url)}" target="_blank" rel="noopener noreferrer" aria-label="Ver COA de referencia de ${escapeHtml(product.name)} en sitio externo">Ver COA <span aria-hidden="true">↗</span></a>`
       : '<span class="coa-card-link coa-card-link--disabled" aria-disabled="true">COA pendiente de asignación/publicación para este lote</span>';
     return `<article class="product-card" data-kind="${BLEND_CODES.has(product.code) ? 'blend' : 'single'}">

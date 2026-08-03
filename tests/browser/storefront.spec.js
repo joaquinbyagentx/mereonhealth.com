@@ -20,7 +20,8 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   await page.goto('/');
   await expect(page.locator('.product-card')).toHaveCount(12);
   await expect(page.locator('[data-catalog-status]')).toContainText('12 de 12');
-  await expect(page.locator('.coa-card-link[href]')).toHaveCount(12);
+  await expect(page.locator('.coa-card-link[href]')).toHaveCount(8);
+  await expect(page.locator('.coa-card-link--disabled')).toHaveCount(4);
   for (const link of await page.locator('.coa-card-link[href]').all()) {
     await expect(link).toHaveAttribute('target', '_blank');
     await expect(link).toHaveAttribute('rel', /noopener/);
@@ -66,10 +67,10 @@ test('cart add, quantity, totals, legal gate, persistence, and removal work', as
   const cart = page.locator('[data-cart-dialog]');
   await expect(cart).toBeVisible();
   await expect(cart).toBeInViewport();
-  await expect(cart.locator('[data-subtotal]')).toContainText('1,740.00');
+  await expect(cart.locator('[data-subtotal]')).toContainText('4,140.00');
   await expect(cart.locator('[data-shipping]')).toContainText('250.00');
-  await expect(cart.locator('[data-iva]')).toContainText('274.48');
-  await expect(cart.locator('[data-total]')).toContainText('1,990.00');
+  await expect(cart.locator('[data-iva]')).toContainText('605.52');
+  await expect(cart.locator('[data-total]')).toContainText('4,390.00');
 
   const payment = cart.locator('[data-payment-button]');
   await expect(payment).toBeDisabled();
@@ -82,7 +83,7 @@ test('cart add, quantity, totals, legal gate, persistence, and removal work', as
 
   await cart.getByRole('button', { name: 'Aumentar cantidad' }).click();
   await expect(page.locator('[data-cart-count]')).toHaveText('2');
-  await expect(cart.locator('[data-subtotal]')).toContainText('3,480.00');
+  await expect(cart.locator('[data-subtotal]')).toContainText('8,280.00');
   await cart.locator('[data-cart-close]').first().click();
   await page.reload();
   await expect(page.locator('[data-cart-count]')).toHaveText('2');

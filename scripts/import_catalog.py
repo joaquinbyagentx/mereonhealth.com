@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Import Mereon's launch catalog from Protide Health's public storefront.
+"""Import Mereon's multibrand catalog from public supplier storefronts.
 
-This script uses only public, unauthenticated pages. Protide is a research input,
-not a reseller affiliation. Product imagery and supplier-facing claims are not
-copied. Any source-shape change in a listed product fails visibly.
+This script uses only public, unauthenticated pages. Supplier data is a research
+input, not evidence of reseller affiliation. Descriptions are original and any
+source-shape change in a listed product fails visibly.
 """
 
 from __future__ import annotations
@@ -30,6 +30,37 @@ LANDED_UPLIFT_BPS = 1300
 TARGET_PROFIT_MARKUP_BPS = 3500
 IVA_BPS = 1600
 CLEAN_INCREMENT_CENTAVOS = 1000
+
+LIMITLESS_OVERRIDES = {
+    "BPC-157-10": {
+        "sourceUsdCents": 15498,
+        "productUrl": "https://limitlesslifenootropics.com/product/bpc-157/",
+        "priceEvidenceUrl": "https://limitlesslifenootropics.st/product/bpc-157/",
+        "sourcePresentation": "BPCSF-US-10MG · 10 mg · Premium",
+        "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/original/products/217/824/BPC-157_10MG_.SINGLE.VIAL__08417.1780584885.png",
+    },
+    "TB500-10": {
+        "sourceUsdCents": 13399,
+        "productUrl": "https://limitlesslifenootropics.com/product/tb-500/",
+        "priceEvidenceUrl": "https://limitlesslifenootropics.st/product/tb-500/",
+        "sourcePresentation": "TB4-US-10MG · 10 mg · Premium",
+        "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/original/products/186/891/THYMOSIN_BETA_4_TB-500_10MG.SINGLE.VIAL__04024.1762297179.png",
+    },
+    "MOTSC-10": {
+        "sourceUsdCents": 9999,
+        "productUrl": "https://limitlesslifenootropics.com/product/mots-c/",
+        "priceEvidenceUrl": "https://limitlesslifenootropics.st/product/mots-c/",
+        "sourcePresentation": "MOTS-US-10MG · 10 mg · Premium",
+        "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/original/products/187/852/MOTS-C_10MG_.SINGLE.VIAL__34440.1762231552.png",
+    },
+    "TA1-10": {
+        "sourceUsdCents": 13199,
+        "productUrl": "https://limitlesslifenootropics.com/product/thymosin-alpha-1/",
+        "priceEvidenceUrl": "https://limitlesslifenootropics.st/product/thymosin-alpha-1/",
+        "sourcePresentation": "TA1-US-10MG · 10 mg · Premium",
+        "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/original/products/185/885/THYMOSIN_ALPHA_1_10MG.SINGLE.VIAL__29102.1762296430.png",
+    },
+}
 
 SELECTIONS = [
     {
@@ -367,7 +398,7 @@ def build_catalog() -> Dict[str, Any]:
         if not source_image_url.startswith("https://protidehealth.com/wp-content/uploads/"):
             raise RuntimeError(f"{selection['slug']}: unexpected product image URL")
         image_filename = f"{selection['code'].lower()}.png"
-        normalized.append({
+        record = {
             "code": selection["code"],
             "name": selection["name"],
             "presentation": selection["presentation"],
@@ -395,7 +426,49 @@ def build_catalog() -> Dict[str, Any]:
                 "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización.",
             },
             "coa": coa,
-        })
+        }
+        limitless = LIMITLESS_OVERRIDES.get(selection["code"])
+        if limitless:
+            limitless_price = base_price_centavos(limitless["sourceUsdCents"])
+            limitless_markup = profit_markup_bps(limitless["sourceUsdCents"], limitless_price)
+            if not 3450 <= limitless_markup <= 3550:
+                raise RuntimeError(f"{selection['code']}: Limitless clean-price markup outside range")
+            record.update({
+                "status": "coa_pending",
+                "brandSupplier": {
+                    "brand": "Limitless Biotech",
+                    "role": "Marca / proveedor de referencia",
+                    "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial.",
+                },
+                "source": {
+                    "catalogUrl": "https://limitlesslifenootropics.com/shop",
+                    "productUrl": limitless["productUrl"],
+                    "priceEvidenceUrl": limitless["priceEvidenceUrl"],
+                    "sourceTitle": selection["name"],
+                    "sourcePresentation": limitless["sourcePresentation"],
+                    "fetchedAt": fetched_at,
+                },
+                "sourceUsdCents": limitless["sourceUsdCents"],
+                "basePriceCentavos": limitless_price,
+                "profitMarkupBasisPoints": limitless_markup,
+                "image": {
+                    "assetPath": f"assets/images/products/{image_filename}",
+                    "sourceUrl": limitless["imageUrl"],
+                    "alt": f"Fotografía de referencia Limitless Biotech de {selection['name']} {selection['presentation']}",
+                    "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización.",
+                },
+                "coa": {
+                    "url": None,
+                    "kind": "pending",
+                    "label": "COA pendiente de asignación/publicación para este lote.",
+                    "lot": None,
+                    "lab": None,
+                    "methods": [],
+                    "sourceDocumentTitle": None,
+                    "verifiedAt": None,
+                },
+            })
+        normalized.append(record)
 
     return {
         "schemaVersion": 1,
@@ -408,7 +481,7 @@ def build_catalog() -> Dict[str, Any]:
             "ivaIncludedBasisPoints": IVA_BPS,
             "acceptedProfitMarkupRangeBasisPoints": [3450, 3550],
             "cleanPriceIncrementCentavos": CLEAN_INCREMENT_CENTAVOS,
-            "rule": "Protide public price converted at FX, plus 13% landed uplift, plus 35% profit markup. Final consumer price includes IVA; nearest MXN 10; exact midpoint rounds upward.",
+            "rule": "Public supplier price converted at FX, plus 13% landed uplift, plus 35% profit markup. Final consumer price includes IVA; nearest MXN 10; exact midpoint rounds upward.",
         },
         "products": normalized,
     }
