@@ -68,6 +68,30 @@ class StaticSiteTests(unittest.TestCase):
         self.assertIn("ningún producto recibe este sello mientras su expediente de lote permanezca incompleto o pendiente", self.html)
         self.assertNotIn("status-badge--verified", self.js)
 
+    def test_client_program_framing_leads_the_page(self):
+        hero = self.html.split('<section class="hero"', 1)[1].split('</section>', 1)[0]
+        for phrase in [
+            "Evaluación inicial",
+            "Plan personalizado",
+            "Seguimiento y ajustes",
+            "Ejercicio y nutrición",
+            "progreso medible",
+        ]:
+            self.assertIn(phrase, self.html)
+        self.assertIn("no una solución aislada", self.html)
+        self.assertIn("exclusivamente para investigación y no forma parte de la ruta de atención", self.html)
+        self.assertNotRegex(hero, r"(?i)catálogo|investigación|comprar|referencias")
+        self.assertLess(self.html.index('id="como-funciona"'), self.html.index('id="catalogo"'))
+
+    def test_navigation_supports_client_journey_and_mobile_menu(self):
+        self.assertIn('class="nav-toggle"', self.html)
+        self.assertIn('aria-controls="primary-nav"', self.html)
+        self.assertIn('id="primary-nav"', self.html)
+        for destination in ["#programas", "#como-funciona", "#confianza", "#catalogo"]:
+            self.assertIn(f'href="{destination}"', self.html)
+        self.assertIn("navToggle.addEventListener", self.js)
+        self.assertIn("aria-expanded", self.js)
+
     def test_checkout_lines_are_in_required_order(self):
         labels = ["Subtotal de productos", "Envío", "IVA incluido (16%)", "Total final"]
         totals = self.html.split('<dl class="totals"', 1)[1].split('</dl>', 1)[0]

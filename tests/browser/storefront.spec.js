@@ -8,7 +8,7 @@ async function trackRuntimeFailures(page) {
   page.on('pageerror', (error) => errors.push(`pageerror: ${error.message}`));
   page.on('response', (response) => {
     const url = new URL(response.url());
-    if (url.origin === 'http://127.0.0.1:8000' && response.status() >= 400) {
+    if (url.hostname === '127.0.0.1' && response.status() >= 400) {
       errors.push(`response ${response.status()}: ${url.pathname}`);
     }
   });
@@ -47,6 +47,33 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   await expect(page.locator('[data-cart-dialog]')).toBeInViewport();
   await page.keyboard.press('Escape');
   await expect(page.locator('[data-cart-dialog]')).not.toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('client journey CTA and responsive navigation work', async ({ page }, testInfo) => {
+  const errors = await trackRuntimeFailures(page);
+  await page.goto('/');
+  await expect(page.locator('#hero-title')).toContainText('plan claro');
+  await expect(page.locator('.journey-grid > li')).toHaveCount(4);
+
+  await page.locator('.hero__actions a[href="#como-funciona"]').click();
+  await expect(page).toHaveURL(/#como-funciona$/);
+  await expect(page.locator('#como-funciona')).toBeInViewport();
+
+  const navToggle = page.locator('.nav-toggle');
+  if (testInfo.project.name === 'desktop') {
+    await expect(navToggle).toBeHidden();
+    await expect(page.locator('#primary-nav')).toBeVisible();
+  } else {
+    await expect(navToggle).toBeVisible();
+    await expect(navToggle).toHaveAttribute('aria-expanded', 'false');
+    await navToggle.click();
+    await expect(navToggle).toHaveAttribute('aria-expanded', 'true');
+    await expect(page.locator('#primary-nav')).toBeVisible();
+    await page.locator('#primary-nav a[href="#confianza"]').click();
+    await expect(page).toHaveURL(/#confianza$/);
+    await expect(navToggle).toHaveAttribute('aria-expanded', 'false');
+  }
   expect(errors).toEqual([]);
 });
 

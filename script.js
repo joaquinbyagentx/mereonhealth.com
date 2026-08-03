@@ -29,6 +29,30 @@ const paymentButton = document.querySelector('[data-payment-button]');
 const paymentState = document.querySelector('[data-payment-state]');
 const checkoutForm = document.querySelector('[data-checkout-form]');
 const toast = document.querySelector('[data-toast]');
+const navToggle = document.querySelector('.nav-toggle');
+const primaryNav = document.querySelector('#primary-nav');
+
+function closeNavigation() {
+  if (!navToggle || !primaryNav) return;
+  navToggle.setAttribute('aria-expanded', 'false');
+  navToggle.setAttribute('aria-label', 'Abrir navegación');
+  primaryNav.classList.remove('is-open');
+}
+
+if (navToggle && primaryNav) {
+  navToggle.addEventListener('click', () => {
+    const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+    navToggle.setAttribute('aria-expanded', String(!isOpen));
+    navToggle.setAttribute('aria-label', isOpen ? 'Abrir navegación' : 'Cerrar navegación');
+    primaryNav.classList.toggle('is-open', !isOpen);
+  });
+  primaryNav.addEventListener('click', (event) => {
+    if (event.target.closest('a')) closeNavigation();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeNavigation();
+  });
+}
 
 let catalog = [];
 let productByCode = new Map();
