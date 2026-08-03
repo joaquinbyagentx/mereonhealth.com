@@ -1,9 +1,9 @@
 export const PRICING_CONFIG = Object.freeze({
-  fxMxnCentavosPerUsd: 1750,
+  fxMxnTenThousandthsPerUsd: 173_207,
   landedUpliftBasisPoints: 1300,
-  targetProfitMarkupBasisPoints: 3500,
-  acceptedProfitMarkupRangeBasisPoints: Object.freeze([3450, 3550]),
-  cleanPriceIncrementCentavos: 1000,
+  targetProfitMarkupBasisPoints: 4000,
+  acceptedEffectiveMarkupRangeBasisPoints: Object.freeze([3700, 4300]),
+  cleanPriceIncrementCentavos: 5000,
   ivaBasisPoints: 1600,
   maxQuantity: 20
 });
@@ -27,16 +27,27 @@ export function roundDivide(numerator, denominator) {
   return Math.floor((numerator + Math.floor(denominator / 2)) / denominator);
 }
 
+function roundDivideBigInt(numerator, denominator) {
+  if (numerator < 0n || denominator <= 0n) {
+    throw new RangeError('La división entera requiere valores positivos');
+  }
+  const value = (numerator + (denominator / 2n)) / denominator;
+  if (value > BigInt(Number.MAX_SAFE_INTEGER)) {
+    throw new RangeError('El resultado monetario excede el rango entero seguro');
+  }
+  return Number(value);
+}
+
 export function calculateBasePriceCentavos(sourceUsdCents) {
   requireNonNegativeInteger(sourceUsdCents, 'Costo fuente USD');
-  const numerator = sourceUsdCents
-    * PRICING_CONFIG.fxMxnCentavosPerUsd
-    * (10_000 + PRICING_CONFIG.landedUpliftBasisPoints)
-    * (10_000 + PRICING_CONFIG.targetProfitMarkupBasisPoints);
-  const denominator = 100 * 10_000 * 10_000;
-  const cleanUnits = roundDivide(
+  const numerator = BigInt(sourceUsdCents)
+    * BigInt(PRICING_CONFIG.fxMxnTenThousandthsPerUsd)
+    * BigInt(10_000 + PRICING_CONFIG.landedUpliftBasisPoints)
+    * BigInt(10_000 + PRICING_CONFIG.targetProfitMarkupBasisPoints);
+  const denominator = 10_000n * 10_000n * 10_000n;
+  const cleanUnits = roundDivideBigInt(
     numerator,
-    denominator * PRICING_CONFIG.cleanPriceIncrementCentavos
+    denominator * BigInt(PRICING_CONFIG.cleanPriceIncrementCentavos)
   );
   return cleanUnits * PRICING_CONFIG.cleanPriceIncrementCentavos;
 }
@@ -46,13 +57,13 @@ export function calculateProfitMarkupBasisPoints(sourceUsdCents, basePriceCentav
   requireNonNegativeInteger(basePriceCentavos, 'Precio base');
   if (basePriceCentavos === 0) throw new RangeError('Precio base debe ser mayor a cero');
 
-  const landedNumerator = sourceUsdCents
-    * PRICING_CONFIG.fxMxnCentavosPerUsd
-    * (10_000 + PRICING_CONFIG.landedUpliftBasisPoints);
-  const landedDenominator = 100 * 10_000;
-  const profitNumerator = basePriceCentavos * landedDenominator - landedNumerator;
-  if (profitNumerator < 0) return -roundDivide(-profitNumerator * 10_000, landedNumerator);
-  return roundDivide(profitNumerator * 10_000, landedNumerator);
+  const landedNumerator = BigInt(sourceUsdCents)
+    * BigInt(PRICING_CONFIG.fxMxnTenThousandthsPerUsd)
+    * BigInt(10_000 + PRICING_CONFIG.landedUpliftBasisPoints);
+  const landedDenominator = 10_000n * 10_000n;
+  const profitNumerator = BigInt(basePriceCentavos) * landedDenominator - landedNumerator;
+  if (profitNumerator < 0n) return -roundDivideBigInt(-profitNumerator * 10_000n, landedNumerator);
+  return roundDivideBigInt(profitNumerator * 10_000n, landedNumerator);
 }
 
 export function calculateCheckoutTotals(lines, shippingCentavos) {

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+import hashlib
 import importlib.util
+import json
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -33,40 +35,96 @@ class ImporterSecurityTests(unittest.TestCase):
 
         with patch.object(IMPORTER.urllib.request, "urlopen", return_value=RedirectedResponse()):
             with self.assertRaisesRegex(RuntimeError, "unexpected public source URL"):
-                IMPORTER.fetch("https://protidehealth.com/product/bpc-157/")
+                IMPORTER.fetch("https://ascensionpeptides.com/product/bpc-157-10mg/")
 
     def test_off_domain_product_page_fails_closed(self):
         with patch.object(IMPORTER, "parse_page") as parse_page:
             with self.assertRaisesRegex(RuntimeError, "unexpected public source URL"):
                 IMPORTER.coa_metadata(
                     "https://attacker.example/product/bpc-157/",
-                    r"/certificates/bpc-157-10mg-coa-\d+/?$",
+                    None,
                     "2026-08-02T00:00:00Z",
                 )
             parse_page.assert_not_called()
 
     def test_off_domain_certificate_link_fails_closed(self):
+        with self.assertRaisesRegex(RuntimeError, "unexpected public source URL"):
+            IMPORTER.require_public_source_url(
+                "https://attacker.example/wp-content/uploads/fake.pdf",
+                "/wp-content/uploads/",
+            )
+
+    def test_unreviewed_new_coa_fails_closed(self):
         product_page = IMPORTER.PageParser()
         product_page.links = [
-            "https://attacker.example/certificates/bpc-157-10mg-coa-123/"
+            "https://ascensionpeptides.com/wp-content/uploads/2026/08/new-coa.pdf"
         ]
-        certificate_page = IMPORTER.PageParser()
-        certificate_page.text = [
-            "COA by Fake Lab Lot FAKE-1 COA 123 Test Method HPLC-MS Identity"
-        ]
-        certificate_page.title = ["Fake COA"]
+        with patch.object(IMPORTER, "parse_page", return_value=product_page):
+            with self.assertRaisesRegex(RuntimeError, "now published"):
+                IMPORTER.coa_metadata(
+                    "https://ascensionpeptides.com/product/bpc-157-10mg/",
+                    None,
+                    "2026-08-03T00:00:00Z",
+                )
+
+    def test_exchange_rate_is_fetched_and_validated_exactly(self):
+        payload = b'{"base":"USD","date":"2026-08-03","rates":{"MXN":17.3207}}'
+        with patch.object(IMPORTER, "fetch", return_value=payload):
+            self.assertEqual(IMPORTER.fetch_exchange_rate(), 173207)
+
+    def test_exchange_rate_change_fails_closed(self):
+        payload = b'{"base":"USD","date":"2026-08-03","rates":{"MXN":17.3208}}'
+        with patch.object(IMPORTER, "fetch", return_value=payload):
+            with self.assertRaisesRegex(RuntimeError, "rate changed"):
+                IMPORTER.fetch_exchange_rate()
+
+    def test_coa_metadata_accepts_only_the_pinned_reviewed_pdf(self):
+        coa_url = "https://ascensionpeptides.com/wp-content/uploads/2026/01/coa.pdf"
+        document = b"%PDF-1.7\nreviewed document"
+        page = f'<a href="{coa_url}">Download COA</a>'.encode()
 
         with patch.object(
             IMPORTER,
-            "parse_page",
-            side_effect=[product_page, certificate_page],
+            "fetch",
+            side_effect=lambda url: page if "/product/" in url else document,
         ):
-            with self.assertRaisesRegex(RuntimeError, "unexpected public source URL"):
+            metadata = IMPORTER.coa_metadata(
+                "https://ascensionpeptides.com/product/example/",
+                {
+                    "url": coa_url,
+                    "sha256": hashlib.sha256(document).hexdigest(),
+                    "lot": "LOT-1",
+                    "lab": "Lab",
+                    "methods": ["HPLC"],
+                },
+                "2026-08-03T00:00:00Z",
+            )
+
+        self.assertEqual(metadata["sourceSha256"], hashlib.sha256(document).hexdigest())
+        self.assertEqual(metadata["lot"], "LOT-1")
+
+    def test_coa_metadata_rejects_changed_reviewed_pdf(self):
+        coa_url = "https://ascensionpeptides.com/wp-content/uploads/2026/01/coa.pdf"
+        page = f'<a href="{coa_url}">Download COA</a>'.encode()
+        with patch.object(
+            IMPORTER,
+            "fetch",
+            side_effect=lambda url: page if "/product/" in url else b"%PDF-1.7\ntampered",
+        ):
+            with self.assertRaisesRegex(RuntimeError, "reviewed COA content changed"):
                 IMPORTER.coa_metadata(
-                    "https://protidehealth.com/product/bpc-157/",
-                    r"/certificates/bpc-157-10mg-coa-\d+/?$",
-                    "2026-08-02T00:00:00Z",
+                    "https://ascensionpeptides.com/product/example/",
+                    {"url": coa_url, "sha256": "0" * 64, "lot": "LOT-1", "lab": "Lab", "methods": ["HPLC"]},
+                    "2026-08-03T00:00:00Z",
                 )
+
+    def test_catalog_build_rejects_missing_reviewed_product(self):
+        unrelated = [{"slug": f"unrelated-{index}"} for index in range(12)]
+        with patch.object(IMPORTER, "fetch_exchange_rate", return_value=173207), patch.object(
+            IMPORTER, "fetch", return_value=json.dumps(unrelated).encode()
+        ):
+            with self.assertRaisesRegex(RuntimeError, "reviewed product is missing"):
+                IMPORTER.build_catalog()
 
 
 if __name__ == "__main__":

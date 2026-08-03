@@ -19,14 +19,14 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   const errors = await trackRuntimeFailures(page);
   await page.goto('/');
   await expect(page.locator('.product-card')).toHaveCount(12);
-  await expect(page.locator('.product-card .mereon-verified-badge')).toHaveCount(12);
+  await expect(page.locator('.product-card .mereon-verified-badge')).toHaveCount(10);
   await expect(page.locator('[data-catalog-status]')).toContainText('12 de 12');
-  await expect(page.locator('.coa-card-link[href]')).toHaveCount(8);
-  await expect(page.locator('.coa-card-link--disabled')).toHaveCount(4);
+  await expect(page.locator('.coa-card-link[href]')).toHaveCount(10);
+  await expect(page.locator('.coa-card-link--disabled')).toHaveCount(2);
   for (const link of await page.locator('.coa-card-link[href]').all()) {
     await expect(link).toHaveAttribute('target', '_blank');
     await expect(link).toHaveAttribute('rel', /noopener/);
-    await expect(link).toHaveAttribute('href', /^https:\/\/protidehealth\.com\/certificates\//);
+    await expect(link).toHaveAttribute('href', /^https:\/\/ascensionpeptides\.com\/wp-content\/uploads\/.*\.pdf$/);
   }
   await page.getByRole('button', { name: 'Mezclas' }).click();
   await expect(page.locator('.product-card')).toHaveCount(4);
@@ -52,7 +52,7 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   expect(overflow.body).toBeLessThanOrEqual(1);
   expect(Math.max(...overflow.cards)).toBeLessThanOrEqual(1);
 
-  const detailsButton = page.locator('[data-detail]').first();
+  const detailsButton = page.locator('[data-detail="TB500-5"]');
   await detailsButton.focus();
   await page.keyboard.press('Enter');
   await expect(page.locator('[data-product-dialog]')).toBeInViewport();
@@ -135,10 +135,10 @@ test('cart add, quantity, totals, disabled payment, persistence, and removal wor
   const cart = page.locator('[data-cart-dialog]');
   await expect(cart).toBeVisible();
   await expect(cart).toBeInViewport();
-  await expect(cart.locator('[data-subtotal]')).toContainText('2,670.00');
+  await expect(cart.locator('[data-subtotal]')).toContainText('1,350.00');
   await expect(cart.locator('[data-shipping]')).toContainText('250.00');
-  await expect(cart.locator('[data-iva]')).toContainText('402.76');
-  await expect(cart.locator('[data-total]')).toContainText('2,920.00');
+  await expect(cart.locator('[data-iva]')).toContainText('220.69');
+  await expect(cart.locator('[data-total]')).toContainText('1,600.00');
 
   const payment = cart.locator('[data-payment-button]');
   await expect(payment).toBeDisabled();
@@ -149,7 +149,7 @@ test('cart add, quantity, totals, disabled payment, persistence, and removal wor
 
   await cart.getByRole('button', { name: 'Aumentar cantidad' }).click();
   await expect(page.locator('[data-cart-count]')).toHaveText('2');
-  await expect(cart.locator('[data-subtotal]')).toContainText('5,340.00');
+  await expect(cart.locator('[data-subtotal]')).toContainText('2,700.00');
   await cart.locator('[data-cart-close]').first().click();
   await page.reload();
   await expect(page.locator('[data-cart-count]')).toHaveText('2');
@@ -166,12 +166,16 @@ test('COA-pending product disables external navigation and remains transparent',
   test.skip(testInfo.project.name !== 'desktop', 'Single behavior check is sufficient; responsive layout is covered separately.');
   await page.goto('/');
   const firstCard = page.locator('.product-card').first();
-  await expect(firstCard).toContainText('COA pendiente de asignación/publicación para este lote');
-  await expect(firstCard.locator('a[href*="/certificates/"]')).toHaveCount(0);
+  await expect(firstCard).toContainText('COA pendiente de publicación por Ascension Peptides');
+  await expect(firstCard.locator('.mereon-verified-badge')).toHaveCount(0);
+  await expect(firstCard.locator('a[href$=".pdf"]')).toHaveCount(0);
   await firstCard.locator('[data-detail]').click();
   const detail = page.locator('[data-product-dialog]');
   await expect(detail).toBeInViewport();
-  await expect(detail).toContainText('COA pendiente de asignación/publicación para este lote');
+  await expect(detail).toContainText('COA pendiente de publicación por Ascension Peptides');
+  await expect(detail).not.toContainText('Mereon Verified');
+  await expect(detail.locator('.mereon-verified-badge')).toHaveCount(0);
+  await expect(detail.locator('.mereon-verified-note')).toHaveCount(0);
   await expect(detail.getByRole('link', { name: /Ver COA/ })).toHaveCount(0);
   await expect(detail.locator('[aria-disabled="true"]')).toHaveText('Ver COA no disponible');
   await expect(detail).not.toContainText('null');

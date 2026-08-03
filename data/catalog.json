@@ -1,502 +1,558 @@
 {
-  "schemaVersion": 1,
-  "generatedAt": "2026-08-03T01:47:44Z",
-  "sourceNotice": "Supplier catalog research input; Limitless prices reflect the authenticated Premium 10 mg variant. No reseller, affiliate, or authorization relationship is implied.",
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-03T17:15:26Z",
+  "sourceNotice": "Ascension Peptides public catalog data is a research input. No reseller, affiliate, authorization, or official-distributor relationship is implied.",
   "pricingAssumptions": {
-    "fxMxnCentavosPerUsd": 1750,
+    "fxMxnTenThousandthsPerUsd": 173207,
+    "fxSourceUrl": "https://api.frankfurter.app/latest?from=USD&to=MXN",
+    "fxSourceDate": "2026-08-03",
     "landedUpliftBasisPoints": 1300,
-    "targetProfitMarkupBasisPoints": 3500,
+    "targetProfitMarkupBasisPoints": 4000,
     "ivaIncludedBasisPoints": 1600,
-    "acceptedProfitMarkupRangeBasisPoints": [
-      3450,
-      3550
+    "acceptedEffectiveMarkupRangeBasisPoints": [
+      3700,
+      4300
     ],
-    "cleanPriceIncrementCentavos": 1000,
-    "rule": "Public supplier price converted at FX, plus 13% landed uplift, plus 35% profit markup. Final consumer price includes IVA; nearest MXN 10; exact midpoint rounds upward."
+    "cleanPriceIncrementCentavos": 5000,
+    "rule": "Supplier USD price × 17.3207 MXN/USD × 1.13 landed uplift × 1.40 markup; nearest MXN 50, exact midpoint upward. No separate IVA multiplier is added; checkout transparently extracts included IVA from the displayed final amount."
   },
   "products": [
     {
       "code": "BPC-157-10",
       "name": "BPC-157",
-      "presentation": "10 mg · vial Premium liofilizado",
+      "presentation": "10 mg",
       "status": "coa_pending",
       "researchContext": "Péptido sintético de 15 aminoácidos estudiado en modelos preclínicos de señalización y respuesta tisular; la evidencia no establece beneficios clínicos.",
       "brandSupplier": {
-        "brand": "Limitless Biotech",
+        "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
         "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
       },
       "source": {
-        "catalogUrl": "https://limitlesslifenootropics.com/shop",
-        "productUrl": "https://limitlesslifenootropics.com/product/bpc-157/",
-        "priceEvidenceUrl": "https://limitlesslifenootropics.com/product/bpc-157/",
-        "sourceTitle": "BPC-157",
-        "sourcePresentation": "BPCSF-US-10MG · 10 mg · Premium · Lyophilized",
-        "fetchedAt": "2026-08-03T01:47:44Z"
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/bpc-157-10mg/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/bpc-157-10mg/",
+        "sourceTitle": "BPC-157 (10mg)",
+        "sourcePresentation": "BPC-157 (10mg)",
+        "fetchedAt": "2026-08-03T17:15:26Z"
       },
-      "sourceUsdCents": 9999,
-      "basePriceCentavos": 267000,
-      "profitMarkupBasisPoints": 3503,
+      "sourceUsdCents": 4900,
+      "basePriceCentavos": 135000,
+      "profitMarkupBasisPoints": 4076,
       "image": {
         "assetPath": "assets/images/products/bpc-157-10.png",
-        "sourceUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/original/products/217/824/BPC-157_10MG_.SINGLE.VIAL__08417.1780584885.png",
-        "alt": "Fotografía de referencia Limitless Biotech de BPC-157 10 mg · vial Premium liofilizado",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/03/Ascension-BPC-157-10mg-scaled.jpg",
+        "alt": "Fotografía de referencia Ascension Peptides de BPC-157 10 mg",
         "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
       },
       "coa": {
         "url": null,
         "kind": "pending",
-        "label": "COA pendiente de asignación/publicación para este lote.",
+        "label": "COA pendiente de publicación por Ascension Peptides para esta referencia.",
         "lot": null,
         "lab": null,
         "methods": [],
         "sourceDocumentTitle": null,
-        "verifiedAt": null
+        "verifiedAt": "2026-08-03T17:15:26Z"
       }
     },
     {
-      "code": "TB500-10",
+      "code": "TB500-5",
       "name": "TB-500",
-      "presentation": "10 mg · vial Premium liofilizado",
-      "status": "coa_pending",
+      "presentation": "5 mg",
+      "status": "available",
       "researchContext": "Péptido sintético relacionado con thymosin beta-4, investigado en sistemas preclínicos de dinámica celular; sin indicaciones terapéuticas aprobadas.",
       "brandSupplier": {
-        "brand": "Limitless Biotech",
+        "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
         "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
       },
       "source": {
-        "catalogUrl": "https://limitlesslifenootropics.com/shop",
-        "productUrl": "https://limitlesslifenootropics.com/product/tb-500/",
-        "priceEvidenceUrl": "https://limitlesslifenootropics.com/product/tb-500/",
-        "sourceTitle": "TB-500",
-        "sourcePresentation": "TB4-US-10MG · 10 mg · Premium · Lyophilized",
-        "fetchedAt": "2026-08-03T01:47:44Z"
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/tb-500-5mg/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/tb-500-5mg/",
+        "sourceTitle": "TB-500 (5MG)",
+        "sourcePresentation": "TB-500 (5MG)",
+        "fetchedAt": "2026-08-03T17:15:26Z"
       },
-      "sourceUsdCents": 13399,
-      "basePriceCentavos": 358000,
-      "profitMarkupBasisPoints": 3511,
+      "sourceUsdCents": 5400,
+      "basePriceCentavos": 150000,
+      "profitMarkupBasisPoints": 4192,
       "image": {
-        "assetPath": "assets/images/products/tb500-10.png",
-        "sourceUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/original/products/186/891/THYMOSIN_BETA_4_TB-500_10MG.SINGLE.VIAL__04024.1762297179.png",
-        "alt": "Fotografía de referencia Limitless Biotech de TB-500 10 mg · vial Premium liofilizado",
+        "assetPath": "assets/images/products/tb500-5.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-TB-500-5mg.webp",
+        "alt": "Fotografía de referencia Ascension Peptides de TB-500 5 mg",
         "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
       },
       "coa": {
-        "url": null,
-        "kind": "pending",
-        "label": "COA pendiente de asignación/publicación para este lote.",
-        "lot": null,
-        "lab": null,
-        "methods": [],
-        "sourceDocumentTitle": null,
-        "verifiedAt": null
-      }
-    },
-    {
-      "code": "MOTSC-10",
-      "name": "MOTS-c",
-      "presentation": "10 mg · vial Premium liofilizado",
-      "status": "coa_pending",
-      "researchContext": "Péptido derivado de una secuencia mitocondrial investigado en modelos preclínicos de señalización metabólica; sin extrapolación a resultados en personas.",
-      "brandSupplier": {
-        "brand": "Limitless Biotech",
-        "role": "Marca / proveedor de referencia",
-        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
-      },
-      "source": {
-        "catalogUrl": "https://limitlesslifenootropics.com/shop",
-        "productUrl": "https://limitlesslifenootropics.com/product/mots-c/",
-        "priceEvidenceUrl": "https://limitlesslifenootropics.com/product/mots-c/",
-        "sourceTitle": "MOTS-c",
-        "sourcePresentation": "MOTS-US-10MG · 10 mg · Premium · Lyophilized",
-        "fetchedAt": "2026-08-03T01:47:44Z"
-      },
-      "sourceUsdCents": 9999,
-      "basePriceCentavos": 267000,
-      "profitMarkupBasisPoints": 3503,
-      "image": {
-        "assetPath": "assets/images/products/motsc-10.png",
-        "sourceUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/original/products/187/852/MOTS-C_10MG_.SINGLE.VIAL__34440.1762231552.png",
-        "alt": "Fotografía de referencia Limitless Biotech de MOTS-c 10 mg · vial Premium liofilizado",
-        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
-      },
-      "coa": {
-        "url": null,
-        "kind": "pending",
-        "label": "COA pendiente de asignación/publicación para este lote.",
-        "lot": null,
-        "lab": null,
-        "methods": [],
-        "sourceDocumentTitle": null,
-        "verifiedAt": null
-      }
-    },
-    {
-      "code": "GHKCU-50",
-      "name": "GHK-Cu",
-      "presentation": "50 mg · vial liofilizado",
-      "status": "available",
-      "researchContext": "Complejo tripeptídico de cobre utilizado como referencia en investigación bioquímica; no se presenta como medicamento, cosmético ni tratamiento.",
-      "brandSupplier": {
-        "brand": "Protide Health",
-        "role": "Marca / proveedor de referencia",
-        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
-      },
-      "source": {
-        "catalogUrl": "https://protidehealth.com/wp-json/wc/store/v1/products?per_page=100",
-        "productUrl": "https://protidehealth.com/product/ghk-cu-copper-peptide/",
-        "sourceTitle": "GHK-Cu – Copper Peptide",
-        "sourcePresentation": "Select vial strength: 50mg",
-        "fetchedAt": "2026-08-03T01:47:44Z"
-      },
-      "sourceUsdCents": 5500,
-      "basePriceCentavos": 147000,
-      "profitMarkupBasisPoints": 3516,
-      "image": {
-        "assetPath": "assets/images/products/ghkcu-50.png",
-        "sourceUrl": "https://protidehealth.com/wp-content/uploads/2026/02/GHK-Cu-50mg_Protide-Cover-Image-1.png",
-        "alt": "Fotografía de referencia de GHK-Cu 50 mg · vial liofilizado",
-        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
-      },
-      "coa": {
-        "url": "https://protidehealth.com/certificates/ghk-cu-50mg-coa-2606260209/",
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/03/COA_Thymosin_beta4_quant_31-01260229_20260214.pdf",
+        "sourceSha256": "92cdd2245957fb01cd54c4abd6827dab6db3d7e8ac1c99bb1dcddf53351232f2",
         "kind": "source-reference",
-        "label": "COA de referencia de la fuente",
-        "lot": "PH-gu50-0309",
-        "lab": "Freedom Diagnostics",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "31-01260229",
+        "lab": "MZ Biolabs",
         "methods": [
           "HPLC",
           "LC-MS"
         ],
-        "sourceDocumentTitle": "GHK-CU 50mg COA #2606260209 - Protide Health",
-        "verifiedAt": "2026-08-03T01:47:44Z"
+        "sourceDocumentTitle": "Certificate of Analysis — lote 31-01260229",
+        "verifiedAt": "2026-08-03T17:15:26Z"
+      }
+    },
+    {
+      "code": "MOTSC-10",
+      "name": "MOTS-C",
+      "presentation": "10 mg",
+      "status": "available",
+      "researchContext": "Péptido derivado de una secuencia mitocondrial investigado en modelos preclínicos de señalización metabólica; sin extrapolación a resultados en personas.",
+      "brandSupplier": {
+        "brand": "Ascension Peptides",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/mots-c-10mg/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/mots-c-10mg/",
+        "sourceTitle": "MOTS-C (10MG)",
+        "sourcePresentation": "MOTS-C (10MG)",
+        "fetchedAt": "2026-08-03T17:15:26Z"
+      },
+      "sourceUsdCents": 4900,
+      "basePriceCentavos": 135000,
+      "profitMarkupBasisPoints": 4076,
+      "image": {
+        "assetPath": "assets/images/products/motsc-10.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-MOTS-C-10mg.jpg",
+        "alt": "Fotografía de referencia Ascension Peptides de MOTS-C 10 mg",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/03/COA_MOTS-C_quant_24-01260229_20260305.pdf",
+        "sourceSha256": "ace1d6f18d530a19c807f1aed83487ec3a52196a0e7b37dd4c2d828831b9a9f1",
+        "kind": "source-reference",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "24-01260229",
+        "lab": "MZ Biolabs",
+        "methods": [
+          "HPLC",
+          "LC-MS"
+        ],
+        "sourceDocumentTitle": "Certificate of Analysis — lote 24-01260229",
+        "verifiedAt": "2026-08-03T17:15:26Z"
+      }
+    },
+    {
+      "code": "GHKCU-100-3ML",
+      "name": "GHK-Cu",
+      "presentation": "100 mg · 3 mL",
+      "status": "coa_pending",
+      "researchContext": "Complejo tripeptídico de cobre utilizado como referencia en investigación bioquímica; no se presenta como medicamento, cosmético ni tratamiento.",
+      "brandSupplier": {
+        "brand": "Ascension Peptides",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/ghk-cu-100mg-3ml/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/ghk-cu-100mg-3ml/",
+        "sourceTitle": "GHK-CU (100MG) 3mL",
+        "sourcePresentation": "GHK-CU (100MG) 3mL",
+        "fetchedAt": "2026-08-03T17:15:26Z"
+      },
+      "sourceUsdCents": 6500,
+      "basePriceCentavos": 180000,
+      "profitMarkupBasisPoints": 4149,
+      "image": {
+        "assetPath": "assets/images/products/ghkcu-100-3ml.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-GHK-CU-100mg.jpg",
+        "alt": "Fotografía de referencia Ascension Peptides de GHK-Cu 100 mg · 3 mL",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": null,
+        "kind": "pending",
+        "label": "COA pendiente de publicación por Ascension Peptides para esta referencia.",
+        "lot": null,
+        "lab": null,
+        "methods": [],
+        "sourceDocumentTitle": null,
+        "verifiedAt": "2026-08-03T17:15:26Z"
       }
     },
     {
       "code": "CJCIPA-5-5",
       "name": "CJC-1295 No-DAC + Ipamorelin",
-      "presentation": "5/5 mg · vial liofilizado",
+      "presentation": "CJC-1295 No DAC 5 mg + Ipamorelin 5 mg · 10 mg total",
       "status": "available",
       "researchContext": "Mezcla de dos péptidos estudiada como material analítico en modelos de señalización; no implica eficacia, seguridad o uso clínico.",
       "brandSupplier": {
-        "brand": "Protide Health",
+        "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
         "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
       },
       "source": {
-        "catalogUrl": "https://protidehealth.com/wp-json/wc/store/v1/products?per_page=100",
-        "productUrl": "https://protidehealth.com/product/cjc-1295-no-dac-ipamorelin-blend/",
-        "sourceTitle": "CJC-1295 (No Dac) & Ipamorelin Blend",
-        "sourcePresentation": "Select vial strength: 5/5mg",
-        "fetchedAt": "2026-08-03T01:47:44Z"
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/fit-stack-cjc-1295-ipamorelin/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/fit-stack-cjc-1295-ipamorelin/",
+        "sourceTitle": "CJC-1295 No DAC 5mg + Ipamorelin 5mg (FIT Stack 10mg)",
+        "sourcePresentation": "CJC-1295 No DAC 5mg + Ipamorelin 5mg (FIT Stack 10mg)",
+        "fetchedAt": "2026-08-03T17:15:26Z"
       },
-      "sourceUsdCents": 7500,
-      "basePriceCentavos": 200000,
-      "profitMarkupBasisPoints": 3485,
+      "sourceUsdCents": 7000,
+      "basePriceCentavos": 190000,
+      "profitMarkupBasisPoints": 3868,
       "image": {
         "assetPath": "assets/images/products/cjcipa-5-5.png",
-        "sourceUrl": "https://protidehealth.com/wp-content/uploads/2025/07/cjc-ipa-blend-1.png",
-        "alt": "Fotografía de referencia de CJC-1295 No-DAC + Ipamorelin 5/5 mg · vial liofilizado",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2025/06/Ascension-FIT-Stack-CJC-1295IPAMORELIN.webp",
+        "alt": "Fotografía de referencia Ascension Peptides de CJC-1295 No-DAC + Ipamorelin CJC-1295 No DAC 5 mg + Ipamorelin 5 mg · 10 mg total",
         "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
       },
       "coa": {
-        "url": "https://protidehealth.com/certificates/cjc-1295-no-dac-ipamorelin-5-5mg-coa-2607230265/",
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/05/CJC-1295_No_DAC_Ipamorelin_06-05260628_COA.pdf",
+        "sourceSha256": "83fea5f4667f68af48c882197ef11786f1f0499618e4dd44f2946cab57e5d209",
         "kind": "source-reference",
-        "label": "COA de referencia de la fuente",
-        "lot": "PH-c/i55-0605",
-        "lab": "Freedom Diagnostics",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "06-05260628",
+        "lab": "Kovera Labs",
         "methods": [
-          "HPLC",
-          "LC-MS"
+          "RP-HPLC",
+          "LC-MS",
+          "endotoxinas",
+          "esterilidad",
+          "metales pesados"
         ],
-        "sourceDocumentTitle": "CJC-1295 (NO DAC)/Ipamorelin 5/5mg COA #2607230265 - Protide Health",
-        "verifiedAt": "2026-08-03T01:47:44Z"
+        "sourceDocumentTitle": "Certificate of Analysis — lote 06-05260628",
+        "verifiedAt": "2026-08-03T17:15:26Z"
       }
     },
     {
       "code": "TA1-10",
-      "name": "Thymosin Alpha-1",
-      "presentation": "10 mg · vial Premium liofilizado",
-      "status": "coa_pending",
+      "name": "Thymosin Alpha 1",
+      "presentation": "10 mg",
+      "status": "available",
       "researchContext": "Péptido sintético empleado en investigación de vías inmunológicas in vitro y preclínicas; esta descripción no constituye una indicación terapéutica.",
       "brandSupplier": {
-        "brand": "Limitless Biotech",
+        "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
         "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
       },
       "source": {
-        "catalogUrl": "https://limitlesslifenootropics.com/shop",
-        "productUrl": "https://limitlesslifenootropics.com/product/thymosin-alpha-1/",
-        "priceEvidenceUrl": "https://limitlesslifenootropics.com/product/thymosin-alpha-1/",
-        "sourceTitle": "Thymosin Alpha-1",
-        "sourcePresentation": "TA1-US-10MG · 10 mg · Premium · Lyophilized",
-        "fetchedAt": "2026-08-03T01:47:44Z"
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/thymosin-alpha-1-10mg/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/thymosin-alpha-1-10mg/",
+        "sourceTitle": "Thymosin Alpha 1 (10MG)",
+        "sourcePresentation": "Thymosin Alpha 1 (10MG)",
+        "fetchedAt": "2026-08-03T17:15:26Z"
       },
-      "sourceUsdCents": 13199,
-      "basePriceCentavos": 352000,
-      "profitMarkupBasisPoints": 3486,
+      "sourceUsdCents": 7100,
+      "basePriceCentavos": 195000,
+      "profitMarkupBasisPoints": 4032,
       "image": {
         "assetPath": "assets/images/products/ta1-10.png",
-        "sourceUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/original/products/185/885/THYMOSIN_ALPHA_1_10MG.SINGLE.VIAL__29102.1762296430.png",
-        "alt": "Fotografía de referencia Limitless Biotech de Thymosin Alpha-1 10 mg · vial Premium liofilizado",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-Thymosin-Alpha-1-10mg.webp",
+        "alt": "Fotografía de referencia Ascension Peptides de Thymosin Alpha 1 10 mg",
         "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
       },
       "coa": {
-        "url": null,
-        "kind": "pending",
-        "label": "COA pendiente de asignación/publicación para este lote.",
-        "lot": null,
-        "lab": null,
-        "methods": [],
-        "sourceDocumentTitle": null,
-        "verifiedAt": null
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/05/Thymosin_alpha-1_33-05260628_COA.pdf",
+        "sourceSha256": "9b1b2ffb3c9dad063ab7534c4dde4220219e003f9234834e0b85b0e8b3fa312e",
+        "kind": "source-reference",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "33-05260628",
+        "lab": "Kovera Labs",
+        "methods": [
+          "RP-HPLC",
+          "LC-MS",
+          "endotoxinas",
+          "esterilidad",
+          "metales pesados"
+        ],
+        "sourceDocumentTitle": "Certificate of Analysis — lote 33-05260628",
+        "verifiedAt": "2026-08-03T17:15:26Z"
       }
     },
     {
-      "code": "TESA-10",
+      "code": "TESA-5",
       "name": "Tesamorelin",
-      "presentation": "10 mg · vial liofilizado",
+      "presentation": "5 mg",
       "status": "available",
       "researchContext": "Análogo peptídico sintético estudiado en investigación de señalización endocrina; el material se ofrece exclusivamente para investigación y referencia.",
       "brandSupplier": {
-        "brand": "Protide Health",
+        "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
         "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
       },
       "source": {
-        "catalogUrl": "https://protidehealth.com/wp-json/wc/store/v1/products?per_page=100",
-        "productUrl": "https://protidehealth.com/product/tesamorelin/",
-        "sourceTitle": "Tesamorelin",
-        "sourcePresentation": "Select vial strength: 10mg",
-        "fetchedAt": "2026-08-03T01:47:44Z"
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/tesamorelin-5mg/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/tesamorelin-5mg/",
+        "sourceTitle": "Tesamorelin (5MG)",
+        "sourcePresentation": "Tesamorelin (5MG)",
+        "fetchedAt": "2026-08-03T17:15:26Z"
       },
-      "sourceUsdCents": 8500,
-      "basePriceCentavos": 227000,
-      "profitMarkupBasisPoints": 3505,
+      "sourceUsdCents": 5000,
+      "basePriceCentavos": 135000,
+      "profitMarkupBasisPoints": 3795,
       "image": {
-        "assetPath": "assets/images/products/tesa-10.png",
-        "sourceUrl": "https://protidehealth.com/wp-content/uploads/2026/02/Tesamorelin_Protide-Cover-Image-1.png",
-        "alt": "Fotografía de referencia de Tesamorelin 10 mg · vial liofilizado",
+        "assetPath": "assets/images/products/tesa-5.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-Tesamorelin-5mg.webp",
+        "alt": "Fotografía de referencia Ascension Peptides de Tesamorelin 5 mg",
         "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
       },
       "coa": {
-        "url": "https://protidehealth.com/certificates/tesamorelin-10mg-coa-2605150485/",
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/02/COA_Tesamorelin_quant_32-01260229_20260212.pdf",
+        "sourceSha256": "de121018334ead3efaba870acf1814f235c12ed32fd578a782f77f349a2985a4",
         "kind": "source-reference",
-        "label": "COA de referencia de la fuente",
-        "lot": "PH-te10-0408",
-        "lab": "Freedom Diagnostics",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "32-01260229",
+        "lab": "MZ Biolabs",
         "methods": [
           "HPLC",
           "LC-MS"
         ],
-        "sourceDocumentTitle": "Tesamorelin 10mg COA #2605150485 - Protide Health",
-        "verifiedAt": "2026-08-03T01:47:44Z"
+        "sourceDocumentTitle": "Certificate of Analysis — lote 32-01260229",
+        "verifiedAt": "2026-08-03T17:15:26Z"
       }
     },
     {
-      "code": "EPITALON-10",
-      "name": "Epitalon",
-      "presentation": "10 mg · vial liofilizado",
+      "code": "EPITHALON-10",
+      "name": "Epithalon",
+      "presentation": "10 mg",
       "status": "available",
       "researchContext": "Tetrapéptido sintético investigado en modelos preclínicos de biología celular; no hay promesa de resultados ni recomendación de uso.",
       "brandSupplier": {
-        "brand": "Protide Health",
+        "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
         "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
       },
       "source": {
-        "catalogUrl": "https://protidehealth.com/wp-json/wc/store/v1/products?per_page=100",
-        "productUrl": "https://protidehealth.com/product/epithalon-10mg/",
-        "sourceTitle": "Epithalon 10mg",
-        "sourcePresentation": "Epithalon 10mg",
-        "fetchedAt": "2026-08-03T01:47:44Z"
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/epithalon-10mg/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/epithalon-10mg/",
+        "sourceTitle": "Epithalon (10mg)",
+        "sourcePresentation": "Epithalon (10mg)",
+        "fetchedAt": "2026-08-03T17:15:26Z"
       },
-      "sourceUsdCents": 7500,
-      "basePriceCentavos": 200000,
-      "profitMarkupBasisPoints": 3485,
+      "sourceUsdCents": 4400,
+      "basePriceCentavos": 120000,
+      "profitMarkupBasisPoints": 3934,
       "image": {
-        "assetPath": "assets/images/products/epitalon-10.png",
-        "sourceUrl": "https://protidehealth.com/wp-content/uploads/2026/02/Epithalon_Protide-Cover-Image-1.png",
-        "alt": "Fotografía de referencia de Epitalon 10 mg · vial liofilizado",
+        "assetPath": "assets/images/products/epithalon-10.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/03/Ascension-Epithalon-10mg-scaled.jpg",
+        "alt": "Fotografía de referencia Ascension Peptides de Epithalon 10 mg",
         "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
       },
       "coa": {
-        "url": "https://protidehealth.com/certificates/epithalon-10mg-coa-2605280422/",
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/05/Epithalon_15-05260628_COA.pdf",
+        "sourceSha256": "cf40aad2b791b54b63223d9955350696530fd82cf9c404bef8c7148548931f2c",
         "kind": "source-reference",
-        "label": "COA de referencia de la fuente",
-        "lot": "PH ep10 0327",
-        "lab": "Freedom Diagnostics",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "15-05260628",
+        "lab": "Kovera Labs",
         "methods": [
-          "HPLC",
-          "LC-MS"
+          "RP-HPLC",
+          "LC-MS",
+          "endotoxinas",
+          "esterilidad",
+          "metales pesados"
         ],
-        "sourceDocumentTitle": "Epithalon 10mg COA #2605280422 - Protide Health",
-        "verifiedAt": "2026-08-03T01:47:44Z"
+        "sourceDocumentTitle": "Certificate of Analysis — lote 15-05260628",
+        "verifiedAt": "2026-08-03T17:15:26Z"
       }
     },
     {
       "code": "KPV-10",
       "name": "KPV",
-      "presentation": "10 mg · vial liofilizado",
+      "presentation": "10 mg",
       "status": "available",
       "researchContext": "Tripéptido sintético utilizado en estudios preclínicos de señalización; sus contextos de investigación no demuestran resultados clínicos.",
       "brandSupplier": {
-        "brand": "Protide Health",
+        "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
         "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
       },
       "source": {
-        "catalogUrl": "https://protidehealth.com/wp-json/wc/store/v1/products?per_page=100",
-        "productUrl": "https://protidehealth.com/product/kpv-10mg/",
-        "sourceTitle": "KPV 10mg",
-        "sourcePresentation": "KPV 10mg",
-        "fetchedAt": "2026-08-03T01:47:44Z"
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/kpv-10mg/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/kpv-10mg/",
+        "sourceTitle": "KPV (10MG)",
+        "sourcePresentation": "KPV (10MG)",
+        "fetchedAt": "2026-08-03T17:15:26Z"
       },
-      "sourceUsdCents": 9500,
-      "basePriceCentavos": 254000,
-      "profitMarkupBasisPoints": 3521,
+      "sourceUsdCents": 5000,
+      "basePriceCentavos": 135000,
+      "profitMarkupBasisPoints": 3795,
       "image": {
         "assetPath": "assets/images/products/kpv-10.png",
-        "sourceUrl": "https://protidehealth.com/wp-content/uploads/2026/02/KPV_Protide-Cover-Image-1.png",
-        "alt": "Fotografía de referencia de KPV 10 mg · vial liofilizado",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-KPV-10mg.jpg",
+        "alt": "Fotografía de referencia Ascension Peptides de KPV 10 mg",
         "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
       },
       "coa": {
-        "url": "https://protidehealth.com/certificates/kpv-10mg-coa-2606220449/",
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/05/KPV_20-05260628_COA.pdf",
+        "sourceSha256": "ee84f58b6204e85449ba57fe40f131f5bcfd986536638a3f7210d8f78863fe7d",
         "kind": "source-reference",
-        "label": "COA de referencia de la fuente",
-        "lot": "PH-kv101123",
-        "lab": "Freedom Diagnostics",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "20-05260628",
+        "lab": "Kovera Labs",
         "methods": [
-          "HPLC",
-          "LC-MS"
+          "RP-HPLC",
+          "LC-MS",
+          "endotoxinas",
+          "esterilidad",
+          "metales pesados"
         ],
-        "sourceDocumentTitle": "KPV 10mg COA #2606220449 - Protide Health",
-        "verifiedAt": "2026-08-03T01:47:44Z"
+        "sourceDocumentTitle": "Certificate of Analysis — lote 20-05260628",
+        "verifiedAt": "2026-08-03T17:15:26Z"
       }
     },
     {
       "code": "GLOW-70",
-      "name": "Glow blend",
-      "presentation": "GHK-Cu 50 mg + BPC-157 10 mg + TB-500 10 mg · vial liofilizado",
+      "name": "GLOW",
+      "presentation": "GHK-Cu 50 mg + BPC-157 10 mg + TB-500 10 mg · 70 mg total",
       "status": "available",
       "researchContext": "Mezcla analítica de GHK-Cu, BPC-157 y TB-500 para investigación controlada; el nombre comercial no describe un resultado esperado.",
       "brandSupplier": {
-        "brand": "Protide Health",
+        "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
         "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
       },
       "source": {
-        "catalogUrl": "https://protidehealth.com/wp-json/wc/store/v1/products?per_page=100",
-        "productUrl": "https://protidehealth.com/product/glow-peptide-blend-ghk-cu-tb-500-bpc-157/",
-        "sourceTitle": "Glow Blend (GHK-CU, BPC-157, TB-500)",
-        "sourcePresentation": "Select vial strength: 50/10/10mg",
-        "fetchedAt": "2026-08-03T01:47:44Z"
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/glow-advanced-peptide-blend-for-radiance-recovery/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/glow-advanced-peptide-blend-for-radiance-recovery/",
+        "sourceTitle": "GHK-CU 50mg + BPC-157 10mg + TB-500 10mg (GLOW 70mg)",
+        "sourcePresentation": "GHK-CU 50mg + BPC-157 10mg + TB-500 10mg (GLOW 70mg)",
+        "fetchedAt": "2026-08-03T17:15:26Z"
       },
-      "sourceUsdCents": 14500,
-      "basePriceCentavos": 387000,
-      "profitMarkupBasisPoints": 3497,
+      "sourceUsdCents": 12500,
+      "basePriceCentavos": 345000,
+      "profitMarkupBasisPoints": 4101,
       "image": {
         "assetPath": "assets/images/products/glow-70.png",
-        "sourceUrl": "https://protidehealth.com/wp-content/uploads/2026/02/Glow-35MG_Protide-Cover-Image-1.png",
-        "alt": "Fotografía de referencia de Glow blend GHK-Cu 50 mg + BPC-157 10 mg + TB-500 10 mg · vial liofilizado",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2025/06/Ascension-Glow-70mg.webp",
+        "alt": "Fotografía de referencia Ascension Peptides de GLOW GHK-Cu 50 mg + BPC-157 10 mg + TB-500 10 mg · 70 mg total",
         "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
       },
       "coa": {
-        "url": "https://protidehealth.com/certificates/glow-blend-70mg-coa-2606260215/",
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/06/Glow_07-05260628_COA-combined.pdf",
+        "sourceSha256": "7a9ed6b6444ca1b8ab0f48bb29aeacbac60ae96b58265d1c208ac6376c573d21",
         "kind": "source-reference",
-        "label": "COA de referencia de la fuente",
-        "lot": "PH-gw70-0423",
-        "lab": "Freedom Diagnostics",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "07-05260628",
+        "lab": "Kovera Labs",
         "methods": [
-          "HPLC",
-          "LC-MS"
+          "RP-HPLC",
+          "LC-MS",
+          "endotoxinas",
+          "esterilidad",
+          "metales pesados"
         ],
-        "sourceDocumentTitle": "Glow Blend 70mg COA #2606260215 - Protide Health",
-        "verifiedAt": "2026-08-03T01:47:44Z"
+        "sourceDocumentTitle": "Certificate of Analysis — lote 07-05260628",
+        "verifiedAt": "2026-08-03T17:15:26Z"
       }
     },
     {
       "code": "KLOW-80",
-      "name": "Klow blend",
-      "presentation": "GHK-Cu 50 mg + KPV 10 mg + BPC-157 10 mg + TB-500 10 mg · vial liofilizado",
+      "name": "KLOW",
+      "presentation": "GHK-Cu 50 mg + BPC-157 10 mg + TB-500 10 mg + KPV 10 mg · 80 mg total",
       "status": "available",
       "researchContext": "Mezcla analítica de cuatro péptidos para comparación y caracterización en laboratorio; no es un protocolo ni una promesa de efecto.",
       "brandSupplier": {
-        "brand": "Protide Health",
+        "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
         "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
       },
       "source": {
-        "catalogUrl": "https://protidehealth.com/wp-json/wc/store/v1/products?per_page=100",
-        "productUrl": "https://protidehealth.com/product/klow-blend-50mg-10-10-10-ghk-cu-kpv-bpc-157-tb-500/",
-        "sourceTitle": "Klow Blend (GHK-CU, KPV, BPC-157, TB-500)",
-        "sourcePresentation": "Klow Blend (GHK-CU, KPV, BPC-157, TB-500)",
-        "fetchedAt": "2026-08-03T01:47:44Z"
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/klow-ghk-cu-bpc-157-thymosin-beta4-kpv/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/klow-ghk-cu-bpc-157-thymosin-beta4-kpv/",
+        "sourceTitle": "GHK-Cu 50mg + BPC-157 10mg + TB-500 10mg + KPV 10mg (KLOW 80mg)",
+        "sourcePresentation": "GHK-Cu 50mg + BPC-157 10mg + TB-500 10mg + KPV 10mg (KLOW 80mg)",
+        "fetchedAt": "2026-08-03T17:15:26Z"
       },
-      "sourceUsdCents": 17500,
-      "basePriceCentavos": 467000,
-      "profitMarkupBasisPoints": 3495,
+      "sourceUsdCents": 12500,
+      "basePriceCentavos": 345000,
+      "profitMarkupBasisPoints": 4101,
       "image": {
         "assetPath": "assets/images/products/klow-80.png",
-        "sourceUrl": "https://protidehealth.com/wp-content/uploads/2026/02/Klow_Protide-Cover-Image-1.png",
-        "alt": "Fotografía de referencia de Klow blend GHK-Cu 50 mg + KPV 10 mg + BPC-157 10 mg + TB-500 10 mg · vial liofilizado",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2025/10/Ascension-KLOW-80mg.webp",
+        "alt": "Fotografía de referencia Ascension Peptides de KLOW GHK-Cu 50 mg + BPC-157 10 mg + TB-500 10 mg + KPV 10 mg · 80 mg total",
         "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
       },
       "coa": {
-        "url": "https://protidehealth.com/certificates/klow-blend-coa-2605010047/",
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/02/COA_KLOW_TB4_quant_46-01260229_20260212.pdf",
+        "sourceSha256": "c531a1bf872704c931579eaadf491db5bbabd2fda1ff83a5e93feee4315e6447",
         "kind": "source-reference",
-        "label": "COA de referencia de la fuente",
-        "lot": "PH-KO80-0309",
-        "lab": "Freedom Diagnostics",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "46-01260229",
+        "lab": "MZ Biolabs",
         "methods": [
           "HPLC",
           "LC-MS"
         ],
-        "sourceDocumentTitle": "Klow Blend – 50/10/10/10mg (COA #2605010047) - Protide Health",
-        "verifiedAt": "2026-08-03T01:47:44Z"
+        "sourceDocumentTitle": "Certificate of Analysis — lote 46-01260229",
+        "verifiedAt": "2026-08-03T17:15:26Z"
       }
     },
     {
       "code": "WOLVERINE-10-10",
-      "name": "Wolverine blend",
-      "presentation": "BPC-157 10 mg + TB-500 10 mg · vial liofilizado",
+      "name": "Wolverine Stack",
+      "presentation": "BPC-157 10 mg + TB-500 10 mg · 20 mg total",
       "status": "available",
       "researchContext": "Mezcla analítica de BPC-157 y TB-500 para investigación preclínica controlada; el nombre comercial no afirma recuperación ni otro resultado.",
       "brandSupplier": {
-        "brand": "Protide Health",
+        "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
         "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
       },
       "source": {
-        "catalogUrl": "https://protidehealth.com/wp-json/wc/store/v1/products?per_page=100",
-        "productUrl": "https://protidehealth.com/product/bpc-157-tb-500-peptide-blend/",
-        "sourceTitle": "BPC-157 & TB-500 “Wolverine” Blend",
-        "sourcePresentation": "Select vial strength: 10/10mg",
-        "fetchedAt": "2026-08-03T01:47:44Z"
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/wolverine-stack/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/wolverine-stack/",
+        "sourceTitle": "BPC-157 10mg + TB-500 10mg (Wolverine Stack 20mg)",
+        "sourcePresentation": "BPC-157 10mg + TB-500 10mg (Wolverine Stack 20mg)",
+        "fetchedAt": "2026-08-03T17:15:26Z"
       },
-      "sourceUsdCents": 14500,
-      "basePriceCentavos": 387000,
-      "profitMarkupBasisPoints": 3497,
+      "sourceUsdCents": 9000,
+      "basePriceCentavos": 245000,
+      "profitMarkupBasisPoints": 3908,
       "image": {
         "assetPath": "assets/images/products/wolverine-10-10.png",
-        "sourceUrl": "https://protidehealth.com/wp-content/uploads/2025/11/tb500-bpc157-blend-10mg-1.png",
-        "alt": "Fotografía de referencia de Wolverine blend BPC-157 10 mg + TB-500 10 mg · vial liofilizado",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2025/03/Ascension-Wolverine-Stack-20mg.webp",
+        "alt": "Fotografía de referencia Ascension Peptides de Wolverine Stack BPC-157 10 mg + TB-500 10 mg · 20 mg total",
         "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
       },
       "coa": {
-        "url": "https://protidehealth.com/certificates/bpc-157-tb-500-10-10mg-coa-2606260191/",
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/06/BPC-157_TB-500_08-05260628_COA-combined.pdf",
+        "sourceSha256": "a18c0610b972b5a3ea2172c54b8f2a7f5d0c9a1eea98fea3fdfc6891f31b77e7",
         "kind": "source-reference",
-        "label": "COA de referencia de la fuente",
-        "lot": "PH-t/b1010-0408",
-        "lab": "Freedom Diagnostics",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "08-05260628",
+        "lab": "Kovera Labs",
         "methods": [
-          "HPLC",
-          "LC-MS"
+          "RP-HPLC",
+          "LC-MS",
+          "endotoxinas",
+          "esterilidad",
+          "metales pesados"
         ],
-        "sourceDocumentTitle": "BPC-157/TB-500 10/10mg COA #2606260191 - Protide Health",
-        "verifiedAt": "2026-08-03T01:47:44Z"
+        "sourceDocumentTitle": "Certificate of Analysis — lote 08-05260628",
+        "verifiedAt": "2026-08-03T17:15:26Z"
       }
     }
   ]

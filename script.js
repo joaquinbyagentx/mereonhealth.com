@@ -103,12 +103,15 @@ function renderCatalog() {
     const price = purchasable ? formatMxn(product.basePriceCentavos) : 'Precio por confirmar';
     const coaAction = product.coa?.url
       ? `<a class="coa-card-link" href="${escapeHtml(product.coa.url)}" target="_blank" rel="noopener noreferrer" aria-label="Ver COA de referencia de ${escapeHtml(product.name)} en sitio externo">Ver COA <span aria-hidden="true">↗</span></a>`
-      : '<span class="coa-card-link coa-card-link--disabled" aria-disabled="true">COA pendiente de asignación/publicación para este lote</span>';
+      : `<span class="coa-card-link coa-card-link--disabled" aria-disabled="true">${escapeHtml(product.coa?.label || 'COA no publicado por la fuente')}</span>`;
+    const verificationBadge = product.status === 'available'
+      ? '<span class="mereon-verified-badge" aria-label="Mereon Verified"><span aria-hidden="true">M</span><strong>Mereon Verified™</strong></span>'
+      : '';
     return `<article class="product-card" data-kind="${BLEND_CODES.has(product.code) ? 'blend' : 'single'}">
       ${visualMarkup(product, index)}
       <div class="product-card__body">
         <div class="product-card__meta"><span>${BLEND_CODES.has(product.code) ? 'Mezcla de referencia' : 'Compuesto de referencia'}</span><span>${escapeHtml(product.code)}</span></div>
-        <span class="mereon-verified-badge" aria-label="Mereon Verified"><span aria-hidden="true">M</span><strong>Mereon Verified™</strong></span>
+        ${verificationBadge}
         <h3>${escapeHtml(product.name)}</h3>
         <p class="product-card__presentation">${escapeHtml(product.presentation)}</p>
         <p class="supplier-line"><span>${escapeHtml(product.brandSupplier.role)}</span><strong>${escapeHtml(product.brandSupplier.brand)}</strong></p>
@@ -213,23 +216,26 @@ function showToast(message) {
 function renderDetail(product) {
   const index = catalog.findIndex((item) => item.code === product.code);
   const coa = product.coa;
+  const verificationMarkup = product.status === 'available'
+    ? `<div class="mereon-verified-note">
+        <span class="mereon-verified-badge" aria-label="Mereon Verified"><span aria-hidden="true">M</span><strong>Mereon Verified™</strong></span>
+        <p>Mereon Verified™ identifica una selección Mereon de origen estadounidense, evaluada con criterios de pruebas independientes, identidad, pureza y trazabilidad. Estado documental del lote indicado a continuación.</p>
+      </div>`
+    : '';
   const coaMarkup = coa?.url ? `<div class="coa-box">
       <h3>${escapeHtml(coa.label)}</h3>
       <dl class="coa-meta"><dt>Lote de la fuente</dt><dd>${escapeHtml(coa.lot)}</dd><dt>Laboratorio publicado</dt><dd>${escapeHtml(coa.lab)}</dd><dt>Métodos publicados</dt><dd>${escapeHtml(coa.methods.join(' · '))}</dd></dl>
       <a href="${escapeHtml(coa.url)}" target="_blank" rel="noopener noreferrer">Ver COA en sitio externo <span aria-hidden="true">↗</span></a>
       <p class="external-note">Documento público de referencia del catálogo fuente. No corresponde todavía a un lote Mereon y no implica afiliación, autorización o reventa oficial.</p>
-    </div>` : `<div class="coa-box"><h3>COA pendiente</h3><p>COA pendiente de asignación/publicación para este lote.</p><span class="button" aria-disabled="true">Ver COA no disponible</span></div>`;
+    </div>` : `<div class="coa-box"><h3>COA pendiente</h3><p>${escapeHtml(coa?.label || 'COA no publicado por la fuente.')}</p><span class="button" aria-disabled="true">Ver COA no disponible</span></div>`;
   productDetail.innerHTML = `<div class="product-detail__layout">
     <div class="product-detail__visual">${visualMarkup(product, index)}</div>
     <div class="product-detail__copy">
       <button class="icon-button" type="button" data-detail-close aria-label="Cerrar detalle" style="float:right">×</button>
       <p class="eyebrow">${escapeHtml(product.code)}</p><h2 id="detail-title">${escapeHtml(product.name)}</h2>
       <p class="product-detail__presentation">${escapeHtml(product.presentation)}</p>
-      <div class="mereon-verified-note">
-        <span class="mereon-verified-badge" aria-label="Mereon Verified"><span aria-hidden="true">M</span><strong>Mereon Verified™</strong></span>
-        <p>Mereon Verified™ identifica una selección Mereon de origen estadounidense, evaluada con criterios de pruebas independientes, identidad, pureza y trazabilidad. Estado documental del lote indicado a continuación.</p>
-      </div>
-      <dl class="supplier-detail"><dt>${escapeHtml(product.brandSupplier.role)}</dt><dd>${escapeHtml(product.brandSupplier.brand)}</dd><dt>Plataforma comercial</dt><dd>Mereon Health</dd></dl>
+      ${verificationMarkup}
+      <dl class="supplier-detail"><dt>${escapeHtml(product.brandSupplier.role)}</dt><dd>${escapeHtml(product.brandSupplier.brand)}</dd><dt>Ficha pública de la fuente</dt><dd><a href="${escapeHtml(product.source.productUrl)}" target="_blank" rel="noopener noreferrer">Ver producto en Ascension Peptides <span aria-hidden="true">↗</span></a></dd><dt>Plataforma comercial</dt><dd>Mereon Health</dd></dl>
       <p class="product-detail__research">${escapeHtml(product.researchContext)}</p>
       ${coaMarkup}
       <div class="product-detail__actions"><button class="button button--primary" type="button" data-add="${escapeHtml(product.code)}" ${isPurchasable(product) ? '' : 'disabled'}>${isPurchasable(product) ? `Agregar · ${formatMxn(product.basePriceCentavos)}` : 'En evaluación'}</button></div>

@@ -66,6 +66,8 @@ class StaticSiteTests(unittest.TestCase):
         for phrase in required:
             self.assertIn(phrase.lower(), self.html.lower())
         self.assertIn("cuando están publicados", self.html.lower())
+        self.assertIn("únicamente en referencias con un coa publicado y revisable", self.html.lower())
+        self.assertIn("las referencias pendientes no muestran el sello", self.html.lower())
         self.assertIn("estado documental del lote", self.js.lower())
         self.assertIn('class="mereon-verified-badge"', self.js)
         self.assertIn('class="mereon-verified-note"', self.js)
@@ -130,29 +132,37 @@ class StaticSiteTests(unittest.TestCase):
                 self.assertTrue((ROOT / image["assetPath"]).is_file())
                 image_source = urlparse(image["sourceUrl"])
                 self.assertEqual(image_source.scheme, "https")
-                self.assertIn(image_source.netloc, {"protidehealth.com", "cdn11.bigcommerce.com"})
+                self.assertEqual(image_source.netloc, "ascensionpeptides.com")
                 self.assertIn("no implica afiliación o autorización", image["notice"])
-                self.assertIn(product["brandSupplier"]["brand"], {"Protide Health", "Limitless Biotech"})
+                self.assertEqual(product["brandSupplier"]["brand"], "Ascension Peptides")
                 self.assertIn("no implica afiliación", product["brandSupplier"]["notice"])
         self.assertIn('product.image?.assetPath', self.js)
         self.assertIn('Fotografía de referencia de la fuente', self.js)
         self.assertIn('Plataforma comercial', self.js)
 
-    def test_limitless_authenticated_prices_and_uniform_images(self):
+    def test_ascension_source_prices_formula_outputs_and_uniform_images(self):
         expected = {
-            "BPC-157-10": (9999, 267000),
-            "TB500-10": (13399, 358000),
-            "MOTSC-10": (9999, 267000),
-            "TA1-10": (13199, 352000),
+            "BPC-157-10": (4900, 135000),
+            "TB500-5": (5400, 150000),
+            "MOTSC-10": (4900, 135000),
+            "GHKCU-100-3ML": (6500, 180000),
+            "CJCIPA-5-5": (7000, 190000),
+            "TA1-10": (7100, 195000),
+            "TESA-5": (5000, 135000),
+            "EPITHALON-10": (4400, 120000),
+            "KPV-10": (5000, 135000),
+            "GLOW-70": (12500, 345000),
+            "KLOW-80": (12500, 345000),
+            "WOLVERINE-10-10": (9000, 245000),
         }
         products = {product["code"]: product for product in self.catalog["products"]}
+        self.assertEqual(set(products), set(expected))
         for code, (usd_cents, mxn_centavos) in expected.items():
             product = products[code]
-            self.assertEqual(product["brandSupplier"]["brand"], "Limitless Biotech")
+            self.assertEqual(product["brandSupplier"]["brand"], "Ascension Peptides")
             self.assertEqual(product["sourceUsdCents"], usd_cents)
             self.assertEqual(product["basePriceCentavos"], mxn_centavos)
-            self.assertEqual(product["presentation"], "10 mg · vial Premium liofilizado")
-            self.assertTrue(product["source"]["priceEvidenceUrl"].startswith("https://limitlesslifenootropics.com/product/"))
+            self.assertTrue(product["source"]["priceEvidenceUrl"].startswith("https://ascensionpeptides.com/product/"))
 
         for product in self.catalog["products"]:
             image_path = ROOT / product["image"]["assetPath"]
@@ -163,27 +173,43 @@ class StaticSiteTests(unittest.TestCase):
         self.assertIn("object-fit: contain", self.css)
 
     def test_coa_links_and_metadata_are_fail_closed(self):
+        status_counts = {"available": 0, "coa_pending": 0}
         for product in self.catalog["products"]:
             coa = product["coa"]
             if product["status"] == "available":
+                status_counts["available"] += 1
                 self.assertIsNotNone(coa, product["code"])
                 parsed = urlparse(coa["url"])
                 self.assertEqual(parsed.scheme, "https")
-                self.assertEqual(parsed.netloc, "protidehealth.com")
-                self.assertTrue(parsed.path.startswith("/certificates/"))
+                self.assertEqual(parsed.netloc, "ascensionpeptides.com")
+                self.assertTrue(parsed.path.startswith("/wp-content/uploads/"))
+                self.assertTrue(parsed.path.endswith(".pdf"))
                 self.assertEqual(coa["kind"], "source-reference")
                 self.assertTrue(coa["lot"] and coa["lab"] and coa["methods"])
+                self.assertRegex(coa["sourceSha256"], r"^[0-9a-f]{64}$")
             elif product["status"] == "coa_pending":
+                status_counts["coa_pending"] += 1
                 self.assertIsNotNone(coa)
                 self.assertEqual(coa["kind"], "pending")
                 self.assertIsNone(coa["url"])
                 self.assertIsNone(coa["lot"])
                 self.assertIsNone(coa["lab"])
                 self.assertEqual(coa["methods"], [])
-                self.assertEqual(coa["label"], "COA pendiente de asignación/publicación para este lote.")
+                self.assertEqual(coa["label"], "COA pendiente de publicación por Ascension Peptides para esta referencia.")
             else:
                 self.assertIsNone(coa)
-        self.assertIn("COA pendiente de asignación/publicación para este lote", self.js)
+        self.assertEqual(status_counts, {"available": 10, "coa_pending": 2})
+        self.assertIn("COA no publicado por la fuente", self.js)
+
+    def test_stale_suppliers_are_absent_from_live_catalog_and_frontend(self):
+        live_surface = "\n".join([
+            json.dumps(self.catalog, ensure_ascii=False),
+            self.html,
+            self.js,
+            self.css,
+        ])
+        self.assertNotRegex(live_surface, r"(?i)\bprotide\b")
+        self.assertNotRegex(live_surface, r"(?i)\blimitless(?: biotech)?\b")
 
     def test_internal_anchors_and_local_assets_resolve(self):
         broken = [href for href in self.parser.hrefs if href.startswith("#") and href[1:] not in self.parser.ids]

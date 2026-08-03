@@ -13,29 +13,37 @@ import {
 import catalog from '../data/catalog.json' with { type: 'json' };
 import { paymentAdapter } from '../payment-adapter.js';
 
-test('pricing configuration preserves the requested 35 percent profit markup', () => {
-  assert.equal(PRICING_CONFIG.fxMxnCentavosPerUsd, 1750);
+test('pricing configuration preserves the exact landed-cost formula and adds no extra IVA multiplier', () => {
+  assert.equal(PRICING_CONFIG.fxMxnTenThousandthsPerUsd, 173_207);
   assert.equal(PRICING_CONFIG.landedUpliftBasisPoints, 1300);
-  assert.equal(PRICING_CONFIG.targetProfitMarkupBasisPoints, 3500);
-  assert.equal(PRICING_CONFIG.cleanPriceIncrementCentavos, 1000);
+  assert.equal(PRICING_CONFIG.targetProfitMarkupBasisPoints, 4000);
+  assert.equal(PRICING_CONFIG.cleanPriceIncrementCentavos, 5000);
+  assert.equal(catalog.pricingAssumptions.fxSourceDate, '2026-08-03');
+  assert.equal(catalog.pricingAssumptions.fxSourceUrl, 'https://api.frankfurter.app/latest?from=USD&to=MXN');
+  assert.match(catalog.pricingAssumptions.rule, /No separate IVA multiplier is added/);
 });
 
-test('every available SKU uses clean integer-centavo pricing within the 34.5–35.5% profit-markup range', () => {
-  const available = catalog.products.filter((product) => product.status === 'available');
-  assert.ok(available.length > 0);
-  for (const product of available) {
+test('catalog has 12 unique Ascension SKUs and every price derives from the exact formula', () => {
+  assert.equal(catalog.products.length, 12);
+  assert.equal(new Set(catalog.products.map((product) => product.code)).size, 12);
+  for (const product of catalog.products) {
+    assert.equal(product.brandSupplier.brand, 'Ascension Peptides');
+    assert.match(product.source.productUrl, /^https:\/\/ascensionpeptides\.com\/product\//);
+    assert.match(product.source.priceEvidenceUrl, /^https:\/\/ascensionpeptides\.com\/product\//);
+    assert.match(product.image.sourceUrl, /^https:\/\/ascensionpeptides\.com\/wp-content\/uploads\//);
     const price = calculateBasePriceCentavos(product.sourceUsdCents);
     assert.equal(price, product.basePriceCentavos, product.code);
-    assert.equal(price % 1000, 0, product.code);
+    assert.equal(price % 5000, 0, product.code);
     const profitMarkup = calculateProfitMarkupBasisPoints(product.sourceUsdCents, price);
     assert.equal(profitMarkup, product.profitMarkupBasisPoints, product.code);
-    assert.ok(profitMarkup >= 3450 && profitMarkup <= 3550, `${product.code}: ${profitMarkup}`);
+    assert.ok(profitMarkup >= 3700 && profitMarkup <= 4300, `${product.code}: ${profitMarkup}`);
   }
 });
 
-test('clean-price rounding uses integer arithmetic and rounds midpoint upward', () => {
-  assert.equal(calculateBasePriceCentavos(6500), 174000);
+test('clean-price rounding uses overflow-safe integer arithmetic at MXN 50 increments', () => {
+  assert.equal(calculateBasePriceCentavos(6500), 180000);
   assert.equal(Number.isInteger(calculateBasePriceCentavos(6501)), true);
+  assert.equal(calculateBasePriceCentavos(0), 0);
 });
 
 test('shipping configuration exposes exactly the two taxable launch estimates', () => {
