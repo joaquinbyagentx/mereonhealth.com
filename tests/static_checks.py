@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 import re
+import struct
 import unittest
 from html.parser import HTMLParser
 from pathlib import Path
@@ -98,6 +99,30 @@ class StaticSiteTests(unittest.TestCase):
         self.assertIn('product.image?.assetPath', self.js)
         self.assertIn('Fotografía de referencia de la fuente', self.js)
         self.assertIn('Plataforma comercial', self.js)
+
+    def test_limitless_authenticated_prices_and_uniform_images(self):
+        expected = {
+            "BPC-157-10": (9999, 267000),
+            "TB500-10": (13399, 358000),
+            "MOTSC-10": (9999, 267000),
+            "TA1-10": (13199, 352000),
+        }
+        products = {product["code"]: product for product in self.catalog["products"]}
+        for code, (usd_cents, mxn_centavos) in expected.items():
+            product = products[code]
+            self.assertEqual(product["brandSupplier"]["brand"], "Limitless Biotech")
+            self.assertEqual(product["sourceUsdCents"], usd_cents)
+            self.assertEqual(product["basePriceCentavos"], mxn_centavos)
+            self.assertEqual(product["presentation"], "10 mg · vial Premium liofilizado")
+            self.assertTrue(product["source"]["priceEvidenceUrl"].startswith("https://limitlesslifenootropics.com/product/"))
+
+        for product in self.catalog["products"]:
+            image_path = ROOT / product["image"]["assetPath"]
+            with image_path.open("rb") as image_file:
+                header = image_file.read(24)
+            self.assertEqual(header[:8], b"\x89PNG\r\n\x1a\n")
+            self.assertEqual(struct.unpack(">II", header[16:24]), (800, 800), product["code"])
+        self.assertIn("object-fit: contain", self.css)
 
     def test_coa_links_and_metadata_are_fail_closed(self):
         for product in self.catalog["products"]:

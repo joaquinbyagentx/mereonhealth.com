@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-03T00:23:03Z",
-  "sourceNotice": "Public catalog research input only; no reseller, affiliate, or authorization relationship is implied.",
+  "generatedAt": "2026-08-03T01:47:44Z",
+  "sourceNotice": "Supplier catalog research input; Limitless prices reflect the authenticated Premium 10 mg variant. No reseller, affiliate, or authorization relationship is implied.",
   "pricingAssumptions": {
     "fxMxnCentavosPerUsd": 1750,
     "landedUpliftBasisPoints": 1300,
@@ -18,7 +18,7 @@
     {
       "code": "BPC-157-10",
       "name": "BPC-157",
-      "presentation": "10 mg · vial liofilizado",
+      "presentation": "10 mg · vial Premium liofilizado",
       "status": "coa_pending",
       "researchContext": "Péptido sintético de 15 aminoácidos estudiado en modelos preclínicos de señalización y respuesta tisular; la evidencia no establece beneficios clínicos.",
       "brandSupplier": {
@@ -29,18 +29,18 @@
       "source": {
         "catalogUrl": "https://limitlesslifenootropics.com/shop",
         "productUrl": "https://limitlesslifenootropics.com/product/bpc-157/",
-        "priceEvidenceUrl": "https://limitlesslifenootropics.st/product/bpc-157/",
+        "priceEvidenceUrl": "https://limitlesslifenootropics.com/product/bpc-157/",
         "sourceTitle": "BPC-157",
-        "sourcePresentation": "BPCSF-US-10MG · 10 mg · Premium",
-        "fetchedAt": "2026-08-03T00:23:03Z"
+        "sourcePresentation": "BPCSF-US-10MG · 10 mg · Premium · Lyophilized",
+        "fetchedAt": "2026-08-03T01:47:44Z"
       },
-      "sourceUsdCents": 15498,
-      "basePriceCentavos": 414000,
-      "profitMarkupBasisPoints": 3509,
+      "sourceUsdCents": 9999,
+      "basePriceCentavos": 267000,
+      "profitMarkupBasisPoints": 3503,
       "image": {
         "assetPath": "assets/images/products/bpc-157-10.png",
         "sourceUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/original/products/217/824/BPC-157_10MG_.SINGLE.VIAL__08417.1780584885.png",
-        "alt": "Fotografía de referencia Limitless Biotech de BPC-157 10 mg · vial liofilizado",
+        "alt": "Fotografía de referencia Limitless Biotech de BPC-157 10 mg · vial Premium liofilizado",
         "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
       },
       "coa": {
@@ -57,7 +57,7 @@
     {
       "code": "TB500-10",
       "name": "TB-500",
-      "presentation": "10 mg · vial liofilizado",
+      "presentation": "10 mg · vial Premium liofilizado",
       "status": "coa_pending",
       "researchContext": "Péptido sintético relacionado con thymosin beta-4, investigado en sistemas preclínicos de dinámica celular; sin indicaciones terapéuticas aprobadas.",
       "brandSupplier": {
@@ -68,10 +68,10 @@
       "source": {
         "catalogUrl": "https://limitlesslifenootropics.com/shop",
         "productUrl": "https://limitlesslifenootropics.com/product/tb-500/",
-        "priceEvidenceUrl": "https://limitlesslifenootropics.st/product/tb-500/",
+        "priceEvidenceUrl": "https://limitlesslifenootropics.com/product/tb-500/",
         "sourceTitle": "TB-500",
-        "sourcePresentation": "TB4-US-10MG · 10 mg · Premium",
-        "fetchedAt": "2026-08-03T00:23:03Z"
+        "sourcePresentation": "TB4-US-10MG · 10 mg · Premium · Lyophilized",
+        "fetchedAt": "2026-08-03T01:47:44Z"
       },
       "sourceUsdCents": 13399,
       "basePriceCentavos": 358000,
@@ -79,7 +79,7 @@
       "image": {
         "assetPath": "assets/images/products/tb500-10.png",
         "sourceUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/original/products/186/891/THYMOSIN_BETA_4_TB-500_10MG.SINGLE.VIAL__04024.1762297179.png",
-        "alt": "Fotografía de referencia Limitless Biotech de TB-500 10 mg · vial liofilizado",
+        "alt": "Fotografía de referencia Limitless Biotech de TB-500 10 mg · vial Premium liofilizado",
         "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
       },
       "coa": {
@@ -96,7 +96,7 @@
     {
       "code": "MOTSC-10",
       "name": "MOTS-c",
-      "presentation": "10 mg · vial liofilizado",
+      "presentation": "10 mg · vial Premium liofilizado",
       "status": "coa_pending",
       "researchContext": "Péptido derivado de una secuencia mitocondrial investigado en modelos preclínicos de señalización metabólica; sin extrapolación a resultados en personas.",
       "brandSupplier": {
@@ -107,10 +107,10 @@
       "source": {
         "catalogUrl": "https://limitlesslifenootropics.com/shop",
         "productUrl": "https://limitlesslifenootropics.com/product/mots-c/",
-        "priceEvidenceUrl": "https://limitlesslifenootropics.st/product/mots-c/",
+        "priceEvidenceUrl": "https://limitlesslifenootropics.com/product/mots-c/",
         "sourceTitle": "MOTS-c",
-        "sourcePresentation": "MOTS-US-10MG · 10 mg · Premium",
-        "fetchedAt": "2026-08-03T00:23:03Z"
+        "sourcePresentation": "MOTS-US-10MG · 10 mg · Premium · Lyophilized",
+        "fetchedAt": "2026-08-03T01:47:44Z"
       },
       "sourceUsdCents": 9999,
       "basePriceCentavos": 267000,
@@ -118,7 +118,7 @@
       "image": {
         "assetPath": "assets/images/products/motsc-10.png",
         "sourceUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/original/products/187/852/MOTS-C_10MG_.SINGLE.VIAL__34440.1762231552.png",
-        "alt": "Fotografía de referencia Limitless Biotech de MOTS-c 10 mg · vial liofilizado",
+        "alt": "Fotografía de referencia Limitless Biotech de MOTS-c 10 mg · vial Premium liofilizado",
         "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
       },
       "coa": {
@@ -148,7 +148,7 @@
         "productUrl": "https://protidehealth.com/product/ghk-cu-copper-peptide/",
         "sourceTitle": "GHK-Cu – Copper Peptide",
         "sourcePresentation": "Select vial strength: 50mg",
-        "fetchedAt": "2026-08-03T00:23:03Z"
+        "fetchedAt": "2026-08-03T01:47:44Z"
       },
       "sourceUsdCents": 5500,
       "basePriceCentavos": 147000,
@@ -170,7 +170,7 @@
           "LC-MS"
         ],
         "sourceDocumentTitle": "GHK-CU 50mg COA #2606260209 - Protide Health",
-        "verifiedAt": "2026-08-03T00:23:03Z"
+        "verifiedAt": "2026-08-03T01:47:44Z"
       }
     },
     {
@@ -189,7 +189,7 @@
         "productUrl": "https://protidehealth.com/product/cjc-1295-no-dac-ipamorelin-blend/",
         "sourceTitle": "CJC-1295 (No Dac) & Ipamorelin Blend",
         "sourcePresentation": "Select vial strength: 5/5mg",
-        "fetchedAt": "2026-08-03T00:23:03Z"
+        "fetchedAt": "2026-08-03T01:47:44Z"
       },
       "sourceUsdCents": 7500,
       "basePriceCentavos": 200000,
@@ -211,13 +211,13 @@
           "LC-MS"
         ],
         "sourceDocumentTitle": "CJC-1295 (NO DAC)/Ipamorelin 5/5mg COA #2607230265 - Protide Health",
-        "verifiedAt": "2026-08-03T00:23:03Z"
+        "verifiedAt": "2026-08-03T01:47:44Z"
       }
     },
     {
       "code": "TA1-10",
       "name": "Thymosin Alpha-1",
-      "presentation": "10 mg · vial liofilizado",
+      "presentation": "10 mg · vial Premium liofilizado",
       "status": "coa_pending",
       "researchContext": "Péptido sintético empleado en investigación de vías inmunológicas in vitro y preclínicas; esta descripción no constituye una indicación terapéutica.",
       "brandSupplier": {
@@ -228,10 +228,10 @@
       "source": {
         "catalogUrl": "https://limitlesslifenootropics.com/shop",
         "productUrl": "https://limitlesslifenootropics.com/product/thymosin-alpha-1/",
-        "priceEvidenceUrl": "https://limitlesslifenootropics.st/product/thymosin-alpha-1/",
+        "priceEvidenceUrl": "https://limitlesslifenootropics.com/product/thymosin-alpha-1/",
         "sourceTitle": "Thymosin Alpha-1",
-        "sourcePresentation": "TA1-US-10MG · 10 mg · Premium",
-        "fetchedAt": "2026-08-03T00:23:03Z"
+        "sourcePresentation": "TA1-US-10MG · 10 mg · Premium · Lyophilized",
+        "fetchedAt": "2026-08-03T01:47:44Z"
       },
       "sourceUsdCents": 13199,
       "basePriceCentavos": 352000,
@@ -239,7 +239,7 @@
       "image": {
         "assetPath": "assets/images/products/ta1-10.png",
         "sourceUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/original/products/185/885/THYMOSIN_ALPHA_1_10MG.SINGLE.VIAL__29102.1762296430.png",
-        "alt": "Fotografía de referencia Limitless Biotech de Thymosin Alpha-1 10 mg · vial liofilizado",
+        "alt": "Fotografía de referencia Limitless Biotech de Thymosin Alpha-1 10 mg · vial Premium liofilizado",
         "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
       },
       "coa": {
@@ -269,7 +269,7 @@
         "productUrl": "https://protidehealth.com/product/tesamorelin/",
         "sourceTitle": "Tesamorelin",
         "sourcePresentation": "Select vial strength: 10mg",
-        "fetchedAt": "2026-08-03T00:23:03Z"
+        "fetchedAt": "2026-08-03T01:47:44Z"
       },
       "sourceUsdCents": 8500,
       "basePriceCentavos": 227000,
@@ -291,7 +291,7 @@
           "LC-MS"
         ],
         "sourceDocumentTitle": "Tesamorelin 10mg COA #2605150485 - Protide Health",
-        "verifiedAt": "2026-08-03T00:23:03Z"
+        "verifiedAt": "2026-08-03T01:47:44Z"
       }
     },
     {
@@ -310,7 +310,7 @@
         "productUrl": "https://protidehealth.com/product/epithalon-10mg/",
         "sourceTitle": "Epithalon 10mg",
         "sourcePresentation": "Epithalon 10mg",
-        "fetchedAt": "2026-08-03T00:23:03Z"
+        "fetchedAt": "2026-08-03T01:47:44Z"
       },
       "sourceUsdCents": 7500,
       "basePriceCentavos": 200000,
@@ -332,7 +332,7 @@
           "LC-MS"
         ],
         "sourceDocumentTitle": "Epithalon 10mg COA #2605280422 - Protide Health",
-        "verifiedAt": "2026-08-03T00:23:03Z"
+        "verifiedAt": "2026-08-03T01:47:44Z"
       }
     },
     {
@@ -351,7 +351,7 @@
         "productUrl": "https://protidehealth.com/product/kpv-10mg/",
         "sourceTitle": "KPV 10mg",
         "sourcePresentation": "KPV 10mg",
-        "fetchedAt": "2026-08-03T00:23:03Z"
+        "fetchedAt": "2026-08-03T01:47:44Z"
       },
       "sourceUsdCents": 9500,
       "basePriceCentavos": 254000,
@@ -373,7 +373,7 @@
           "LC-MS"
         ],
         "sourceDocumentTitle": "KPV 10mg COA #2606220449 - Protide Health",
-        "verifiedAt": "2026-08-03T00:23:03Z"
+        "verifiedAt": "2026-08-03T01:47:44Z"
       }
     },
     {
@@ -392,7 +392,7 @@
         "productUrl": "https://protidehealth.com/product/glow-peptide-blend-ghk-cu-tb-500-bpc-157/",
         "sourceTitle": "Glow Blend (GHK-CU, BPC-157, TB-500)",
         "sourcePresentation": "Select vial strength: 50/10/10mg",
-        "fetchedAt": "2026-08-03T00:23:03Z"
+        "fetchedAt": "2026-08-03T01:47:44Z"
       },
       "sourceUsdCents": 14500,
       "basePriceCentavos": 387000,
@@ -414,7 +414,7 @@
           "LC-MS"
         ],
         "sourceDocumentTitle": "Glow Blend 70mg COA #2606260215 - Protide Health",
-        "verifiedAt": "2026-08-03T00:23:03Z"
+        "verifiedAt": "2026-08-03T01:47:44Z"
       }
     },
     {
@@ -433,7 +433,7 @@
         "productUrl": "https://protidehealth.com/product/klow-blend-50mg-10-10-10-ghk-cu-kpv-bpc-157-tb-500/",
         "sourceTitle": "Klow Blend (GHK-CU, KPV, BPC-157, TB-500)",
         "sourcePresentation": "Klow Blend (GHK-CU, KPV, BPC-157, TB-500)",
-        "fetchedAt": "2026-08-03T00:23:03Z"
+        "fetchedAt": "2026-08-03T01:47:44Z"
       },
       "sourceUsdCents": 17500,
       "basePriceCentavos": 467000,
@@ -455,7 +455,7 @@
           "LC-MS"
         ],
         "sourceDocumentTitle": "Klow Blend – 50/10/10/10mg (COA #2605010047) - Protide Health",
-        "verifiedAt": "2026-08-03T00:23:03Z"
+        "verifiedAt": "2026-08-03T01:47:44Z"
       }
     },
     {
@@ -474,7 +474,7 @@
         "productUrl": "https://protidehealth.com/product/bpc-157-tb-500-peptide-blend/",
         "sourceTitle": "BPC-157 & TB-500 “Wolverine” Blend",
         "sourcePresentation": "Select vial strength: 10/10mg",
-        "fetchedAt": "2026-08-03T00:23:03Z"
+        "fetchedAt": "2026-08-03T01:47:44Z"
       },
       "sourceUsdCents": 14500,
       "basePriceCentavos": 387000,
@@ -496,7 +496,7 @@
           "LC-MS"
         ],
         "sourceDocumentTitle": "BPC-157/TB-500 10/10mg COA #2606260191 - Protide Health",
-        "verifiedAt": "2026-08-03T00:23:03Z"
+        "verifiedAt": "2026-08-03T01:47:44Z"
       }
     }
   ]
