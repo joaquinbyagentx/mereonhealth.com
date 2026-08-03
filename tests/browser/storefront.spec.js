@@ -119,6 +119,40 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   expect(errors).toEqual([]);
 });
 
+test('official logo is accessible, proportional, and unclipped', async ({ page }) => {
+  const errors = await trackRuntimeFailures(page);
+  await page.goto('/');
+
+  const homeLinks = page.getByRole('link', { name: 'Mereon, inicio', exact: true });
+  await expect(homeLinks).toHaveCount(2);
+  await expect(page.locator('.brand span, .brand small')).toHaveCount(0);
+
+  const logos = page.locator('img[src="assets/mereon-logo.svg"]');
+  await expect(logos).toHaveCount(2);
+  for (const logo of await logos.all()) {
+    await logo.scrollIntoViewIfNeeded();
+    await expect(logo).toBeVisible();
+    await expect(logo).toHaveJSProperty('complete', true);
+    const geometry = await logo.evaluate((image) => {
+      const imageRect = image.getBoundingClientRect();
+      const linkRect = image.closest('a').getBoundingClientRect();
+      return {
+        naturalWidth: image.naturalWidth,
+        naturalHeight: image.naturalHeight,
+        width: imageRect.width,
+        height: imageRect.height,
+        clipped: imageRect.left < linkRect.left - 1 || imageRect.right > linkRect.right + 1 || imageRect.top < linkRect.top - 1 || imageRect.bottom > linkRect.bottom + 1
+      };
+    });
+    expect(geometry.naturalWidth).toBe(268);
+    expect(geometry.naturalHeight).toBe(91);
+    expect(geometry.width / geometry.height).toBeCloseTo(268 / 91, 2);
+    expect(geometry.width).toBeGreaterThanOrEqual(126);
+    expect(geometry.clipped).toBe(false);
+  }
+  expect(errors).toEqual([]);
+});
+
 test('reduced-motion preference disables smooth scrolling and transitions', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop', 'CSS behavior is viewport-independent.');
   await page.emulateMedia({ reducedMotion: 'reduce' });

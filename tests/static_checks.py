@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import hashlib
 import re
 import struct
 import unittest
@@ -61,6 +62,26 @@ class StaticSiteTests(unittest.TestCase):
         self.assertNotIn("Pedido no enviado", self.html + self.js)
         self.assertNotIn("Estimaciones de lanzamiento", self.html)
         self.assertRegex(self.html, r"data-payment-button disabled")
+
+    def test_official_logo_is_used_in_header_and_footer(self):
+        logo_path = "assets/mereon-logo.svg"
+        self.assertEqual(self.html.count(f'src="{logo_path}"'), 2)
+        self.assertEqual(self.html.count('aria-label="Mereon, inicio"'), 2)
+        self.assertNotIn('<span>MEREON</span><small>HEALTH</small>', self.html)
+
+        logo = (ROOT / logo_path).read_text(encoding="utf-8")
+        self.assertIn('viewBox="0 0 268 91"', logo)
+        self.assertIn('aria-hidden="true"', logo)
+        self.assertNotIn("<rect", logo, "the transparent logo must not carry a background block")
+        self.assertRegex(logo, r'<circle[^>]+stroke="(?:#fff|white)"')
+        self.assertIn('data-wordmark="Mereon"', logo)
+
+    def test_catalog_bytes_remain_at_the_approved_baseline(self):
+        catalog_bytes = (ROOT / "data/catalog.json").read_bytes()
+        self.assertEqual(
+            hashlib.sha256(catalog_bytes).hexdigest(),
+            "1807f5fa8e285a0e57e2da0207e9d7e00b19bb01d8791095ccd5964e97928460",
+        )
 
     def test_research_peptide_explainer_is_exact_and_accessible(self):
         for phrase in RESEARCH_EXPLAINER:
