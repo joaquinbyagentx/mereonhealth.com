@@ -16,6 +16,8 @@ const grid = document.querySelector('[data-product-grid]');
 const catalogStatus = document.querySelector('[data-catalog-status]');
 const productDialog = document.querySelector('[data-product-dialog]');
 const productDetail = document.querySelector('[data-product-detail]');
+const researchDialog = document.querySelector('[data-research-dialog]');
+const researchTrigger = document.querySelector('[data-research-open]');
 const cartDialog = document.querySelector('[data-cart-dialog]');
 const cartItems = document.querySelector('[data-cart-items]');
 const cartCount = document.querySelector('[data-cart-count]');
@@ -261,7 +263,11 @@ productDetail.addEventListener('click', (event) => {
   if (add) addToCart(add.dataset.add);
 });
 productDialog.addEventListener('click', (event) => closeOnBackdrop(productDialog, event));
+researchDialog.addEventListener('click', (event) => closeOnBackdrop(researchDialog, event));
 cartDialog.addEventListener('click', (event) => closeOnBackdrop(cartDialog, event));
+
+researchTrigger.addEventListener('click', () => researchDialog.showModal());
+researchDialog.querySelector('[data-research-close]').addEventListener('click', () => researchDialog.close());
 
 cartTrigger.addEventListener('click', () => {
   cartDialog.showModal();

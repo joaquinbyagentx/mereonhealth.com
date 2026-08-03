@@ -71,7 +71,10 @@
     <section class="catalog section" id="catalogo" aria-labelledby="catalog-title">
       <div class="section-heading">
         <div><p class="eyebrow">Catálogo</p><h2 id="catalog-title">Péptidos de<br> investigación.</h2></div>
-        <p>Precios incluyen IVA. Envío se calcula al pagar.</p>
+        <div class="catalog-heading__aside">
+          <p>Precios incluyen IVA. Envío se calcula al pagar.</p>
+          <button class="catalog-explainer-link" type="button" data-research-open aria-haspopup="dialog" aria-controls="research-explainer">¿Qué significa?</button>
+        </div>
       </div>
       <div class="catalog-toolbar" aria-label="Filtros de catálogo">
         <button type="button" class="filter is-active" data-filter="all" aria-pressed="true">Todos</button>
@@ -121,6 +124,20 @@
 
   <dialog class="dialog product-dialog" data-product-dialog aria-labelledby="detail-title">
     <div data-product-detail></div>
+  </dialog>
+
+  <dialog class="dialog research-dialog" id="research-explainer" data-research-dialog aria-labelledby="research-explainer-title">
+    <div class="dialog-shell research-dialog__shell">
+      <header class="research-dialog__header">
+        <p class="eyebrow">Información del catálogo</p>
+        <button class="icon-button" type="button" data-research-close aria-label="Cerrar explicación" autofocus>×</button>
+      </header>
+      <h2 id="research-explainer-title">¿Qué significa “péptido de investigación”?</h2>
+      <div class="research-dialog__copy">
+        <p>Algunas moléculas de nuestro catálogo continúan siendo estudiadas por la comunidad científica en etapas preclínicas o clínicas. Otras comparten ingredientes activos con medicamentos ya autorizados en determinadas presentaciones y jurisdicciones.</p>
+        <p>La clasificación de investigación corresponde específicamente al material ofrecido por Mereon y no implica registro sanitario, equivalencia farmacéutica ni aprobación para una indicación terapéutica. Consulta la ficha técnica y la documentación de cada producto para conocer su condición particular.</p>
+      </div>
+    </div>
   </dialog>
 
   <dialog class="dialog cart-dialog" data-cart-dialog aria-labelledby="cart-title">

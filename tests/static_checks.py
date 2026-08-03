@@ -10,6 +10,11 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
 HERO_NOTICE = "Exclusivamente para investigación y referencia analítica."
 PRICING_NOTICE = "Precios incluyen IVA. Envío se calcula al pagar."
+RESEARCH_EXPLAINER = [
+    "¿Qué significa “péptido de investigación”?",
+    "Algunas moléculas de nuestro catálogo continúan siendo estudiadas por la comunidad científica en etapas preclínicas o clínicas. Otras comparten ingredientes activos con medicamentos ya autorizados en determinadas presentaciones y jurisdicciones.",
+    "La clasificación de investigación corresponde específicamente al material ofrecido por Mereon y no implica registro sanitario, equivalencia farmacéutica ni aprobación para una indicación terapéutica. Consulta la ficha técnica y la documentación de cada producto para conocer su condición particular.",
+]
 
 
 class SiteParser(HTMLParser):
@@ -52,6 +57,16 @@ class StaticSiteTests(unittest.TestCase):
         self.assertNotIn("Pedido no enviado", self.html + self.js)
         self.assertNotIn("Estimaciones de lanzamiento", self.html)
         self.assertRegex(self.html, r"data-payment-button disabled")
+
+    def test_research_peptide_explainer_is_exact_and_accessible(self):
+        explainer = self.html.split('id="research-explainer"', 1)[1].split('</dialog>', 1)[0]
+        for phrase in RESEARCH_EXPLAINER:
+            self.assertEqual(explainer.count(phrase), 1)
+        self.assertIn('data-research-open aria-haspopup="dialog" aria-controls="research-explainer"', self.html)
+        self.assertIn('aria-labelledby="research-explainer-title"', self.html)
+        self.assertIn('data-research-close aria-label="Cerrar explicación" autofocus', explainer)
+        self.assertIn("researchDialog.showModal()", self.js)
+        self.assertIn("researchDialog.close()", self.js)
 
     def test_mereon_verified_is_consistent_across_catalog_and_quality_copy(self):
         required = [
