@@ -19,6 +19,7 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   const errors = await trackRuntimeFailures(page);
   await page.goto('/');
   await expect(page.locator('.product-card')).toHaveCount(12);
+  await expect(page.locator('.product-card .mereon-verified-badge')).toHaveCount(12);
   await expect(page.locator('[data-catalog-status]')).toContainText('12 de 12');
   await expect(page.locator('.coa-card-link[href]')).toHaveCount(8);
   await expect(page.locator('.coa-card-link--disabled')).toHaveCount(4);
@@ -44,15 +45,21 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   }
   const overflow = await page.evaluate(() => ({
     document: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-    body: document.body.scrollWidth - document.body.clientWidth
+    body: document.body.scrollWidth - document.body.clientWidth,
+    cards: [...document.querySelectorAll('.product-card')].map((card) => card.scrollWidth - card.clientWidth)
   }));
   expect(overflow.document).toBeLessThanOrEqual(1);
   expect(overflow.body).toBeLessThanOrEqual(1);
+  expect(Math.max(...overflow.cards)).toBeLessThanOrEqual(1);
 
   const detailsButton = page.locator('[data-detail]').first();
   await detailsButton.focus();
   await page.keyboard.press('Enter');
   await expect(page.locator('[data-product-dialog]')).toBeInViewport();
+  await expect(page.locator('[data-product-dialog] .mereon-verified-badge')).toHaveCount(1);
+  await expect(page.locator('[data-product-dialog] .mereon-verified-note')).toContainText('origen estadounidense');
+  await expect(page.locator('[data-product-dialog] .mereon-verified-note')).toContainText('pruebas independientes');
+  await expect(page.locator('[data-product-dialog] .mereon-verified-note')).toContainText('Estado documental del lote');
   await page.keyboard.press('Escape');
   await expect(page.locator('[data-product-dialog]')).not.toBeVisible();
 
@@ -111,7 +118,7 @@ test('peptide-first CTA and responsive navigation work', async ({ page }, testIn
   expect(errors).toEqual([]);
 });
 
-test('cart add, quantity, totals, legal gate, persistence, and removal work', async ({ page }) => {
+test('cart add, quantity, totals, disabled payment, persistence, and removal work', async ({ page }) => {
   const errors = await trackRuntimeFailures(page);
   const outboundMutations = [];
   page.on('request', (request) => {
@@ -135,11 +142,9 @@ test('cart add, quantity, totals, legal gate, persistence, and removal work', as
 
   const payment = cart.locator('[data-payment-button]');
   await expect(payment).toBeDisabled();
-  await cart.locator('[data-legal-accept]').check();
-  await expect(payment).toBeEnabled();
-  await payment.click();
-  await expect(cart.locator('[data-payment-state]')).toHaveText('Pedido no enviado. Pago seguro próximamente.');
-  await expect(cart.locator('.privacy-note')).toContainText('no se guardan ni se transmiten');
+  await expect(payment).toHaveText('Pago no disponible');
+  await expect(cart.locator('[data-payment-state]')).toHaveCount(0);
+  await expect(cart.locator('.privacy-note')).toHaveCount(0);
   expect(outboundMutations).toEqual([]);
 
   await cart.getByRole('button', { name: 'Aumentar cantidad' }).click();

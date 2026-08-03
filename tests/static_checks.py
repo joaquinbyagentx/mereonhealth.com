@@ -8,9 +8,8 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
-REQUIRED_SHORT = "Material de investigación. No es medicamento ni suplemento."
-REQUIRED_FULL = "Este compuesto se comercializa exclusivamente como material de investigación y referencia analítica. No ha sido evaluado ni aprobado por COFEPRIS o FDA para indicaciones terapéuticas. Mereon Health no proporciona diagnóstico, prescripción, administración, dosificación ni instrucciones de uso. El comprador es responsable de su almacenamiento, manejo y cumplimiento de las disposiciones aplicables."
-REQUIRED_ACCEPTANCE = "Confirmo que soy mayor de edad, que adquiero material de investigación y que entiendo que Mereon Health no lo comercializa como medicamento, suplemento o tratamiento."
+HERO_NOTICE = "Exclusivamente para investigación y referencia analítica."
+PRICING_NOTICE = "Precios incluyen IVA. Envío se calcula al pagar."
 
 
 class SiteParser(HTMLParser):
@@ -43,30 +42,34 @@ class StaticSiteTests(unittest.TestCase):
         cls.parser = SiteParser()
         cls.parser.feed(cls.html)
 
-    def test_required_legal_copy_is_exact_and_visible(self):
-        self.assertIn(REQUIRED_SHORT, self.js)
-        self.assertIn(REQUIRED_FULL, self.html)
-        self.assertIn(REQUIRED_FULL, self.js)
-        self.assertIn(REQUIRED_ACCEPTANCE, self.html)
+    def test_research_and_pricing_notices_are_concise(self):
+        hero = self.html.split('<section class="hero"', 1)[1].split('</section>', 1)[0]
+        catalog_heading = self.html.split('<div class="section-heading">', 1)[1].split('</div>\n      <div class="catalog-toolbar"', 1)[0]
+        self.assertIn(f'<p class="hero__note">{HERO_NOTICE}</p>', hero)
+        self.assertIn(f'<p>{PRICING_NOTICE}</p>', catalog_heading)
+        self.assertNotIn("No son medicamentos, suplementos ni productos para uso humano", hero)
+        self.assertNotIn("El checkout permanece como vista previa y no transmite pedidos", self.html)
+        self.assertNotIn("Pedido no enviado", self.html + self.js)
+        self.assertNotIn("Estimaciones de lanzamiento", self.html)
         self.assertRegex(self.html, r"data-payment-button disabled")
 
-    def test_mereon_verified_is_lot_specific_and_complete(self):
+    def test_mereon_verified_is_consistent_across_catalog_and_quality_copy(self):
         required = [
             "Mereon Verified™",
-            "COA del lote",
-            "HPLC",
-            "LC-MS",
-            "Endotoxinas",
-            "Laboratorio independiente",
-            "Inspección visual",
-            "QR verificable",
-            "Fecha de recepción",
+            "origen estadounidense",
+            "abastecimiento",
+            "pruebas independientes",
+            "identidad y pureza",
+            "trazabilidad",
+            "selección Mereon",
         ]
         for phrase in required:
-            self.assertIn(phrase, self.html)
-        self.assertIn("La reputación del fabricante, por sí sola, no sustituye la verificación.", self.html)
-        self.assertIn("ningún producto recibe este sello mientras su expediente de lote permanezca incompleto o pendiente", self.html)
-        self.assertNotIn("status-badge--verified", self.js)
+            self.assertIn(phrase.lower(), self.html.lower())
+        self.assertIn("cuando están publicados", self.html.lower())
+        self.assertIn("estado documental del lote", self.js.lower())
+        self.assertIn('class="mereon-verified-badge"', self.js)
+        self.assertIn('class="mereon-verified-note"', self.js)
+        self.assertNotRegex(self.html, r"(?i)ning[uú]n producto recibe (?:este|el) sello")
 
     def test_research_peptide_catalog_leads_the_page(self):
         hero = self.html.split('<section class="hero"', 1)[1].split('</section>', 1)[0]
@@ -92,7 +95,7 @@ class StaticSiteTests(unittest.TestCase):
             self.assertNotIn(rejected, public_copy.lower())
 
         self.assertNotIn("antes de iva", public_copy.lower())
-        self.assertIn("Estimaciones de lanzamiento, IVA incluido", self.html)
+        self.assertIn(PRICING_NOTICE, self.html)
 
     def test_navigation_prioritizes_catalog_and_supports_mobile_menu(self):
         self.assertIn('class="nav-toggle"', self.html)

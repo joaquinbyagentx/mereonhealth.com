@@ -80,11 +80,11 @@ test('quantity updates support increment, decrement, and removal deterministical
   assert.deepEqual(updateQuantity([], 'BPC-157-10', 1), [{ code: 'BPC-157-10', quantity: 1 }]);
 });
 
-test('payment adapter fails closed without transmitting an order', async () => {
+test('payment adapter fails closed with a concise neutral status', async () => {
   assert.equal(paymentAdapter.available, false);
   assert.deepEqual(await paymentAdapter.createOrder(), {
     ok: false,
     code: 'PAYMENT_UNAVAILABLE',
-    message: 'Pedido no enviado. Pago seguro próximamente.'
+    message: 'Pago no disponible.'
   });
 });

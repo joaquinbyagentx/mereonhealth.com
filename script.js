@@ -5,11 +5,7 @@ import {
   normalizeCart,
   updateQuantity
 } from './pricing.js';
-import { paymentAdapter } from './payment-adapter.js';
-
 const CART_KEY = 'mereon-research-cart-v1';
-const SHORT_NOTICE = 'Material de investigación. No es medicamento ni suplemento.';
-const FULL_NOTICE = 'Este compuesto se comercializa exclusivamente como material de investigación y referencia analítica. No ha sido evaluado ni aprobado por COFEPRIS o FDA para indicaciones terapéuticas. Mereon Health no proporciona diagnóstico, prescripción, administración, dosificación ni instrucciones de uso. El comprador es responsable de su almacenamiento, manejo y cumplimiento de las disposiciones aplicables.';
 const BLEND_CODES = new Set(['CJCIPA-5-5', 'GLOW-70', 'KLOW-80', 'WOLVERINE-10-10']);
 const TONES = [
   ['#5d9784', '#d6f5e8'], ['#8e745d', '#f0ddcb'], ['#546f81', '#d9e9f1'],
@@ -24,10 +20,7 @@ const cartDialog = document.querySelector('[data-cart-dialog]');
 const cartItems = document.querySelector('[data-cart-items]');
 const cartCount = document.querySelector('[data-cart-count]');
 const cartTrigger = document.querySelector('[data-cart-open]');
-const legalAccept = document.querySelector('[data-legal-accept]');
 const paymentButton = document.querySelector('[data-payment-button]');
-const paymentState = document.querySelector('[data-payment-state]');
-const checkoutForm = document.querySelector('[data-checkout-form]');
 const toast = document.querySelector('[data-toast]');
 const navToggle = document.querySelector('.nav-toggle');
 const primaryNav = document.querySelector('#primary-nav');
@@ -115,17 +108,17 @@ function renderCatalog() {
       ${visualMarkup(product, index)}
       <div class="product-card__body">
         <div class="product-card__meta"><span>${BLEND_CODES.has(product.code) ? 'Mezcla de referencia' : 'Compuesto de referencia'}</span><span>${escapeHtml(product.code)}</span></div>
+        <span class="mereon-verified-badge" aria-label="Mereon Verified"><span aria-hidden="true">M</span><strong>Mereon Verified™</strong></span>
         <h3>${escapeHtml(product.name)}</h3>
         <p class="product-card__presentation">${escapeHtml(product.presentation)}</p>
         <p class="supplier-line"><span>${escapeHtml(product.brandSupplier.role)}</span><strong>${escapeHtml(product.brandSupplier.brand)}</strong></p>
         <span class="status-badge ${product.status === 'available' ? '' : 'status-badge--pending'}">${statusLabel(product)}</span>
-        <div class="product-price"><strong>${price}</strong><small>Precio final con IVA incluido · envío por separado</small></div>
+        <div class="product-price"><strong>${price}</strong><small>IVA incluido · envío al pagar</small></div>
         <div class="product-actions">
           <button class="button button--primary" type="button" data-add="${escapeHtml(product.code)}" ${purchasable ? '' : 'disabled'}>Agregar</button>
           <button class="details-button" type="button" data-detail="${escapeHtml(product.code)}" aria-label="Ver detalle de ${escapeHtml(product.name)}">↗</button>
         </div>
         ${coaAction}
-        <p class="card-notice">${SHORT_NOTICE}</p>
       </div>
     </article>`;
   }).join('');
@@ -193,7 +186,7 @@ function renderCart() {
   document.querySelector('[data-iva]').textContent = formatMxn(totals.ivaCentavos);
   document.querySelector('[data-total]').textContent = formatMxn(totals.finalTotalCentavos);
   document.querySelectorAll('input[name="shipping"]').forEach((input) => { input.disabled = !lines.length; });
-  paymentButton.disabled = !lines.length || !legalAccept.checked;
+  paymentButton.disabled = true;
 }
 
 function changeQuantity(code, quantity) {
@@ -232,12 +225,14 @@ function renderDetail(product) {
       <button class="icon-button" type="button" data-detail-close aria-label="Cerrar detalle" style="float:right">×</button>
       <p class="eyebrow">${escapeHtml(product.code)}</p><h2 id="detail-title">${escapeHtml(product.name)}</h2>
       <p class="product-detail__presentation">${escapeHtml(product.presentation)}</p>
+      <div class="mereon-verified-note">
+        <span class="mereon-verified-badge" aria-label="Mereon Verified"><span aria-hidden="true">M</span><strong>Mereon Verified™</strong></span>
+        <p>Mereon Verified™ identifica una selección Mereon de origen estadounidense, evaluada con criterios de pruebas independientes, identidad, pureza y trazabilidad. Estado documental del lote indicado a continuación.</p>
+      </div>
       <dl class="supplier-detail"><dt>${escapeHtml(product.brandSupplier.role)}</dt><dd>${escapeHtml(product.brandSupplier.brand)}</dd><dt>Plataforma comercial</dt><dd>Mereon Health</dd></dl>
       <p class="product-detail__research">${escapeHtml(product.researchContext)}</p>
       ${coaMarkup}
-      <div class="legal-notice"><strong>Uso exclusivo de investigación</strong><p>${FULL_NOTICE}</p></div>
       <div class="product-detail__actions"><button class="button button--primary" type="button" data-add="${escapeHtml(product.code)}" ${isPurchasable(product) ? '' : 'disabled'}>${isPurchasable(product) ? `Agregar · ${formatMxn(product.basePriceCentavos)}` : 'En evaluación'}</button></div>
-      <p class="card-notice">${SHORT_NOTICE}</p>
     </div>
   </div>`;
   productDialog.showModal();
@@ -263,7 +258,6 @@ productDialog.addEventListener('click', (event) => closeOnBackdrop(productDialog
 cartDialog.addEventListener('click', (event) => closeOnBackdrop(cartDialog, event));
 
 cartTrigger.addEventListener('click', () => {
-  paymentState.textContent = 'Pedido no enviado. La integración de pago permanece inactiva.';
   cartDialog.showModal();
 });
 document.addEventListener('click', (event) => {
@@ -281,14 +275,6 @@ document.querySelector('[data-shipping-options]').addEventListener('change', (ev
     renderCart();
   }
 });
-legalAccept.addEventListener('change', renderCart);
-checkoutForm.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  if (!legalAccept.checked || !cartLines().length) return;
-  const result = await paymentAdapter.createOrder();
-  paymentState.textContent = result.message;
-});
-
 document.querySelectorAll('[data-filter]').forEach((button) => {
   button.addEventListener('click', () => {
     activeFilter = button.dataset.filter;

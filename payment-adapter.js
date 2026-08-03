@@ -7,7 +7,7 @@ export const paymentAdapter = Object.freeze({
     return Object.freeze({
       ok: false,
       code: 'PAYMENT_UNAVAILABLE',
-      message: 'Pedido no enviado. Pago seguro próximamente.'
+      message: 'Pago no disponible.'
     });
   }
 });

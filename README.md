@@ -1,6 +1,6 @@
 # Mereon Health — catálogo de materiales de investigación
 
-Sitio estático, consumer-facing y research-use-only para GitHub Pages. Incluye 12 categorías, fichas documentales, carrito persistente, checkout de revisión y un adaptador de pago deliberadamente inactivo.
+Sitio estático, consumer-facing y research-use-only para GitHub Pages. Incluye 12 categorías, fichas documentales, carrito persistente, resumen de envío y un adaptador de pago deliberadamente inactivo.
 
 ## Desarrollo
 
@@ -31,10 +31,10 @@ Toda la aritmética monetaria está en centavos/centavos enteros:
 - Precio final al comprador con IVA incluido, redondeado al múltiplo de MXN 10 más cercano, con empate hacia arriba.
 - Envío estándar final: MXN 250 con IVA incluido.
 - Envío express final: MXN 349 con IVA incluido.
-- El checkout desglosa el IVA contenido en productos y envío, pero no lo suma nuevamente.
+- El resumen desglosa el IVA incluido en productos y envío.
 
 La fuente y los supuestos de costo permanecen en el dataset/código interno y no se muestran como divulgación de proveedor al cliente.
 
 ## Límite de pago y datos
 
-`payment-adapter.js` no acepta payloads, no ejecuta solicitudes de red y siempre devuelve `unavailable`. Los campos mínimos de contacto/envío no se persisten ni transmiten. El control final exige aceptación legal, pero no puede enviar un pedido ni simular un pago.
+`payment-adapter.js` no acepta payloads, no ejecuta solicitudes de red y siempre devuelve `unavailable`. La interfaz no solicita datos de contacto mientras el pago está inactivo.
