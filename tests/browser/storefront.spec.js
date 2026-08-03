@@ -27,6 +27,21 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
     await expect(link).toHaveAttribute('rel', /noopener/);
     await expect(link).toHaveAttribute('href', /^https:\/\/protidehealth\.com\/certificates\//);
   }
+  await page.getByRole('button', { name: 'Mezclas' }).click();
+  await expect(page.locator('.product-card')).toHaveCount(4);
+  await expect(page.locator('[data-catalog-status]')).toContainText('4 de 12');
+  await page.getByRole('button', { name: 'Compuestos' }).click();
+  await expect(page.locator('.product-card')).toHaveCount(8);
+  await page.getByRole('button', { name: 'Todos' }).click();
+  await expect(page.locator('.product-card')).toHaveCount(12);
+
+  const productImages = page.locator('.product-visual--photo img');
+  await expect(productImages).toHaveCount(12);
+  for (const image of await productImages.all()) {
+    await image.scrollIntoViewIfNeeded();
+    await expect(image).toHaveJSProperty('complete', true);
+    expect(await image.evaluate((node) => node.naturalWidth)).toBeGreaterThan(0);
+  }
   const overflow = await page.evaluate(() => ({
     document: document.documentElement.scrollWidth - document.documentElement.clientWidth,
     body: document.body.scrollWidth - document.body.clientWidth
@@ -50,15 +65,28 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   expect(errors).toEqual([]);
 });
 
-test('client journey CTA and responsive navigation work', async ({ page }, testInfo) => {
+test('reduced-motion preference disables smooth scrolling and transitions', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop', 'CSS behavior is viewport-independent.');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await expect(page.locator('.product-card')).toHaveCount(12);
+  const motion = await page.evaluate(() => ({
+    scrollBehavior: getComputedStyle(document.documentElement).scrollBehavior,
+    transitionSeconds: parseFloat(getComputedStyle(document.querySelector('.product-card')).transitionDuration)
+  }));
+  expect(motion.scrollBehavior).toBe('auto');
+  expect(motion.transitionSeconds).toBeLessThanOrEqual(0.001);
+});
+
+test('peptide-first CTA and responsive navigation work', async ({ page }, testInfo) => {
   const errors = await trackRuntimeFailures(page);
   await page.goto('/');
-  await expect(page.locator('#hero-title')).toContainText('plan claro');
-  await expect(page.locator('.journey-grid > li')).toHaveCount(4);
+  await expect(page.locator('#hero-title')).toContainText('Tu salud merece prioridad.');
+  await expect(page.locator('.hero__lead')).toContainText('péptidos de investigación');
 
-  await page.locator('.hero__actions a[href="#como-funciona"]').click();
-  await expect(page).toHaveURL(/#como-funciona$/);
-  await expect(page.locator('#como-funciona')).toBeInViewport();
+  await page.locator('.hero__actions a[href="#catalogo"]').click();
+  await expect(page).toHaveURL(/#catalogo$/);
+  await expect(page.locator('#catalogo')).toBeInViewport();
 
   const navToggle = page.locator('.nav-toggle');
   if (testInfo.project.name === 'desktop') {
@@ -70,9 +98,15 @@ test('client journey CTA and responsive navigation work', async ({ page }, testI
     await navToggle.click();
     await expect(navToggle).toHaveAttribute('aria-expanded', 'true');
     await expect(page.locator('#primary-nav')).toBeVisible();
-    await page.locator('#primary-nav a[href="#confianza"]').click();
-    await expect(page).toHaveURL(/#confianza$/);
+    await page.locator('#primary-nav a[href="#calidad"]').focus();
+    await page.keyboard.press('Escape');
     await expect(navToggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(navToggle).toBeFocused();
+    await navToggle.click();
+    await page.locator('#primary-nav a[href="#calidad"]').click();
+    await expect(page).toHaveURL(/#calidad$/);
+    await expect(navToggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(page.locator('#calidad')).toBeFocused();
   }
   expect(errors).toEqual([]);
 });
@@ -125,19 +159,15 @@ test('cart add, quantity, totals, legal gate, persistence, and removal work', as
 
 test('COA-pending product disables external navigation and remains transparent', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop', 'Single behavior check is sufficient; responsive layout is covered separately.');
-  await page.route('**/data/catalog.json', async (route) => {
-    const response = await route.fetch();
-    const payload = await response.json();
-    payload.products[0].status = 'coa_pending';
-    payload.products[0].coa = null;
-    await route.fulfill({ response, json: payload });
-  });
   await page.goto('/');
   const firstCard = page.locator('.product-card').first();
   await expect(firstCard).toContainText('COA pendiente de asignación/publicación para este lote');
   await expect(firstCard.locator('a[href*="/certificates/"]')).toHaveCount(0);
   await firstCard.locator('[data-detail]').click();
-  await expect(page.locator('[data-product-dialog]')).toBeInViewport();
-  await expect(page.locator('[data-product-dialog]')).toContainText('COA pendiente de asignación/publicación para este lote');
-  await expect(page.locator('[data-product-dialog] a[href*="/certificates/"]')).toHaveCount(0);
+  const detail = page.locator('[data-product-dialog]');
+  await expect(detail).toBeInViewport();
+  await expect(detail).toContainText('COA pendiente de asignación/publicación para este lote');
+  await expect(detail.getByRole('link', { name: /Ver COA/ })).toHaveCount(0);
+  await expect(detail.locator('[aria-disabled="true"]')).toHaveText('Ver COA no disponible');
+  await expect(detail).not.toContainText('null');
 });

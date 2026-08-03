@@ -68,26 +68,37 @@ class StaticSiteTests(unittest.TestCase):
         self.assertIn("ningún producto recibe este sello mientras su expediente de lote permanezca incompleto o pendiente", self.html)
         self.assertNotIn("status-badge--verified", self.js)
 
-    def test_client_program_framing_leads_the_page(self):
+    def test_research_peptide_catalog_leads_the_page(self):
         hero = self.html.split('<section class="hero"', 1)[1].split('</section>', 1)[0]
-        for phrase in [
-            "Evaluación inicial",
-            "Plan personalizado",
-            "Seguimiento y ajustes",
-            "Ejercicio y nutrición",
-            "progreso medible",
-        ]:
-            self.assertIn(phrase, self.html)
-        self.assertIn("no una solución aislada", self.html)
-        self.assertIn("exclusivamente para investigación y no forma parte de la ruta de atención", self.html)
-        self.assertNotRegex(hero, r"(?i)catálogo|investigación|comprar|referencias")
-        self.assertLess(self.html.index('id="como-funciona"'), self.html.index('id="catalogo"'))
+        self.assertIn("Tu salud merece <em>prioridad.</em>", hero)
+        self.assertRegex(hero, r"(?i)p[eé]ptidos de investigaci[oó]n")
+        self.assertIn('href="#catalogo"', hero)
+        self.assertLess(self.html.index('id="catalogo"'), self.html.index('id="calidad"'))
 
-    def test_navigation_supports_client_journey_and_mobile_menu(self):
+        public_copy = "\n".join([self.html, self.js, json.dumps(self.catalog, ensure_ascii=False)])
+        for rejected in [
+            "acompañamiento",
+            "evaluación inicial",
+            "plan personalizado",
+            "seguimiento",
+            "contacto continuo",
+            "apoyo en cada etapa",
+            "programa integral",
+            "programas integrales",
+            "gobierno clínico",
+            "ejercicio y nutrición",
+            "acompañamiento humano",
+        ]:
+            self.assertNotIn(rejected, public_copy.lower())
+
+        self.assertNotIn("antes de iva", public_copy.lower())
+        self.assertIn("Estimaciones de lanzamiento, IVA incluido", self.html)
+
+    def test_navigation_prioritizes_catalog_and_supports_mobile_menu(self):
         self.assertIn('class="nav-toggle"', self.html)
         self.assertIn('aria-controls="primary-nav"', self.html)
         self.assertIn('id="primary-nav"', self.html)
-        for destination in ["#programas", "#como-funciona", "#confianza", "#catalogo"]:
+        for destination in ["#catalogo", "#calidad", "#faq"]:
             self.assertIn(f'href="{destination}"', self.html)
         self.assertIn("navToggle.addEventListener", self.js)
         self.assertIn("aria-expanded", self.js)

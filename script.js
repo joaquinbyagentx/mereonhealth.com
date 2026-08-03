@@ -32,11 +32,13 @@ const toast = document.querySelector('[data-toast]');
 const navToggle = document.querySelector('.nav-toggle');
 const primaryNav = document.querySelector('#primary-nav');
 
-function closeNavigation() {
+function closeNavigation({ restoreFocus = false } = {}) {
   if (!navToggle || !primaryNav) return;
+  const wasOpen = navToggle.getAttribute('aria-expanded') === 'true';
   navToggle.setAttribute('aria-expanded', 'false');
   navToggle.setAttribute('aria-label', 'Abrir navegación');
   primaryNav.classList.remove('is-open');
+  if (restoreFocus && wasOpen) navToggle.focus();
 }
 
 if (navToggle && primaryNav) {
@@ -47,10 +49,18 @@ if (navToggle && primaryNav) {
     primaryNav.classList.toggle('is-open', !isOpen);
   });
   primaryNav.addEventListener('click', (event) => {
-    if (event.target.closest('a')) closeNavigation();
+    const link = event.target.closest('a');
+    if (!link) return;
+
+    const destination = link.hash ? document.getElementById(link.hash.slice(1)) : null;
+    closeNavigation();
+    if (destination) {
+      if (!destination.hasAttribute('tabindex')) destination.tabIndex = -1;
+      window.requestAnimationFrame(() => destination.focus({ preventScroll: true }));
+    }
   });
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') closeNavigation();
+    if (event.key === 'Escape') closeNavigation({ restoreFocus: true });
   });
 }
 
@@ -210,7 +220,7 @@ function showToast(message) {
 function renderDetail(product) {
   const index = catalog.findIndex((item) => item.code === product.code);
   const coa = product.coa;
-  const coaMarkup = coa ? `<div class="coa-box">
+  const coaMarkup = coa?.url ? `<div class="coa-box">
       <h3>${escapeHtml(coa.label)}</h3>
       <dl class="coa-meta"><dt>Lote de la fuente</dt><dd>${escapeHtml(coa.lot)}</dd><dt>Laboratorio publicado</dt><dd>${escapeHtml(coa.lab)}</dd><dt>Métodos publicados</dt><dd>${escapeHtml(coa.methods.join(' · '))}</dd></dl>
       <a href="${escapeHtml(coa.url)}" target="_blank" rel="noopener noreferrer">Ver COA en sitio externo <span aria-hidden="true">↗</span></a>
