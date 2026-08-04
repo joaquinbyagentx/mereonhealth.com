@@ -19,32 +19,34 @@ SPEC.loader.exec_module(IMPORTER)
 class ImporterSecurityTests(unittest.TestCase):
     def test_order_costs_recompute_exact_approved_prices_without_adding_iva(self):
         expected = {
-            "T-10": 135000,
-            "BPC-157-10": 135000,
-            "SEMAX-10": 165000,
-            "KLOW-80": 345000,
-            "CJCIPA-5-5": 190000,
-            "TA1-10": 195000,
-            "IPAMORELIN-5": 120000,
-            "TESA-5": 135000,
-            "GHKCU-100-10ML": 205000,
+            "T-10": 155000,
+            "BPC-157-10": 160000,
+            "SEMAX-10": 180000,
+            "KLOW-80": 305000,
+            "CJCIPA-5-5": 200000,
+            "TA1-10": 200000,
+            "IPAMORELIN-5": 150000,
+            "TESA-5": 160000,
+            "GHKCU-100-10ML": 210000,
         }
         self.assertEqual(IMPORTER.FX_MXN_TEN_THOUSANDTHS_PER_USD, 173288)
         for code, clean_price in expected.items():
             line = IMPORTER.confirmed_inventory_line(code)
             self.assertIsNotNone(line, code)
-            numerator = (
-                line["unitUsdCents"]
-                * 173288
-                * 11300
-                * 14000
-            )
-            denominator = 10000 * 10000 * 10000 * 5000
-            independently_computed = IMPORTER.round_div(numerator, denominator) * 5000
+            landed_numerator = line["unitUsdCents"] * 173288 * 11300
+            landed_denominator = 10000 * 10000
+            target_price_numerator = landed_numerator + 60000 * landed_denominator
+            independently_computed = IMPORTER.ceil_div(
+                target_price_numerator,
+                landed_denominator * 5000,
+            ) * 5000
             computed = IMPORTER.base_price_centavos(line["unitUsdCents"])
             self.assertEqual(computed, independently_computed, code)
             self.assertEqual(computed, clean_price, code)
             self.assertEqual(computed % IMPORTER.CLEAN_INCREMENT_CENTAVOS, 0, code)
+            margin = IMPORTER.profit_margin_centavos(line["unitUsdCents"], computed)
+            self.assertGreaterEqual(margin, 60000, code)
+            self.assertLessEqual(margin, 64999, code)
 
     def test_importer_research_copy_matches_canonical_catalog_exactly(self):
         catalog = json.loads((ROOT / "data" / "catalog.json").read_text(encoding="utf-8"))

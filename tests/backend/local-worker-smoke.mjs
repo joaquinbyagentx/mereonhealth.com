@@ -53,7 +53,7 @@ const last = await fetch(`${providers}/last-stripe`).then((response) => response
 const stripe = stripeContext(last);
 assert.equal(stripe.params.get('currency'), null);
 assert.equal(stripe.params.get('customer_email'), customer.email);
-assert.equal(stripe.total, 160000, 'one-item total is product subtotal plus standard shipping, with no extra IVA');
+assert.equal(stripe.total, 180000, 'one-item total is product subtotal plus standard shipping, with no extra IVA');
 const paidEvent = { id: 'evt_live_local_paid', type: 'checkout.session.completed', livemode: true, created: Math.floor(Date.now() / 1000), data: { object: { id: stripe.sessionId, client_reference_id: stripe.orderId, metadata: { mereon_order_id: stripe.orderId }, payment_status: 'paid', currency: 'mxn', amount_total: stripe.total, payment_intent: 'pi_live_synthetic' } } };
 assert.equal((await sendEvent(paidEvent)).response.status, 200);
 assert.equal((await sendEvent(paidEvent)).response.status, 200);

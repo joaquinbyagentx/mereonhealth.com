@@ -254,10 +254,10 @@ test('cart add, quantity, totals, disabled payment, persistence, and removal wor
   const cart = page.locator('[data-cart-dialog]');
   await expect(cart).toBeVisible();
   await expect(cart).toBeInViewport();
-  await expect(cart.locator('[data-subtotal]')).toContainText('1,350.00');
+  await expect(cart.locator('[data-subtotal]')).toContainText('1,550.00');
   await expect(cart.locator('[data-shipping]')).toContainText('250.00');
-  await expect(cart.locator('[data-iva]')).toContainText('220.69');
-  await expect(cart.locator('[data-total]')).toContainText('1,600.00');
+  await expect(cart.locator('[data-iva]')).toContainText('248.28');
+  await expect(cart.locator('[data-total]')).toContainText('1,800.00');
   await expect(cart.getByText('De este total, IVA incluido (16%)')).toBeVisible();
   await expect(cart.getByText('IVA se muestra como dato informativo y no se suma nuevamente.')).toBeVisible();
 
@@ -270,7 +270,7 @@ test('cart add, quantity, totals, disabled payment, persistence, and removal wor
 
   await cart.getByRole('button', { name: 'Aumentar cantidad' }).click();
   await expect(page.locator('[data-cart-count]')).toHaveText('2');
-  await expect(cart.locator('[data-subtotal]')).toContainText('2,700.00');
+  await expect(cart.locator('[data-subtotal]')).toContainText('3,100.00');
   await cart.locator('[data-cart-close]').first().click();
   await page.reload();
   await expect(page.locator('[data-cart-count]')).toHaveText('2');
@@ -351,10 +351,10 @@ test('success and cancellation pages trust only API-verified state', async ({ pa
   const cors = { 'access-control-allow-origin': origin, 'access-control-allow-methods': 'POST', 'access-control-allow-headers': 'Content-Type' };
   await page.route('https://api.mereonhealth.com/v1/orders/status', (route) => route.fulfill(route.request().method() === 'OPTIONS'
     ? { status: 204, headers: cors }
-    : { status: 200, contentType: 'application/json', headers: cors, body: JSON.stringify({ orderNumber: 'MEREON-20260803-ABC123', status: 'paid', lines: [{ name: 'T-10', presentation: '10 mg', quantity: 1, lineTotal: 135000 }], subtotal: 135000, shipping: { label: 'Estándar', amount: 25000 }, total: 160000, includedIva: 22069 }) }));
+    : { status: 200, contentType: 'application/json', headers: cors, body: JSON.stringify({ orderNumber: 'MEREON-20260803-ABC123', status: 'paid', lines: [{ name: 'Tirzepatida (T-10)', presentation: '10 mg', quantity: 1, lineTotal: 155000 }], subtotal: 155000, shipping: { label: 'Estándar', amount: 25000 }, total: 180000, includedIva: 24828 }) }));
   await page.goto(`/checkout-success.html#token=${token}`);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Pago confirmado');
-  await expect(page.locator('[data-order-summary]')).toContainText('$1,600.00');
+  await expect(page.locator('[data-order-summary]')).toContainText('$1,800.00');
   await expect(page.locator('body')).not.toContainText('Av. Reforma');
   await page.route('https://api.mereonhealth.com/v1/orders/cancel', (route) => route.fulfill(route.request().method() === 'OPTIONS' ? { status: 204, headers: cors } : { status: 200, contentType: 'application/json', headers: cors, body: '{"cancelled":true}' }));
   await page.goto(`/checkout-cancel.html#token=${token}`);

@@ -1,15 +1,15 @@
 const product = (code, name, presentation, unitAmount, initialStock) => Object.freeze({ code, name, presentation, unitAmount, initialStock });
 
 export const CATALOG = Object.freeze(Object.fromEntries([
-  product('T-10', 'Tirzepatida (T-10)', '10 mg', 135000, 3),
-  product('BPC-157-10', 'BPC-157', '10 mg', 135000, 1),
-  product('SEMAX-10', 'Semax', '10 mg', 165000, 3),
-  product('KLOW-80', 'KLOW', 'GHK-Cu 50 mg + BPC-157 10 mg + TB-500 10 mg + KPV 10 mg', 345000, 1),
-  product('CJCIPA-5-5', 'CJC-1295 No-DAC + Ipamorelin', '5 mg + 5 mg', 190000, 1),
-  product('TA1-10', 'Thymosin Alpha 1', '10 mg', 195000, 1),
-  product('IPAMORELIN-5', 'Ipamorelin', '5 mg', 120000, 1),
-  product('TESA-5', 'Tesamorelin', '5 mg', 135000, 1),
-  product('GHKCU-100-10ML', 'GHK-Cu', '100 mg · 10 mL', 205000, 1)
+  product('T-10', 'Tirzepatida (T-10)', '10 mg', 155000, 3),
+  product('BPC-157-10', 'BPC-157', '10 mg', 160000, 1),
+  product('SEMAX-10', 'Semax', '10 mg', 180000, 3),
+  product('KLOW-80', 'KLOW', 'GHK-Cu 50 mg + BPC-157 10 mg + TB-500 10 mg + KPV 10 mg', 305000, 1),
+  product('CJCIPA-5-5', 'CJC-1295 No-DAC + Ipamorelin', '5 mg + 5 mg', 200000, 1),
+  product('TA1-10', 'Thymosin Alpha 1', '10 mg', 200000, 1),
+  product('IPAMORELIN-5', 'Ipamorelin', '5 mg', 150000, 1),
+  product('TESA-5', 'Tesamorelin', '5 mg', 160000, 1),
+  product('GHKCU-100-10ML', 'GHK-Cu', '100 mg · 10 mL', 210000, 1)
 ].map((item) => [item.code, item])));
 
 export const SHIPPING = Object.freeze({

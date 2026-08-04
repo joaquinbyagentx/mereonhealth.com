@@ -33,10 +33,10 @@ OUTPUT_PATH = Path("data/catalog.json")
 
 FX_MXN_TEN_THOUSANDTHS_PER_USD = 173_288
 LANDED_UPLIFT_BPS = 1300
-TARGET_PROFIT_MARKUP_BPS = 4000
+TARGET_PROFIT_CENTAVOS = 60_000
 IVA_BPS = 1600
 CLEAN_INCREMENT_CENTAVOS = 5000
-ACCEPTED_EFFECTIVE_MARKUP_BPS = [3700, 4300]
+ACCEPTED_EFFECTIVE_MARGIN_CENTAVOS = [60_000, 64_999]
 
 SUPPLIER_ORDER = {
     "number": "33332",
@@ -347,22 +347,24 @@ def round_div(numerator: int, denominator: int) -> int:
     return (numerator + denominator // 2) // denominator
 
 
+def ceil_div(numerator: int, denominator: int) -> int:
+    if numerator < 0 or denominator <= 0:
+        raise ValueError("ceil_div accepts a non-negative numerator and positive denominator")
+    return (numerator + denominator - 1) // denominator
+
+
 def base_price_centavos(
     source_usd_cents: int,
     fx_mxn_ten_thousandths_per_usd: int = FX_MXN_TEN_THOUSANDTHS_PER_USD,
 ) -> int:
-    numerator = (
-        source_usd_cents
-        * fx_mxn_ten_thousandths_per_usd
-        * (10_000 + LANDED_UPLIFT_BPS)
-        * (10_000 + TARGET_PROFIT_MARKUP_BPS)
-    )
-    denominator = 10_000 * 10_000 * 10_000
-    clean_units = round_div(numerator, denominator * CLEAN_INCREMENT_CENTAVOS)
+    landed_numerator = source_usd_cents * fx_mxn_ten_thousandths_per_usd * (10_000 + LANDED_UPLIFT_BPS)
+    landed_denominator = 10_000 * 10_000
+    target_price_numerator = landed_numerator + TARGET_PROFIT_CENTAVOS * landed_denominator
+    clean_units = ceil_div(target_price_numerator, landed_denominator * CLEAN_INCREMENT_CENTAVOS)
     return clean_units * CLEAN_INCREMENT_CENTAVOS
 
 
-def profit_markup_bps(
+def profit_margin_centavos(
     source_usd_cents: int,
     price_centavos: int,
     fx_mxn_ten_thousandths_per_usd: int = FX_MXN_TEN_THOUSANDTHS_PER_USD,
@@ -370,7 +372,7 @@ def profit_markup_bps(
     landed_numerator = source_usd_cents * fx_mxn_ten_thousandths_per_usd * (10_000 + LANDED_UPLIFT_BPS)
     landed_denominator = 10_000 * 10_000
     profit_numerator = price_centavos * landed_denominator - landed_numerator
-    return round_div(profit_numerator * 10_000, landed_numerator)
+    return profit_numerator // landed_denominator
 
 
 def plain_source(product: Dict[str, Any]) -> str:
@@ -480,11 +482,11 @@ def build_catalog() -> Dict[str, Any]:
         price_centavos = base_price_centavos(
             source_usd_cents, fx_mxn_ten_thousandths_per_usd
         )
-        profit_markup = profit_markup_bps(
+        profit_margin = profit_margin_centavos(
             source_usd_cents, price_centavos, fx_mxn_ten_thousandths_per_usd
         )
-        if not ACCEPTED_EFFECTIVE_MARKUP_BPS[0] <= profit_markup <= ACCEPTED_EFFECTIVE_MARKUP_BPS[1]:
-            raise RuntimeError(f"{selection['slug']}: rounded effective markup {profit_markup / 100:.2f}% is outside guardrails")
+        if not ACCEPTED_EFFECTIVE_MARGIN_CENTAVOS[0] <= profit_margin <= ACCEPTED_EFFECTIVE_MARGIN_CENTAVOS[1]:
+            raise RuntimeError(f"{selection['slug']}: rounded effective margin MXN {profit_margin / 100:.2f} is outside guardrails")
         product_url = product.get("permalink")
         if not product_url or not product_url.startswith(f"https://{SOURCE_ORIGIN}/product/"):
             raise RuntimeError(f"{selection['slug']}: missing or unexpected product URL")

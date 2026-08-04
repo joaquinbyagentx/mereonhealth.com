@@ -70,11 +70,11 @@ test('every positive-stock purchase-enabled SKU receives the Mereon designation 
 
 test('confirmed inventory is the only sellable inventory and exposes only approved clean prices', () => {
   const expected = {
-    'T-10': [3, 135000], 'BPC-157-10': [1, 135000],
-    'SEMAX-10': [3, 165000],
-    'KLOW-80': [1, 345000], 'CJCIPA-5-5': [1, 190000],
-    'TA1-10': [1, 195000], 'IPAMORELIN-5': [1, 120000],
-    'TESA-5': [1, 135000], 'GHKCU-100-10ML': [1, 205000]
+    'T-10': [3, 155000], 'BPC-157-10': [1, 160000],
+    'SEMAX-10': [3, 180000],
+    'KLOW-80': [1, 305000], 'CJCIPA-5-5': [1, 200000],
+    'TA1-10': [1, 200000], 'IPAMORELIN-5': [1, 150000],
+    'TESA-5': [1, 160000], 'GHKCU-100-10ML': [1, 210000]
   };
   const products = new Map(catalog.products.map((product) => [product.code, product]));
   assert.deepEqual(new Set(catalog.products.filter(isSellable).map((product) => product.code)), new Set(Object.keys(expected)));
@@ -110,12 +110,12 @@ test('shipping configuration exposes exactly the two taxable launch estimates', 
 });
 
 test('checkout totals treat product and shipping prices as IVA-included final amounts', () => {
-  assert.deepEqual(calculateCheckoutTotals([{ unitPriceCentavos: 135000, quantity: 2 }], 25000), {
-    productSubtotalCentavos: 270000,
+  assert.deepEqual(calculateCheckoutTotals([{ unitPriceCentavos: 155000, quantity: 2 }], 25000), {
+    productSubtotalCentavos: 310000,
     shippingCentavos: 25000,
-    taxableBaseCentavos: 254310,
-    ivaCentavos: 40690,
-    finalTotalCentavos: 295000
+    taxableBaseCentavos: 288793,
+    ivaCentavos: 46207,
+    finalTotalCentavos: 335000
   });
 });
 

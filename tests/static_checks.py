@@ -193,15 +193,15 @@ class StaticSiteTests(unittest.TestCase):
 
     def test_order_backed_prices_inventory_and_uniform_images(self):
         expected = {
-            "T-10": (4850, 3, 135000),
-            "BPC-157-10": (4900, 1, 135000),
-            "SEMAX-10": (5999, 3, 165000),
-            "GHKCU-100-10ML": (7500, 1, 205000),
-            "CJCIPA-5-5": (7000, 1, 190000),
-            "TA1-10": (7100, 1, 195000),
-            "IPAMORELIN-5": (4400, 1, 120000),
-            "TESA-5": (5000, 1, 135000),
-            "KLOW-80": (12500, 1, 345000),
+            "T-10": (4850, 3, 155000),
+            "BPC-157-10": (4900, 1, 160000),
+            "SEMAX-10": (5999, 3, 180000),
+            "GHKCU-100-10ML": (7500, 1, 210000),
+            "CJCIPA-5-5": (7000, 1, 200000),
+            "TA1-10": (7100, 1, 200000),
+            "IPAMORELIN-5": (4400, 1, 150000),
+            "TESA-5": (5000, 1, 160000),
+            "KLOW-80": (12500, 1, 305000),
         }
         products = {product["code"]: product for product in self.catalog["products"]}
         self.assertEqual({code for code, product in products.items() if product["stockQuantity"] > 0}, set(expected))
