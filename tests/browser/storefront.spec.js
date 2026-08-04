@@ -342,9 +342,10 @@ test('checkout validates Mexico delivery data and sends no client prices before 
   expect(JSON.stringify(checkoutPayload)).not.toMatch(/unitAmount|unitPrice|subtotal|shippingAmount|total|iva|tax/i);
 });
 
-test('success and cancellation pages trust only API-verified state', async ({ page }) => {
+test('success and cancellation pages trust only API-verified state', async ({ page }, testInfo) => {
   const token = 'a'.repeat(64);
-  const cors = { 'access-control-allow-origin': 'http://127.0.0.1:8766', 'access-control-allow-methods': 'POST', 'access-control-allow-headers': 'Content-Type' };
+  const origin = new URL(String(testInfo.project.use.baseURL)).origin;
+  const cors = { 'access-control-allow-origin': origin, 'access-control-allow-methods': 'POST', 'access-control-allow-headers': 'Content-Type' };
   await page.route('https://api.mereonhealth.com/v1/orders/status', (route) => route.fulfill(route.request().method() === 'OPTIONS'
     ? { status: 204, headers: cors }
     : { status: 200, contentType: 'application/json', headers: cors, body: JSON.stringify({ orderNumber: 'MEREON-20260803-ABC123', status: 'paid', lines: [{ name: 'T-10', presentation: '10 mg', quantity: 1, lineTotal: 135000 }], subtotal: 135000, shipping: { label: 'Estándar', amount: 25000 }, total: 160000, includedIva: 22069 }) }));
