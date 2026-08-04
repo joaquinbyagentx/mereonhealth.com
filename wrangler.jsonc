@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "mereon-checkout-api",
+  "main": "worker/src/index.js",
+  "compatibility_date": "2026-08-03",
+  "workers_dev": false,
+  "routes": [{ "pattern": "api.mereonhealth.com", "custom_domain": true }],
+  "triggers": { "crons": ["*/5 * * * *"] },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "mereon-checkout-production",
+    "database_id": "3bf4db44-adac-4896-af12-5aa7907e2ae6",
+    "migrations_dir": "worker/migrations"
+  }],
+  "durable_objects": { "bindings": [{ "name": "INVENTORY_COORDINATOR", "class_name": "InventoryCoordinator" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["InventoryCoordinator"] }],
+  "vars": { "STORE_ORIGIN": "https://mereonhealth.com" },
+  "observability": { "enabled": true, "head_sampling_rate": 0.1 }
+}

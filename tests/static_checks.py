@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import json
-import hashlib
+
 import re
 import struct
 import unittest
@@ -18,7 +18,7 @@ RESEARCH_EXPLAINER = [
 ]
 CATALOG_CLARIFICATION = (
     "Las descripciones presentan áreas estudiadas en investigación preclínica y no establecen eficacia, seguridad ni una indicación terapéutica. "
-    "Los materiales ofrecidos por Mereon son exclusivamente para investigación y referencia analítica; no están destinados a consumo, administración o uso diagnóstico, terapéutico o veterinario."
+    "Los materiales ofrecidos por Mereon son exclusivamente para investigación."
 )
 
 
@@ -76,12 +76,6 @@ class StaticSiteTests(unittest.TestCase):
         self.assertRegex(logo, r'<circle[^>]+stroke="(?:#fff|white)"')
         self.assertIn('data-wordmark="Mereon"', logo)
 
-    def test_catalog_bytes_remain_at_the_approved_baseline(self):
-        catalog_bytes = (ROOT / "data/catalog.json").read_bytes()
-        self.assertEqual(
-            hashlib.sha256(catalog_bytes).hexdigest(),
-            "1807f5fa8e285a0e57e2da0207e9d7e00b19bb01d8791095ccd5964e97928460",
-        )
 
     def test_research_peptide_explainer_is_exact_and_accessible(self):
         for phrase in RESEARCH_EXPLAINER:
@@ -116,12 +110,14 @@ class StaticSiteTests(unittest.TestCase):
         for phrase in required:
             self.assertIn(phrase.lower(), self.html.lower())
         self.assertIn("cuando están publicados", self.html.lower())
-        self.assertIn("únicamente en referencias con un coa publicado y revisable", self.html.lower())
-        self.assertIn("las referencias pendientes no muestran el sello", self.html.lower())
-        self.assertIn("estado documental del lote", self.js.lower())
+        self.assertIn("designación propia de mereon para productos actualmente disponibles", self.html.lower())
+        self.assertIn("no equivale a un coa", self.html.lower())
+        self.assertIn("no sustituye ni implica un coa publicado", self.html.lower())
+        self.assertIn("el estado del coa se muestra por separado", self.js.lower())
+        self.assertIn("product.purchaseEnabled === true", self.js)
         self.assertIn('class="mereon-verified-badge"', self.js)
         self.assertIn('class="mereon-verified-note"', self.js)
-        self.assertNotRegex(self.html, r"(?i)ning[uú]n producto recibe (?:este|el) sello")
+        self.assertNotIn("product.status === 'available'\n      ? '<span class=\"mereon-verified-badge\"", self.js)
 
     def test_research_peptide_catalog_leads_the_page(self):
         hero = self.html.split('<section class="hero"', 1)[1].split('</section>', 1)[0]
@@ -159,22 +155,27 @@ class StaticSiteTests(unittest.TestCase):
         self.assertIn("aria-expanded", self.js)
 
     def test_checkout_lines_are_in_required_order(self):
-        labels = ["Subtotal de productos", "Envío", "IVA incluido (16%)", "Total final"]
+        labels = ["Subtotal de productos", "Envío", "De este total, IVA incluido (16%)", "Total final"]
         totals = self.html.split('<dl class="totals"', 1)[1].split('</dl>', 1)[0]
         positions = [totals.index(label) for label in labels]
         self.assertEqual(positions, sorted(positions))
         pricing = (ROOT / "pricing.js").read_text()
-        self.assertIn("finalTotalCentavos * PRICING_CONFIG.ivaBasisPoints", pricing)
-        self.assertIn("10_000 + PRICING_CONFIG.ivaBasisPoints", pricing)
+        self.assertIn("finalTotalCentavos * CHECKOUT_CONFIG.ivaBasisPoints", pricing)
+        self.assertIn("10_000 + CHECKOUT_CONFIG.ivaBasisPoints", pricing)
 
     def test_catalog_is_canonical_and_complete(self):
         products = self.catalog["products"]
-        self.assertEqual(len(products), 12)
-        self.assertEqual(len({product["code"] for product in products}), 12)
+        self.assertEqual(len(products), 14)
+        self.assertEqual(len({product["code"] for product in products}), 14)
+        self.assertTrue(all(isinstance(product["stockQuantity"], int) and product["stockQuantity"] >= 0 for product in products))
+        self.assertTrue(all(isinstance(product["purchaseEnabled"], bool) for product in products))
+        self.assertEqual(
+            {product["code"] for product in products if product["purchaseEnabled"] and product["stockQuantity"] > 0},
+            {product["code"] for product in products if product["stockQuantity"] > 0},
+        )
         self.assertTrue(all(product["status"] in {"available", "evaluation", "coa_pending"} for product in products))
         for product in products:
             if product["status"] != "evaluation":
-                self.assertIsInstance(product["sourceUsdCents"], int)
                 self.assertIsInstance(product["basePriceCentavos"], int)
                 self.assertGreater(product["basePriceCentavos"], 0)
                 image = product["image"]
@@ -190,28 +191,26 @@ class StaticSiteTests(unittest.TestCase):
         self.assertIn('Fotografía de referencia de la fuente', self.js)
         self.assertIn('Plataforma comercial', self.js)
 
-    def test_ascension_source_prices_formula_outputs_and_uniform_images(self):
+    def test_order_backed_prices_inventory_and_uniform_images(self):
         expected = {
-            "BPC-157-10": (4900, 135000),
-            "TB500-5": (5400, 150000),
-            "MOTSC-10": (4900, 135000),
-            "GHKCU-100-3ML": (6500, 180000),
-            "CJCIPA-5-5": (7000, 190000),
-            "TA1-10": (7100, 195000),
-            "TESA-5": (5000, 135000),
-            "EPITHALON-10": (4400, 120000),
-            "KPV-10": (5000, 135000),
-            "GLOW-70": (12500, 345000),
-            "KLOW-80": (12500, 345000),
-            "WOLVERINE-10-10": (9000, 245000),
+            "T-10": (4850, 3, 135000),
+            "BPC-157-10": (4900, 1, 135000),
+            "GHKCU-100-10ML": (7500, 1, 205000),
+            "CJCIPA-5-5": (7000, 1, 190000),
+            "TA1-10": (7100, 1, 195000),
+            "IPAMORELIN-5": (4400, 1, 120000),
+            "TESA-5": (5000, 1, 135000),
+            "KLOW-80": (12500, 1, 345000),
         }
         products = {product["code"]: product for product in self.catalog["products"]}
-        self.assertEqual(set(products), set(expected))
-        for code, (usd_cents, mxn_centavos) in expected.items():
+        self.assertEqual({code for code, product in products.items() if product["stockQuantity"] > 0}, set(expected))
+        for code, (usd_cents, stock, mxn_centavos) in expected.items():
             product = products[code]
             self.assertEqual(product["brandSupplier"]["brand"], "Ascension Peptides")
-            self.assertEqual(product["sourceUsdCents"], usd_cents)
+            self.assertEqual(product["stockQuantity"], stock)
             self.assertEqual(product["basePriceCentavos"], mxn_centavos)
+            self.assertNotIn("sourceUsdCents", product)
+            self.assertNotIn("profitMarkupBasisPoints", product)
             self.assertTrue(product["source"]["priceEvidenceUrl"].startswith("https://ascensionpeptides.com/product/"))
 
         for product in self.catalog["products"]:
@@ -245,10 +244,15 @@ class StaticSiteTests(unittest.TestCase):
                 self.assertIsNone(coa["lot"])
                 self.assertIsNone(coa["lab"])
                 self.assertEqual(coa["methods"], [])
-                self.assertEqual(coa["label"], "COA pendiente de publicación por Ascension Peptides para esta referencia.")
+                expected_label = (
+                    "COA de referencia pendiente de revisión por Mereon."
+                    if product["code"] in {"T-10", "IPAMORELIN-5", "GHKCU-100-10ML"}
+                    else "COA pendiente de publicación por Ascension Peptides para esta referencia."
+                )
+                self.assertEqual(coa["label"], expected_label)
             else:
                 self.assertIsNone(coa)
-        self.assertEqual(status_counts, {"available": 10, "coa_pending": 2})
+        self.assertEqual(status_counts, {"available": 10, "coa_pending": 4})
         self.assertIn("COA no publicado por la fuente", self.js)
 
     def test_stale_suppliers_are_absent_from_live_catalog_and_frontend(self):

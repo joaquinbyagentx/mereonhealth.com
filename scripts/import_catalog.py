@@ -17,7 +17,7 @@ import sys
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
-from decimal import Decimal, InvalidOperation
+
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -26,20 +26,45 @@ from urllib.parse import urlparse
 SOURCE_ORIGIN = "ascensionpeptides.com"
 SHOP_URL = "https://ascensionpeptides.com/shop/"
 API_URL = "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100"
-FX_SOURCE_URL = "https://api.frankfurter.app/latest?from=USD&to=MXN"
-FX_SOURCE_REDIRECT_URL = "https://api.frankfurter.dev/v1/latest?from=USD&to=MXN"
+FX_SOURCE_URL = "https://www.dof.gob.mx/indicadores.php"
 FX_SOURCE_DATE = "2026-08-03"
 USER_AGENT = "MereonCatalogImporter/2.0 (+https://mereonhealth.com)"
 OUTPUT_PATH = Path("data/catalog.json")
 
-FX_MXN_TEN_THOUSANDTHS_PER_USD = 173_207
+FX_MXN_TEN_THOUSANDTHS_PER_USD = 173_288
 LANDED_UPLIFT_BPS = 1300
 TARGET_PROFIT_MARKUP_BPS = 4000
 IVA_BPS = 1600
 CLEAN_INCREMENT_CENTAVOS = 5000
 ACCEPTED_EFFECTIVE_MARKUP_BPS = [3700, 4300]
 
+SUPPLIER_ORDER = {
+    "number": "33332",
+    "date": "2026-08-03",
+    "lines": {
+        "T-10": {"quantity": 3, "unitUsdCents": 4850},
+        "BPC-157-10": {"quantity": 1, "unitUsdCents": 4900},
+        "KLOW-80": {"quantity": 1, "unitUsdCents": 12500},
+        "CJCIPA-5-5": {"quantity": 1, "unitUsdCents": 7000},
+        "TA1-10": {"quantity": 1, "unitUsdCents": 7100},
+        "IPAMORELIN-5": {"quantity": 1, "unitUsdCents": 4400},
+        "TESA-5": {"quantity": 1, "unitUsdCents": 5000},
+        "GHKCU-100-10ML": {"quantity": 1, "unitUsdCents": 7500},
+    },
+}
+
 SELECTIONS = [
+    {
+        "code": "T-10",
+        "name": "T-10",
+        "slug": "t-10",
+        "sourceTitle": "T-10",
+        "presentation": "10 mg",
+        "coa": None,
+        "sourceCoaReviewPending": True,
+        "researchArea": "Identidad de catálogo sin ampliar",
+        "researchDescription": "Referencia conservada con el nombre exacto del pedido y del catálogo público de la fuente. Mereon no atribuye una identidad química adicional sin evidencia pública verificable.",
+    },
     {
         "code": "BPC-157-10",
         "name": "BPC-157",
@@ -79,12 +104,13 @@ SELECTIONS = [
         "researchDescription": "Péptido derivado de una secuencia mitocondrial, investigado para entender cómo las células utilizan la energía y responden ante cambios metabólicos y situaciones de estrés celular.",
     },
     {
-        "code": "GHKCU-100-3ML",
+        "code": "GHKCU-100-10ML",
         "name": "GHK-Cu",
-        "slug": "ghk-cu-100mg-3ml",
-        "sourceTitle": "GHK-CU (100MG) 3mL",
-        "presentation": "100 mg · 3 mL",
+        "slug": "ghk-cu-100mg-10ml",
+        "sourceTitle": "GHK-CU (100MG) 10mL",
+        "presentation": "100 mg · 10 mL",
         "coa": None,
+        "sourceCoaReviewPending": True,
         "researchArea": "Piel, colágeno y tejido conectivo",
         "researchDescription": "Tripéptido capaz de unirse al cobre, investigado para entender su participación en la formación de colágeno y en la respuesta de la piel y otros tejidos conectivos durante procesos de renovación y reparación.",
     },
@@ -101,6 +127,17 @@ SELECTIONS = [
         },
         "researchArea": "Señales hormonales y metabolismo",
         "researchDescription": "Mezcla de dos péptidos investigada para entender las señales que regulan la liberación de hormona de crecimiento y su relación con el metabolismo, el uso de energía y el mantenimiento de los tejidos.",
+    },
+    {
+        "code": "IPAMORELIN-5",
+        "name": "Ipamorelin",
+        "slug": "ipamorelin-5mg",
+        "sourceTitle": "Ipamorelin (5MG)",
+        "presentation": "5 mg",
+        "coa": None,
+        "sourceCoaReviewPending": True,
+        "researchArea": "Señales hormonales",
+        "researchDescription": "Pentapéptido investigado para entender la señalización del receptor de grelina y su relación experimental con la liberación de hormona de crecimiento.",
     },
     {
         "code": "TA1-10",
@@ -244,7 +281,7 @@ def require_source_origin(url: str) -> None:
 
 
 def require_fetch_url(url: str) -> None:
-    if url in {FX_SOURCE_URL, FX_SOURCE_REDIRECT_URL}:
+    if url == FX_SOURCE_URL:
         return
     require_source_origin(url)
 
@@ -318,17 +355,18 @@ def plain_source(product: Dict[str, Any]) -> str:
 
 
 def fetch_exchange_rate() -> int:
-    payload = json.loads(fetch(FX_SOURCE_URL).decode("utf-8"))
-    if payload.get("base") != "USD" or payload.get("date") != FX_SOURCE_DATE:
-        raise RuntimeError("Frankfurter response does not match the reviewed USD/date")
-    try:
-        rate = Decimal(str(payload["rates"]["MXN"]))
-    except (KeyError, InvalidOperation, TypeError) as error:
-        raise RuntimeError("Frankfurter response lacks a valid MXN rate") from error
-    scaled = rate * 10_000
-    if scaled != scaled.to_integral_value() or int(scaled) != FX_MXN_TEN_THOUSANDTHS_PER_USD:
-        raise RuntimeError("Frankfurter USD/MXN rate changed from the reviewed 17.3207")
-    return int(scaled)
+    page = fetch(FX_SOURCE_URL).decode("utf-8", "replace")
+    match = re.search(
+        rf"Tipo de Cambio y Tasas al\s+{re.escape('03/08/2026')}.*?DOLAR.*?([0-9]+\.[0-9]{{4}})",
+        page,
+        re.DOTALL,
+    )
+    if not match:
+        raise RuntimeError("DOF response does not contain the reviewed USD/date")
+    scaled = int(match.group(1).replace(".", ""))
+    if scaled != FX_MXN_TEN_THOUSANDTHS_PER_USD:
+        raise RuntimeError("DOF USD/MXN rate changed from the reviewed 17.3288")
+    return scaled
 
 
 def choose_product(products: List[Dict[str, Any]], selection: Dict[str, Any]) -> Optional[Dict[str, Any]]:
@@ -344,6 +382,7 @@ def coa_metadata(
     product_url: str,
     expected: Optional[Dict[str, Any]],
     verified_at: str,
+    source_coa_review_pending: bool = False,
 ) -> Optional[Dict[str, Any]]:
     require_public_source_url(product_url, "/product/")
     product_page = parse_page(product_url)
@@ -352,7 +391,7 @@ def coa_metadata(
         and urlparse(link).path.lower().endswith(".pdf")
     )))
     if expected is None:
-        if matches:
+        if matches and not source_coa_review_pending:
             raise RuntimeError(f"{product_url}: a COA is now published and requires reviewed metadata")
         return None
     coa_url = expected["url"]
@@ -404,14 +443,15 @@ def build_catalog() -> Dict[str, Any]:
             raise RuntimeError(
                 f"{selection['slug']}: source title changed from {selection['sourceTitle']!r} to {source_title!r}"
             )
-        if product.get("is_in_stock") is not True:
-            raise RuntimeError(f"{selection['slug']}: product is not currently in stock")
+
         prices = product.get("prices", {})
         if prices.get("currency_code") != "USD" or prices.get("currency_minor_unit") != 2:
             raise RuntimeError(f"{selection['slug']}: expected USD with 2 minor units")
         if not str(prices.get("price", "")).isdigit() or int(prices["price"]) <= 0:
             raise RuntimeError(f"{selection['slug']}: missing or invalid public USD price")
-        source_usd_cents = int(prices["price"])
+        public_source_usd_cents = int(prices["price"])
+        order_line = SUPPLIER_ORDER["lines"].get(selection["code"])
+        source_usd_cents = order_line["unitUsdCents"] if order_line else public_source_usd_cents
         price_centavos = base_price_centavos(
             source_usd_cents, fx_mxn_ten_thousandths_per_usd
         )
@@ -423,7 +463,12 @@ def build_catalog() -> Dict[str, Any]:
         product_url = product.get("permalink")
         if not product_url or not product_url.startswith(f"https://{SOURCE_ORIGIN}/product/"):
             raise RuntimeError(f"{selection['slug']}: missing or unexpected product URL")
-        coa = coa_metadata(product_url, selection["coa"], fetched_at)
+        coa = coa_metadata(
+            product_url,
+            selection["coa"],
+            fetched_at,
+            selection.get("sourceCoaReviewPending", False),
+        )
         status = "available" if coa else "coa_pending"
         images = product.get("images") or []
         if not images:
@@ -454,9 +499,9 @@ def build_catalog() -> Dict[str, Any]:
                 "sourcePresentation": source_title,
                 "fetchedAt": fetched_at,
             },
-            "sourceUsdCents": source_usd_cents,
+            "stockQuantity": order_line["quantity"] if order_line else 0,
+            "purchaseEnabled": order_line is not None,
             "basePriceCentavos": price_centavos,
-            "profitMarkupBasisPoints": profit_markup,
             "image": {
                 "assetPath": f"assets/images/products/{image_filename}",
                 "sourceUrl": source_image_url,
@@ -466,7 +511,11 @@ def build_catalog() -> Dict[str, Any]:
             "coa": coa or {
                 "url": None,
                 "kind": "pending",
-                "label": "COA pendiente de publicación por Ascension Peptides para esta referencia.",
+                "label": (
+                    "COA de referencia pendiente de revisión por Mereon."
+                    if selection.get("sourceCoaReviewPending")
+                    else "COA pendiente de publicación por Ascension Peptides para esta referencia."
+                ),
                 "lot": None,
                 "lab": None,
                 "methods": [],
@@ -477,19 +526,16 @@ def build_catalog() -> Dict[str, Any]:
         normalized.append(record)
 
     return {
-        "schemaVersion": 2,
+        "schemaVersion": 3,
         "generatedAt": fetched_at,
         "sourceNotice": "Ascension Peptides public catalog data is a research input. No reseller, affiliate, authorization, or official-distributor relationship is implied.",
         "pricingAssumptions": {
             "fxMxnTenThousandthsPerUsd": fx_mxn_ten_thousandths_per_usd,
             "fxSourceUrl": FX_SOURCE_URL,
             "fxSourceDate": FX_SOURCE_DATE,
-            "landedUpliftBasisPoints": LANDED_UPLIFT_BPS,
-            "targetProfitMarkupBasisPoints": TARGET_PROFIT_MARKUP_BPS,
             "ivaIncludedBasisPoints": IVA_BPS,
-            "acceptedEffectiveMarkupRangeBasisPoints": ACCEPTED_EFFECTIVE_MARKUP_BPS,
             "cleanPriceIncrementCentavos": CLEAN_INCREMENT_CENTAVOS,
-            "rule": "Supplier USD price × 17.3207 MXN/USD × 1.13 landed uplift × 1.40 markup; nearest MXN 50, exact midpoint upward. No separate IVA multiplier is added; checkout transparently extracts included IVA from the displayed final amount.",
+            "rule": "Public prices are IVA-inclusive and rounded to MXN 50. Checkout adds shipping only and extracts included IVA informationally.",
         },
         "products": normalized,
     }
@@ -508,7 +554,7 @@ def main() -> int:
         if not args.check:
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_text(json.dumps(catalog, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-        print(f"Catalog validated: 12 products; available={available}; coa_pending={pending}; evaluation={evaluation}")
+        print(f"Catalog validated: {len(catalog['products'])} products; available={available}; coa_pending={pending}; evaluation={evaluation}")
         print(f"Source: {API_URL}")
         print("Output: check-only" if args.check else f"Output: {args.output}")
         return 0

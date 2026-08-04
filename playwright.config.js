@@ -7,8 +7,14 @@ export default defineConfig({
   workers: 1,
   retries: 0,
   outputDir: '/tmp/mereon-playwright-results',
+  webServer: {
+    command: 'npm run build:static && STATIC_ROOT=dist node tests/serve.mjs',
+    url: 'http://127.0.0.1:8766',
+    reuseExistingServer: false,
+    timeout: 10_000
+  },
   use: {
-    baseURL: process.env.BASE_URL || 'http://127.0.0.1:8000',
+    baseURL: process.env.BASE_URL || 'http://127.0.0.1:8766',
     screenshot: 'only-on-failure',
     trace: 'retain-on-failure'
   },

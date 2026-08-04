@@ -1,4 +1,15 @@
 import { test, expect } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+
+const catalogFixture = JSON.parse(readFileSync(new URL('../../data/catalog.json', import.meta.url), 'utf8'));
+const isSellable = (product) => product.purchaseEnabled === true && product.stockQuantity > 0;
+const liveProducts = catalogFixture.products.filter(isSellable).map((product) => ({ code: product.code, name: product.name, unitAmount: product.basePriceCentavos, available: product.stockQuantity }));
+
+test.beforeEach(async ({ page }) => {
+  await page.route('https://fonts.googleapis.com/**', (route) => route.fulfill({ status: 200, contentType: 'text/css', body: '' }));
+  await page.route('https://fonts.gstatic.com/**', (route) => route.abort());
+  await page.route('https://api.mereonhealth.com/v1/catalog', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ currency: 'mxn', products: liveProducts }) }));
+});
 
 async function trackRuntimeFailures(page) {
   const errors = [];
@@ -18,16 +29,16 @@ async function trackRuntimeFailures(page) {
 test('responsive catalog has no runtime errors or horizontal overflow', async ({ page }) => {
   const errors = await trackRuntimeFailures(page);
   await page.goto('/');
-  await expect(page.locator('.product-card')).toHaveCount(12);
-  await expect(page.locator('.product-card .product-card__research-area')).toHaveCount(12);
-  await expect(page.locator('.product-card .mereon-verified-badge')).toHaveCount(10);
-  await expect(page.locator('[data-catalog-status]')).toContainText('12 de 12');
+  await expect(page.locator('.product-card')).toHaveCount(14);
+  await expect(page.locator('.product-card .product-card__research-area')).toHaveCount(14);
+  await expect(page.locator('.product-card .mereon-verified-badge')).toHaveCount(liveProducts.length);
+  await expect(page.locator('[data-catalog-status]')).toContainText('14 de 14');
   const catalogPayload = await page.request.get('/data/catalog.json').then((response) => response.json());
   for (const product of catalogPayload.products) {
     const card = page.locator(`.product-card:has([data-detail="${product.code}"])`);
     await expect(card.locator('.product-card__research-area')).toHaveText(product.researchArea);
   }
-  const clarification = 'Las descripciones presentan áreas estudiadas en investigación preclínica y no establecen eficacia, seguridad ni una indicación terapéutica. Los materiales ofrecidos por Mereon son exclusivamente para investigación y referencia analítica; no están destinados a consumo, administración o uso diagnóstico, terapéutico o veterinario.';
+  const clarification = 'Las descripciones presentan áreas estudiadas en investigación preclínica y no establecen eficacia, seguridad ni una indicación terapéutica. Los materiales ofrecidos por Mereon son exclusivamente para investigación.';
   await expect(page.getByText(clarification, { exact: true })).toHaveCount(1);
   const faqItems = page.locator('.faq__items > details');
   await expect(faqItems).toHaveCount(4);
@@ -60,7 +71,7 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   await expect(researchTrigger).toBeFocused();
   await expect(page.locator('.faq__items > details').last().locator('summary')).toHaveText('¿Qué significa “péptido de investigación”?');
   await expect(page.locator('.coa-card-link[href]')).toHaveCount(10);
-  await expect(page.locator('.coa-card-link--disabled')).toHaveCount(2);
+  await expect(page.locator('.coa-card-link--disabled')).toHaveCount(4);
   for (const link of await page.locator('.coa-card-link[href]').all()) {
     await expect(link).toHaveAttribute('target', '_blank');
     await expect(link).toHaveAttribute('rel', /noopener/);
@@ -68,14 +79,14 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   }
   await page.getByRole('button', { name: 'Mezclas' }).click();
   await expect(page.locator('.product-card')).toHaveCount(4);
-  await expect(page.locator('[data-catalog-status]')).toContainText('4 de 12');
+  await expect(page.locator('[data-catalog-status]')).toContainText('4 de 14');
   await page.getByRole('button', { name: 'Compuestos' }).click();
-  await expect(page.locator('.product-card')).toHaveCount(8);
+  await expect(page.locator('.product-card')).toHaveCount(10);
   await page.getByRole('button', { name: 'Todos' }).click();
-  await expect(page.locator('.product-card')).toHaveCount(12);
+  await expect(page.locator('.product-card')).toHaveCount(14);
 
   const productImages = page.locator('.product-visual--photo img');
-  await expect(productImages).toHaveCount(12);
+  await expect(productImages).toHaveCount(14);
   for (const image of await productImages.all()) {
     await image.scrollIntoViewIfNeeded();
     await expect(image).toHaveJSProperty('complete', true);
@@ -90,14 +101,14 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   expect(overflow.body).toBeLessThanOrEqual(1);
   expect(Math.max(...overflow.cards)).toBeLessThanOrEqual(1);
 
-  const detailsButton = page.locator('[data-detail="TB500-5"]');
+  const detailsButton = page.locator('[data-detail="CJCIPA-5-5"]');
   await detailsButton.focus();
   await page.keyboard.press('Enter');
   await expect(page.locator('[data-product-dialog]')).toBeInViewport();
   await expect(page.locator('[data-product-dialog] .mereon-verified-badge')).toHaveCount(1);
-  await expect(page.locator('[data-product-dialog] .mereon-verified-note')).toContainText('origen estadounidense');
-  await expect(page.locator('[data-product-dialog] .mereon-verified-note')).toContainText('pruebas independientes');
-  await expect(page.locator('[data-product-dialog] .mereon-verified-note')).toContainText('Estado documental del lote');
+  await expect(page.locator('[data-product-dialog] .mereon-verified-note')).toContainText('Designación propia de Mereon');
+  await expect(page.locator('[data-product-dialog] .mereon-verified-note')).toContainText('El estado del COA se muestra por separado');
+  await expect(page.locator('[data-product-dialog] .coa-box')).toContainText('COA de referencia publicado por Ascension Peptides');
   await page.keyboard.press('Escape');
   await expect(page.locator('[data-product-dialog]')).not.toBeVisible();
 
@@ -117,6 +128,29 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   await page.keyboard.press('Escape');
   await expect(page.locator('[data-cart-dialog]')).not.toBeVisible();
   expect(errors).toEqual([]);
+});
+
+test('every sellable catalog SKU shows the exact Mereon designation on card and detail', async ({ page }) => {
+  await page.goto('/');
+  for (const product of catalogFixture.products) {
+    const sellable = isSellable(product);
+    const card = page.locator(`.product-card:has([data-detail="${product.code}"])`);
+    const cardBadge = card.locator('.mereon-verified-badge');
+    await expect(cardBadge).toHaveCount(sellable ? 1 : 0);
+    if (sellable) {
+      await expect(cardBadge).toHaveText('Mereon Verified™');
+      await expect(card.locator(`[data-add="${product.code}"]`)).toBeEnabled();
+    } else {
+      await expect(card.locator(`[data-add="${product.code}"]`)).toBeDisabled();
+    }
+
+    await card.locator(`[data-detail="${product.code}"]`).click();
+    const detail = page.locator('[data-product-dialog]');
+    const detailBadge = detail.locator('.mereon-verified-badge');
+    await expect(detailBadge).toHaveCount(sellable ? 1 : 0);
+    if (sellable) await expect(detailBadge).toHaveText('Mereon Verified™');
+    await detail.locator('[data-detail-close]').click();
+  }
 });
 
 test('official logo is accessible, proportional, and unclipped', async ({ page }) => {
@@ -157,7 +191,7 @@ test('reduced-motion preference disables smooth scrolling and transitions', asyn
   test.skip(testInfo.project.name !== 'desktop', 'CSS behavior is viewport-independent.');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
-  await expect(page.locator('.product-card')).toHaveCount(12);
+  await expect(page.locator('.product-card')).toHaveCount(14);
   const motion = await page.evaluate(() => ({
     scrollBehavior: getComputedStyle(document.documentElement).scrollBehavior,
     transitionSeconds: parseFloat(getComputedStyle(document.querySelector('.product-card')).transitionDuration)
@@ -208,8 +242,9 @@ test('cart add, quantity, totals, disabled payment, persistence, and removal wor
     }
   });
   await page.goto('/');
-  const firstCard = page.locator('.product-card').first();
-  await firstCard.getByRole('button', { name: 'Agregar' }).click();
+  const t10Card = page.locator('.product-card:has([data-detail="T-10"])');
+  await expect(t10Card.locator('.stock-label')).toHaveText('3 disponibles');
+  await t10Card.getByRole('button', { name: 'Agregar' }).click();
   await expect(page.locator('[data-cart-count]')).toHaveText('1');
 
   await page.locator('[data-cart-open]').click();
@@ -220,10 +255,12 @@ test('cart add, quantity, totals, disabled payment, persistence, and removal wor
   await expect(cart.locator('[data-shipping]')).toContainText('250.00');
   await expect(cart.locator('[data-iva]')).toContainText('220.69');
   await expect(cart.locator('[data-total]')).toContainText('1,600.00');
+  await expect(cart.getByText('De este total, IVA incluido (16%)')).toBeVisible();
+  await expect(cart.getByText('IVA se muestra como dato informativo y no se suma nuevamente.')).toBeVisible();
 
   const payment = cart.locator('[data-payment-button]');
-  await expect(payment).toBeDisabled();
-  await expect(payment).toHaveText('Pago no disponible');
+  await expect(payment).toBeEnabled();
+  await expect(payment).toHaveText('Continuar con datos de envío');
   await expect(cart.locator('[data-payment-state]')).toHaveCount(0);
   await expect(cart.locator('.privacy-note')).toHaveCount(0);
   expect(outboundMutations).toEqual([]);
@@ -243,20 +280,97 @@ test('cart add, quantity, totals, disabled payment, persistence, and removal wor
   expect(errors).toEqual([]);
 });
 
-test('COA-pending product disables external navigation and remains transparent', async ({ page }, testInfo) => {
+test('stock availability disables unordered products and clamps restored carts', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop', 'Stock behavior is viewport-independent; cart layout is exercised in every project.');
+  await page.addInitScript(() => localStorage.setItem('mereon-research-cart-v1', JSON.stringify([
+    { code: 'T-10', quantity: 99 },
+    { code: 'BPC-157-10', quantity: 4 },
+    { code: 'TB500-5', quantity: 2 }
+  ])));
+  await page.goto('/');
+
+  await expect(page.locator('.product-card:has([data-detail="TB500-5"]) .stock-label')).toHaveText('Agotado');
+  await expect(page.locator('[data-add="TB500-5"]')).toBeDisabled();
+  await expect(page.locator('.product-card:has([data-detail="BPC-157-10"]) .stock-label')).toHaveText('Última unidad');
+  await expect(page.locator('[data-cart-count]')).toHaveText('4');
+
+  const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('mereon-research-cart-v1')));
+  expect(stored).toEqual([{ code: 'T-10', quantity: 3 }, { code: 'BPC-157-10', quantity: 1 }]);
+
+  await page.locator('[data-cart-open]').click();
+  const t10 = page.locator('.cart-item:has-text("T-10")');
+  await expect(t10.getByRole('button', { name: 'Aumentar cantidad' })).toBeDisabled();
+  await expect(t10).toContainText('Máximo disponible: 3');
+});
+
+test('checkout validates Mexico delivery data and sends no client prices before Stripe redirect', async ({ page }) => {
+  let checkoutPayload;
+  await page.route('https://api.mereonhealth.com/v1/checkout', async (route) => {
+    checkoutPayload = route.request().postDataJSON();
+    await route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ checkoutUrl: 'https://checkout.stripe.com/c/pay/cs_live_safe_test' }) });
+  });
+  await page.route('https://checkout.stripe.com/**', (route) => route.abort());
+  await page.goto('/');
+  await page.locator('[data-add="T-10"]').click();
+  await page.locator('[data-cart-open]').click();
+  await page.locator('[data-payment-button]').click();
+  const form = page.locator('[data-checkout-form]');
+  await expect(form).toBeVisible();
+  await form.locator('[data-checkout-submit]').click();
+  await expect(form.locator('[name="fullName"]')).toBeFocused();
+  await form.locator('[name="fullName"]').fill('Cliente Interno');
+  await form.locator('[name="email"]').fill('partnerships@mereonhealth.com');
+  await form.locator('[name="phone"]').fill('123');
+  await form.locator('[name="address1"]').fill('Av. Reforma 100');
+  await form.locator('[name="colonia"]').fill('Centro');
+  await form.locator('[name="municipality"]').fill('Cuauhtémoc');
+  await form.locator('[name="city"]').fill('Ciudad de México');
+  await form.locator('[name="state"]').selectOption('CMX');
+  await form.locator('[name="postalCode"]').fill('06000');
+  await form.locator('[name="ruoAccepted"]').check();
+  await form.locator('[data-checkout-submit]').click();
+  await expect(form.locator('[name="phone"]')).toBeFocused();
+  await form.locator('[name="phone"]').fill('55 1234 5678');
+  const stripeRequest = page.waitForRequest('https://checkout.stripe.com/c/pay/cs_live_safe_test');
+  await Promise.all([page.waitForRequest('https://api.mereonhealth.com/v1/checkout'), form.locator('[data-checkout-submit]').click()]);
+  expect((await stripeRequest).url()).toBe('https://checkout.stripe.com/c/pay/cs_live_safe_test');
+  expect(checkoutPayload.currency).toBe('mxn');
+  expect(checkoutPayload.shippingId).toBe('standard');
+  expect(checkoutPayload.lines).toEqual([{ code: 'T-10', quantity: 1 }]);
+  expect(checkoutPayload.customer.country).toBe('MX');
+  expect(checkoutPayload.ruoAccepted).toBe(true);
+  expect(JSON.stringify(checkoutPayload)).not.toMatch(/unitAmount|unitPrice|subtotal|shippingAmount|total|iva|tax/i);
+});
+
+test('success and cancellation pages trust only API-verified state', async ({ page }) => {
+  const token = 'a'.repeat(64);
+  const cors = { 'access-control-allow-origin': 'http://127.0.0.1:8766', 'access-control-allow-methods': 'POST', 'access-control-allow-headers': 'Content-Type' };
+  await page.route('https://api.mereonhealth.com/v1/orders/status', (route) => route.fulfill(route.request().method() === 'OPTIONS'
+    ? { status: 204, headers: cors }
+    : { status: 200, contentType: 'application/json', headers: cors, body: JSON.stringify({ orderNumber: 'MEREON-20260803-ABC123', status: 'paid', lines: [{ name: 'T-10', presentation: '10 mg', quantity: 1, lineTotal: 135000 }], subtotal: 135000, shipping: { label: 'Estándar', amount: 25000 }, total: 160000, includedIva: 22069 }) }));
+  await page.goto(`/checkout-success.html#token=${token}`);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Pago confirmado');
+  await expect(page.locator('[data-order-summary]')).toContainText('$1,600.00');
+  await expect(page.locator('body')).not.toContainText('Av. Reforma');
+  await page.route('https://api.mereonhealth.com/v1/orders/cancel', (route) => route.fulfill(route.request().method() === 'OPTIONS' ? { status: 204, headers: cors } : { status: 200, contentType: 'application/json', headers: cors, body: '{"cancelled":true}' }));
+  await page.goto(`/checkout-cancel.html#token=${token}`);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Pago cancelado');
+  await expect(page.locator('[data-state-message]')).toContainText('No se realizó ningún cargo');
+});
+
+test('COA-pending sellable product keeps the COA state separate from its Mereon designation', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop', 'Single behavior check is sufficient; responsive layout is covered separately.');
   await page.goto('/');
   const firstCard = page.locator('.product-card').first();
-  await expect(firstCard).toContainText('COA pendiente de publicación por Ascension Peptides');
-  await expect(firstCard.locator('.mereon-verified-badge')).toHaveCount(0);
+  await expect(firstCard).toContainText('COA de referencia pendiente de revisión por Mereon');
+  await expect(firstCard.locator('.mereon-verified-badge')).toHaveText('Mereon Verified™');
   await expect(firstCard.locator('a[href$=".pdf"]')).toHaveCount(0);
   await firstCard.locator('[data-detail]').click();
   const detail = page.locator('[data-product-dialog]');
   await expect(detail).toBeInViewport();
-  await expect(detail).toContainText('COA pendiente de publicación por Ascension Peptides');
-  await expect(detail).not.toContainText('Mereon Verified');
-  await expect(detail.locator('.mereon-verified-badge')).toHaveCount(0);
-  await expect(detail.locator('.mereon-verified-note')).toHaveCount(0);
+  await expect(detail).toContainText('COA de referencia pendiente de revisión por Mereon');
+  await expect(detail.locator('.mereon-verified-badge')).toHaveText('Mereon Verified™');
+  await expect(detail.locator('.mereon-verified-note')).toHaveCount(1);
   await expect(detail.getByRole('link', { name: /Ver COA/ })).toHaveCount(0);
   await expect(detail.locator('[aria-disabled="true"]')).toHaveText('Ver COA no disponible');
   await expect(detail).not.toContainText('null');

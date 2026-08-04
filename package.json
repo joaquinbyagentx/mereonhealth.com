@@ -3,12 +3,22 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test tests/catalog.test.mjs && python3 tests/static_checks.py && python3 tests/importer_test.py",
+    "build:static": "node scripts/build-static.mjs",
+    "test": "node --test tests/catalog.test.mjs && python3 tests/static_checks.py && python3 tests/importer_test.py && node --test tests/publish-artifact.test.mjs",
     "test:browser": "playwright test",
+    "test:backend": "node --test tests/backend/*.test.mjs",
+    "worker:dev": "wrangler dev",
+    "worker:deploy": "wrangler deploy",
+    "worker:migrate:local": "wrangler d1 migrations apply mereon-checkout-production --local",
+    "worker:migrate:remote": "wrangler d1 migrations apply mereon-checkout-production --remote",
     "catalog:import": "python3 scripts/import_catalog.py",
     "catalog:check": "python3 scripts/import_catalog.py --check"
   },
   "devDependencies": {
-    "@playwright/test": "1.62.1"
+    "@playwright/test": "1.62.1",
+    "wrangler": "^4.35.0"
+  },
+  "overrides": {
+    "undici": ">=7.29.0"
   }
 }

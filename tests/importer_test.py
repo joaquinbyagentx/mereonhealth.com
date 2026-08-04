@@ -17,6 +17,33 @@ SPEC.loader.exec_module(IMPORTER)
 
 
 class ImporterSecurityTests(unittest.TestCase):
+    def test_order_costs_recompute_exact_approved_prices_without_adding_iva(self):
+        expected = {
+            "T-10": 135000,
+            "BPC-157-10": 135000,
+            "KLOW-80": 345000,
+            "CJCIPA-5-5": 190000,
+            "TA1-10": 195000,
+            "IPAMORELIN-5": 120000,
+            "TESA-5": 135000,
+            "GHKCU-100-10ML": 205000,
+        }
+        self.assertEqual(IMPORTER.FX_MXN_TEN_THOUSANDTHS_PER_USD, 173288)
+        for code, clean_price in expected.items():
+            line = IMPORTER.SUPPLIER_ORDER["lines"][code]
+            numerator = (
+                line["unitUsdCents"]
+                * 173288
+                * 11300
+                * 14000
+            )
+            denominator = 10000 * 10000 * 10000 * 5000
+            independently_computed = IMPORTER.round_div(numerator, denominator) * 5000
+            computed = IMPORTER.base_price_centavos(line["unitUsdCents"])
+            self.assertEqual(computed, independently_computed, code)
+            self.assertEqual(computed, clean_price, code)
+            self.assertEqual(computed % IMPORTER.CLEAN_INCREMENT_CENTAVOS, 0, code)
+
     def test_importer_research_copy_matches_canonical_catalog_exactly(self):
         catalog = json.loads((ROOT / "data" / "catalog.json").read_text(encoding="utf-8"))
         expected = [
@@ -36,8 +63,14 @@ class ImporterSecurityTests(unittest.TestCase):
             for selection in IMPORTER.SELECTIONS
         ]
 
-        self.assertEqual(len(actual), 12)
+        self.assertEqual(len(actual), 14)
         self.assertEqual(actual, expected)
+        for product in catalog["products"]:
+            self.assertEqual(
+                product["purchaseEnabled"],
+                product["code"] in IMPORTER.SUPPLIER_ORDER["lines"],
+                product["code"],
+            )
 
     def test_cross_origin_redirect_fails_before_body_is_read(self):
         class RedirectedResponse:
@@ -90,12 +123,12 @@ class ImporterSecurityTests(unittest.TestCase):
                 )
 
     def test_exchange_rate_is_fetched_and_validated_exactly(self):
-        payload = b'{"base":"USD","date":"2026-08-03","rates":{"MXN":17.3207}}'
+        payload = b'<html><body>Tipo de Cambio y Tasas al 03/08/2026 <span>DOLAR</span> 17.3288</body></html>'
         with patch.object(IMPORTER, "fetch", return_value=payload):
-            self.assertEqual(IMPORTER.fetch_exchange_rate(), 173207)
+            self.assertEqual(IMPORTER.fetch_exchange_rate(), 173288)
 
     def test_exchange_rate_change_fails_closed(self):
-        payload = b'{"base":"USD","date":"2026-08-03","rates":{"MXN":17.3208}}'
+        payload = b'<html><body>Tipo de Cambio y Tasas al 03/08/2026 <span>DOLAR</span> 17.3289</body></html>'
         with patch.object(IMPORTER, "fetch", return_value=payload):
             with self.assertRaisesRegex(RuntimeError, "rate changed"):
                 IMPORTER.fetch_exchange_rate()
@@ -141,8 +174,8 @@ class ImporterSecurityTests(unittest.TestCase):
                 )
 
     def test_catalog_build_rejects_missing_reviewed_product(self):
-        unrelated = [{"slug": f"unrelated-{index}"} for index in range(12)]
-        with patch.object(IMPORTER, "fetch_exchange_rate", return_value=173207), patch.object(
+        unrelated = [{"slug": f"unrelated-{index}"} for index in range(14)]
+        with patch.object(IMPORTER, "fetch_exchange_rate", return_value=173288), patch.object(
             IMPORTER, "fetch", return_value=json.dumps(unrelated).encode()
         ):
             with self.assertRaisesRegex(RuntimeError, "reviewed product is missing"):

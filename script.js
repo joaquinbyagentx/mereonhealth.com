@@ -5,7 +5,9 @@ import {
   normalizeCart,
   updateQuantity
 } from './pricing.js';
+import { paymentAdapter } from './payment-adapter.js';
 const CART_KEY = 'mereon-research-cart-v1';
+const MEREON_DESIGNATION = 'Mereon Verified™';
 const BLEND_CODES = new Set(['CJCIPA-5-5', 'GLOW-70', 'KLOW-80', 'WOLVERINE-10-10']);
 const TONES = [
   ['#5d9784', '#d6f5e8'], ['#8e745d', '#f0ddcb'], ['#546f81', '#d9e9f1'],
@@ -26,6 +28,11 @@ const cartItems = document.querySelector('[data-cart-items]');
 const cartCount = document.querySelector('[data-cart-count]');
 const cartTrigger = document.querySelector('[data-cart-open]');
 const paymentButton = document.querySelector('[data-payment-button]');
+const checkoutAvailability = document.querySelector('[data-checkout-availability]');
+const checkoutDialog = document.querySelector('[data-checkout-dialog]');
+const checkoutForm = document.querySelector('[data-checkout-form]');
+const checkoutError = document.querySelector('[data-checkout-error]');
+const checkoutSubmit = document.querySelector('[data-checkout-submit]');
 const toast = document.querySelector('[data-toast]');
 const navToggle = document.querySelector('.nav-toggle');
 const primaryNav = document.querySelector('#primary-nav');
@@ -67,6 +74,8 @@ let productByCode = new Map();
 let cart = [];
 let shippingId = 'standard';
 let activeFilter = 'all';
+let inventoryVerified = false;
+let checkoutBusy = false;
 let toastTimer;
 
 function escapeHtml(value) {
@@ -76,13 +85,23 @@ function escapeHtml(value) {
 }
 
 function isPurchasable(product) {
-  return product.status === 'available' || product.status === 'coa_pending';
+  return product.purchaseEnabled === true && Number(product.stockQuantity) > 0;
+}
+
+function stockByCode() {
+  return new Map(catalog.map((product) => [product.code, isPurchasable(product) ? product.stockQuantity : 0]));
+}
+
+function stockLabel(product) {
+  if (product.stockQuantity < 1) return 'Agotado';
+  if (product.stockQuantity === 1) return 'Última unidad';
+  return `${product.stockQuantity} disponibles`;
 }
 
 function statusLabel(product) {
   if (product.status === 'evaluation') return 'En evaluación';
-  if (product.status === 'coa_pending') return 'COA pendiente';
-  return 'Disponible';
+  if (product.status === 'coa_pending') return 'COA de referencia pendiente';
+  return 'COA de referencia revisado';
 }
 
 function visualMarkup(product, index) {
@@ -105,12 +124,12 @@ function renderCatalog() {
   grid.innerHTML = products.map((product) => {
     const index = catalog.findIndex((item) => item.code === product.code);
     const purchasable = isPurchasable(product);
-    const price = purchasable ? formatMxn(product.basePriceCentavos) : 'Precio por confirmar';
+    const price = product.status === 'evaluation' ? 'Precio por confirmar' : formatMxn(product.basePriceCentavos);
     const coaAction = product.coa?.url
       ? `<a class="coa-card-link" href="${escapeHtml(product.coa.url)}" target="_blank" rel="noopener noreferrer" aria-label="Ver COA de referencia de ${escapeHtml(product.name)} en sitio externo">Ver COA <span aria-hidden="true">↗</span></a>`
       : `<span class="coa-card-link coa-card-link--disabled" aria-disabled="true">${escapeHtml(product.coa?.label || 'COA no publicado por la fuente')}</span>`;
-    const verificationBadge = product.status === 'available'
-      ? '<span class="mereon-verified-badge" aria-label="Mereon Verified"><span aria-hidden="true">M</span><strong>Mereon Verified™</strong></span>'
+    const verificationBadge = purchasable
+      ? `<span class="mereon-verified-badge" aria-label="Designación propia de Mereon"><span aria-hidden="true"></span><strong>${MEREON_DESIGNATION}</strong></span>`
       : '';
     return `<article class="product-card" data-kind="${BLEND_CODES.has(product.code) ? 'blend' : 'single'}">
       ${visualMarkup(product, index)}
@@ -122,9 +141,10 @@ function renderCatalog() {
         <p class="product-card__research"><span>Área de investigación</span><strong class="product-card__research-area">${escapeHtml(product.researchArea)}</strong></p>
         <p class="supplier-line"><span>${escapeHtml(product.brandSupplier.role)}</span><strong>${escapeHtml(product.brandSupplier.brand)}</strong></p>
         <span class="status-badge ${product.status === 'available' ? '' : 'status-badge--pending'}">${statusLabel(product)}</span>
+        <span class="stock-label ${product.stockQuantity < 1 ? 'stock-label--out' : 'stock-label--low'}">${stockLabel(product)}</span>
         <div class="product-price"><strong>${price}</strong><small>IVA incluido · envío al pagar</small></div>
         <div class="product-actions">
-          <button class="button button--primary" type="button" data-add="${escapeHtml(product.code)}" ${purchasable ? '' : 'disabled'}>Agregar</button>
+          <button class="button button--primary" type="button" data-add="${escapeHtml(product.code)}" ${purchasable ? '' : 'disabled'}>${purchasable ? 'Agregar' : 'Agotado'}</button>
           <button class="details-button" type="button" data-detail="${escapeHtml(product.code)}" aria-label="Ver detalle de ${escapeHtml(product.name)}">↗</button>
         </div>
         ${coaAction}
@@ -179,9 +199,10 @@ function renderCart() {
         <div class="cart-item__controls" aria-label="Cantidad de ${escapeHtml(product.name)}">
           <button type="button" data-quantity="${escapeHtml(product.code)}" data-value="${quantity - 1}" aria-label="Reducir cantidad">−</button>
           <span aria-live="polite">${quantity}</span>
-          <button type="button" data-quantity="${escapeHtml(product.code)}" data-value="${quantity + 1}" aria-label="Aumentar cantidad">+</button>
+          <button type="button" data-quantity="${escapeHtml(product.code)}" data-value="${quantity + 1}" aria-label="Aumentar cantidad" ${quantity >= product.stockQuantity ? 'disabled' : ''}>+</button>
           <button type="button" data-remove="${escapeHtml(product.code)}">Quitar</button>
         </div>
+        <p class="cart-item__stock">Máximo disponible: ${product.stockQuantity}</p>
       </div>
       <strong>${formatMxn(product.basePriceCentavos * quantity)}</strong>
     </article>`).join('') : '<div class="empty-cart"><p>Tu selección está vacía.</p><button class="button" type="button" data-cart-close>Explorar catálogo</button></div>';
@@ -195,11 +216,15 @@ function renderCart() {
   document.querySelector('[data-iva]').textContent = formatMxn(totals.ivaCentavos);
   document.querySelector('[data-total]').textContent = formatMxn(totals.finalTotalCentavos);
   document.querySelectorAll('input[name="shipping"]').forEach((input) => { input.disabled = !lines.length; });
-  paymentButton.disabled = true;
+  paymentButton.disabled = !lines.length || !inventoryVerified || checkoutBusy;
+  paymentButton.textContent = inventoryVerified ? 'Continuar con datos de envío' : 'Pago temporalmente no disponible';
+  checkoutAvailability.textContent = inventoryVerified
+    ? 'Existencias verificadas. El cobro será exactamente subtotal más envío.'
+    : 'No pudimos verificar existencias en tiempo real. La compra permanece desactivada.';
 }
 
 function changeQuantity(code, quantity) {
-  cart = updateQuantity(cart, code, quantity);
+  cart = updateQuantity(cart, code, quantity, stockByCode());
   persistCart();
   renderCart();
 }
@@ -208,6 +233,10 @@ function addToCart(code) {
   const product = productByCode.get(code);
   if (!product || !isPurchasable(product)) return;
   const existing = cart.find((line) => line.code === code);
+  if ((existing?.quantity || 0) >= product.stockQuantity) {
+    showToast(`Ya seleccionaste el máximo disponible de ${product.name}.`);
+    return;
+  }
   changeQuantity(code, (existing?.quantity || 0) + 1);
   showToast(`${product.name} se agregó a tu selección.`);
 }
@@ -222,10 +251,10 @@ function showToast(message) {
 function renderDetail(product) {
   const index = catalog.findIndex((item) => item.code === product.code);
   const coa = product.coa;
-  const verificationMarkup = product.status === 'available'
+  const verificationMarkup = isPurchasable(product)
     ? `<div class="mereon-verified-note">
-        <span class="mereon-verified-badge" aria-label="Mereon Verified"><span aria-hidden="true">M</span><strong>Mereon Verified™</strong></span>
-        <p>Mereon Verified™ identifica una selección Mereon de origen estadounidense, evaluada con criterios de pruebas independientes, identidad, pureza y trazabilidad. Estado documental del lote indicado a continuación.</p>
+        <span class="mereon-verified-badge" aria-label="Designación propia de Mereon"><span aria-hidden="true"></span><strong>${MEREON_DESIGNATION}</strong></span>
+        <p>Designación propia de Mereon para este producto disponible. El estado del COA se muestra por separado.</p>
       </div>`
     : '';
   const coaMarkup = coa?.url ? `<div class="coa-box">
@@ -248,7 +277,8 @@ function renderDetail(product) {
         <p class="product-detail__research-description">${escapeHtml(product.researchDescription)}</p>
       </section>
       ${coaMarkup}
-      <div class="product-detail__actions"><button class="button button--primary" type="button" data-add="${escapeHtml(product.code)}" ${isPurchasable(product) ? '' : 'disabled'}>${isPurchasable(product) ? `Agregar · ${formatMxn(product.basePriceCentavos)}` : 'En evaluación'}</button></div>
+      <p class="stock-label ${product.stockQuantity < 1 ? 'stock-label--out' : 'stock-label--low'}">${stockLabel(product)}</p>
+      <div class="product-detail__actions"><button class="button button--primary" type="button" data-add="${escapeHtml(product.code)}" ${isPurchasable(product) ? '' : 'disabled'}>${isPurchasable(product) ? `Agregar · ${formatMxn(product.basePriceCentavos)}` : 'Agotado'}</button></div>
     </div>
   </div>`;
   productDialog.showModal();
@@ -306,6 +336,79 @@ document.querySelector('[data-shipping-options]').addEventListener('change', (ev
     renderCart();
   }
 });
+
+paymentButton.addEventListener('click', () => {
+  if (paymentButton.disabled) return;
+  checkoutError.hidden = true;
+  cartDialog.close();
+  checkoutDialog.showModal();
+  checkoutForm.elements.fullName.focus();
+});
+document.querySelector('[data-checkout-close]').addEventListener('click', () => checkoutDialog.close());
+checkoutDialog.addEventListener('click', (event) => { if (event.target === checkoutDialog && !checkoutBusy) checkoutDialog.close(); });
+checkoutForm.elements.phone.addEventListener('input', () => checkoutForm.elements.phone.setCustomValidity(''));
+
+checkoutForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  checkoutError.hidden = true;
+  if (!checkoutForm.reportValidity()) return;
+  const form = new FormData(checkoutForm);
+  const phoneDigits = String(form.get('phone') || '').replace(/[^\d+]/g, '').replace(/^\+/, '');
+  if (!/^(52)?\d{10}$/.test(phoneDigits)) {
+    checkoutForm.elements.phone.setCustomValidity('Ingresa un teléfono mexicano de 10 dígitos.');
+    checkoutForm.elements.phone.reportValidity();
+    return;
+  }
+  checkoutBusy = true;
+  checkoutSubmit.disabled = true;
+  checkoutSubmit.textContent = 'Creando sesión segura…';
+  renderCart();
+  const result = await paymentAdapter.createOrder({
+    currency: 'mxn', shippingId,
+    lines: cart.map(({ code, quantity }) => ({ code, quantity })),
+    customer: {
+      fullName: form.get('fullName'), email: form.get('email'), phone: form.get('phone'),
+      address1: form.get('address1'), interior: form.get('interior'), colonia: form.get('colonia'),
+      municipality: form.get('municipality'), city: form.get('city'), state: form.get('state'),
+      postalCode: form.get('postalCode'), country: 'MX', notes: form.get('notes')
+    },
+    ruoAccepted: form.get('ruoAccepted') === 'on'
+  });
+  if (result.ok) {
+    window.location.assign(result.checkoutUrl);
+    return;
+  }
+  checkoutBusy = false;
+  checkoutSubmit.disabled = false;
+  checkoutSubmit.textContent = 'Continuar a Stripe · pago seguro';
+  checkoutError.textContent = result.code === 'OUT_OF_STOCK'
+    ? 'Las existencias cambiaron. Actualiza tu carrito e inténtalo de nuevo.'
+    : 'No pudimos iniciar el pago. No se realizó ningún cargo. Inténtalo de nuevo.';
+  checkoutError.hidden = false;
+  renderCart();
+});
+
+async function syncInventory() {
+  const result = await paymentAdapter.getAvailability();
+  if (!result.ok) { inventoryVerified = false; renderCart(); return; }
+  const live = new Map(result.products.map((item) => [item.code, item]));
+  const purchasable = catalog.filter((product) => product.stockQuantity > 0);
+  const matches = purchasable.every((product) => {
+    const current = live.get(product.code);
+    return current && Number.isInteger(current.available) && current.available >= 0 && current.unitAmount === product.basePriceCentavos;
+  });
+  if (!matches) { inventoryVerified = false; renderCart(); return; }
+  catalog = catalog.map((product) => {
+    const current = live.get(product.code);
+    return current ? { ...product, stockQuantity: current.available } : product;
+  });
+  productByCode = new Map(catalog.map((product) => [product.code, product]));
+  inventoryVerified = true;
+  cart = normalizeCart(cart, stockByCode());
+  persistCart();
+  renderCatalog();
+  renderCart();
+}
 document.querySelectorAll('[data-filter]').forEach((button) => {
   button.addEventListener('click', () => {
     activeFilter = button.dataset.filter;
@@ -320,7 +423,14 @@ document.querySelectorAll('[data-filter]').forEach((button) => {
 
 window.addEventListener('storage', (event) => {
   if (event.key !== CART_KEY) return;
-  cart = normalizeCart(readStoredCart(), new Set(catalog.filter(isPurchasable).map((product) => product.code)));
+  let candidate;
+  try {
+    candidate = JSON.parse(event.newValue || '[]');
+  } catch {
+    candidate = [];
+  }
+  cart = normalizeCart(candidate, stockByCode());
+  if (JSON.stringify(cart) !== JSON.stringify(candidate)) persistCart();
   renderCart();
 });
 
@@ -331,14 +441,14 @@ try {
   const response = await fetch('./data/catalog.json', { cache: 'no-store' });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const payload = await response.json();
-  if (!Array.isArray(payload.products) || payload.products.length !== 12) throw new Error('Catálogo incompleto');
+  if (!Array.isArray(payload.products) || payload.products.length !== 14) throw new Error('Catálogo incompleto');
   catalog = payload.products;
   productByCode = new Map(catalog.map((product) => [product.code, product]));
-  const knownCodes = new Set(catalog.filter(isPurchasable).map((product) => product.code));
-  cart = normalizeCart(readStoredCart(), knownCodes);
+  cart = normalizeCart(readStoredCart(), stockByCode());
   persistCart();
   renderCatalog();
   renderCart();
+  await syncInventory();
 } catch (error) {
   console.error('Catalog initialization failed:', error);
   catalogStatus.textContent = 'Catálogo temporalmente no disponible';
