@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "generatedAt": "2026-08-03T23:13:57Z",
+  "generatedAt": "2026-08-04T04:21:36Z",
   "sourceNotice": "Ascension Peptides public catalog data is a research input. No reseller, affiliate, authorization, or official-distributor relationship is implied.",
   "products": [
     {
@@ -22,15 +22,15 @@
         "priceEvidenceUrl": "https://ascensionpeptides.com/product/t-10/",
         "sourceTitle": "T-10",
         "sourcePresentation": "T-10",
-        "fetchedAt": "2026-08-03T23:13:57Z"
+        "fetchedAt": "2026-08-04T04:21:36Z"
       },
       "stockQuantity": 3,
       "purchaseEnabled": true,
-      "basePriceCentavos": 135000,
+      "basePriceCentavos": 155000,
       "image": {
         "assetPath": "assets/images/products/t-10.png",
         "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2025/08/Ascension-T-10-10mg.webp",
-        "alt": "Fotografía de referencia Ascension Peptides de tirzepatida T-10 10 mg",
+        "alt": "Fotografía de referencia Ascension Peptides de Tirzepatida (T-10) 10 mg",
         "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
       },
       "coa": {
@@ -41,7 +41,7 @@
         "lab": null,
         "methods": [],
         "sourceDocumentTitle": null,
-        "verifiedAt": "2026-08-03T23:13:57Z"
+        "verifiedAt": "2026-08-04T04:21:36Z"
       }
     },
     {
@@ -63,11 +63,11 @@
         "priceEvidenceUrl": "https://ascensionpeptides.com/product/bpc-157-10mg/",
         "sourceTitle": "BPC-157 (10mg)",
         "sourcePresentation": "BPC-157 (10mg)",
-        "fetchedAt": "2026-08-03T23:13:57Z"
+        "fetchedAt": "2026-08-04T04:21:36Z"
       },
       "stockQuantity": 1,
       "purchaseEnabled": true,
-      "basePriceCentavos": 135000,
+      "basePriceCentavos": 160000,
       "image": {
         "assetPath": "assets/images/products/bpc-157-10.png",
         "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/03/Ascension-BPC-157-10mg-scaled.jpg",
@@ -82,7 +82,7 @@
         "lab": null,
         "methods": [],
         "sourceDocumentTitle": null,
-        "verifiedAt": "2026-08-03T23:13:57Z"
+        "verifiedAt": "2026-08-04T04:21:36Z"
       }
     },
     {
@@ -99,19 +99,19 @@
       },
       "source": {
         "catalogUrl": "https://ascensionpeptides.com/shop/",
-        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?slug=semax-10mg",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
         "productUrl": "https://ascensionpeptides.com/product/semax-10mg/",
         "priceEvidenceUrl": "https://ascensionpeptides.com/product/semax-10mg/",
         "sourceTitle": "Semax (10MG)",
         "sourcePresentation": "Semax (10MG)",
-        "fetchedAt": "2026-08-03T23:13:57Z"
+        "fetchedAt": "2026-08-04T04:21:36Z"
       },
       "stockQuantity": 3,
       "purchaseEnabled": true,
-      "basePriceCentavos": 165000,
+      "basePriceCentavos": 180000,
       "image": {
         "assetPath": "assets/images/products/semax-10.png",
-        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-Semax-10mg-1024x1024.webp",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-Semax-10mg.webp",
         "alt": "Fotografía de referencia Ascension Peptides de Semax 10 mg",
         "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
       },
@@ -123,8 +123,8 @@
         "lot": "30-05260628",
         "lab": "Kovera Labs",
         "methods": [],
-        "sourceDocumentTitle": "Certificate of Analysis — lote 30-05260628 (2026-06-23)",
-        "verifiedAt": "2026-08-03T23:13:57Z"
+        "sourceDocumentTitle": "Certificate of Analysis — lote 30-05260628",
+        "verifiedAt": "2026-08-04T04:21:36Z"
       }
     },
     {
@@ -146,11 +146,11 @@
         "priceEvidenceUrl": "https://ascensionpeptides.com/product/tb-500-5mg/",
         "sourceTitle": "TB-500 (5MG)",
         "sourcePresentation": "TB-500 (5MG)",
-        "fetchedAt": "2026-08-03T23:13:57Z"
+        "fetchedAt": "2026-08-04T04:21:36Z"
       },
       "stockQuantity": 0,
       "purchaseEnabled": false,
-      "basePriceCentavos": 150000,
+      "basePriceCentavos": 170000,
       "image": {
         "assetPath": "assets/images/products/tb500-5.png",
         "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-TB-500-5mg.webp",
@@ -169,7 +169,7 @@
           "LC-MS"
         ],
         "sourceDocumentTitle": "Certificate of Analysis — lote 31-01260229",
-        "verifiedAt": "2026-08-03T23:13:57Z"
+        "verifiedAt": "2026-08-04T04:21:36Z"
       }
     },
     {
@@ -191,11 +191,11 @@
         "priceEvidenceUrl": "https://ascensionpeptides.com/product/mots-c-10mg/",
         "sourceTitle": "MOTS-C (10MG)",
         "sourcePresentation": "MOTS-C (10MG)",
-        "fetchedAt": "2026-08-03T23:13:57Z"
+        "fetchedAt": "2026-08-04T04:21:36Z"
       },
       "stockQuantity": 0,
       "purchaseEnabled": false,
-      "basePriceCentavos": 135000,
+      "basePriceCentavos": 160000,
       "image": {
         "assetPath": "assets/images/products/motsc-10.png",
         "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-MOTS-C-10mg.jpg",
@@ -214,7 +214,7 @@
           "LC-MS"
         ],
         "sourceDocumentTitle": "Certificate of Analysis — lote 24-01260229",
-        "verifiedAt": "2026-08-03T23:13:57Z"
+        "verifiedAt": "2026-08-04T04:21:36Z"
       }
     },
     {
@@ -236,11 +236,11 @@
         "priceEvidenceUrl": "https://ascensionpeptides.com/product/ghk-cu-100mg-10ml/",
         "sourceTitle": "GHK-CU (100MG) 10mL",
         "sourcePresentation": "GHK-CU (100MG) 10mL",
-        "fetchedAt": "2026-08-03T23:13:57Z"
+        "fetchedAt": "2026-08-04T04:21:36Z"
       },
       "stockQuantity": 1,
       "purchaseEnabled": true,
-      "basePriceCentavos": 205000,
+      "basePriceCentavos": 210000,
       "image": {
         "assetPath": "assets/images/products/ghkcu-100-10ml.png",
         "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2026/07/Ascension-GHK-Cu-100mg-10mL.webp",
@@ -255,7 +255,7 @@
         "lab": null,
         "methods": [],
         "sourceDocumentTitle": null,
-        "verifiedAt": "2026-08-03T23:13:57Z"
+        "verifiedAt": "2026-08-04T04:21:36Z"
       }
     },
     {
@@ -277,11 +277,11 @@
         "priceEvidenceUrl": "https://ascensionpeptides.com/product/fit-stack-cjc-1295-ipamorelin/",
         "sourceTitle": "CJC-1295 No DAC 5mg + Ipamorelin 5mg (FIT Stack 10mg)",
         "sourcePresentation": "CJC-1295 No DAC 5mg + Ipamorelin 5mg (FIT Stack 10mg)",
-        "fetchedAt": "2026-08-03T23:13:57Z"
+        "fetchedAt": "2026-08-04T04:21:36Z"
       },
       "stockQuantity": 1,
       "purchaseEnabled": true,
-      "basePriceCentavos": 190000,
+      "basePriceCentavos": 200000,
       "image": {
         "assetPath": "assets/images/products/cjcipa-5-5.png",
         "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2025/06/Ascension-FIT-Stack-CJC-1295IPAMORELIN.webp",
@@ -303,7 +303,7 @@
           "metales pesados"
         ],
         "sourceDocumentTitle": "Certificate of Analysis — lote 06-05260628",
-        "verifiedAt": "2026-08-03T23:13:57Z"
+        "verifiedAt": "2026-08-04T04:21:36Z"
       }
     },
     {
@@ -325,11 +325,11 @@
         "priceEvidenceUrl": "https://ascensionpeptides.com/product/ipamorelin-5mg/",
         "sourceTitle": "Ipamorelin (5MG)",
         "sourcePresentation": "Ipamorelin (5MG)",
-        "fetchedAt": "2026-08-03T23:13:57Z"
+        "fetchedAt": "2026-08-04T04:21:36Z"
       },
       "stockQuantity": 1,
       "purchaseEnabled": true,
-      "basePriceCentavos": 120000,
+      "basePriceCentavos": 150000,
       "image": {
         "assetPath": "assets/images/products/ipamorelin-5.png",
         "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-Ipamorelin-5mg.jpg",
@@ -344,7 +344,7 @@
         "lab": null,
         "methods": [],
         "sourceDocumentTitle": null,
-        "verifiedAt": "2026-08-03T23:13:57Z"
+        "verifiedAt": "2026-08-04T04:21:36Z"
       }
     },
     {
@@ -366,11 +366,11 @@
         "priceEvidenceUrl": "https://ascensionpeptides.com/product/thymosin-alpha-1-10mg/",
         "sourceTitle": "Thymosin Alpha 1 (10MG)",
         "sourcePresentation": "Thymosin Alpha 1 (10MG)",
-        "fetchedAt": "2026-08-03T23:13:57Z"
+        "fetchedAt": "2026-08-04T04:21:36Z"
       },
       "stockQuantity": 1,
       "purchaseEnabled": true,
-      "basePriceCentavos": 195000,
+      "basePriceCentavos": 200000,
       "image": {
         "assetPath": "assets/images/products/ta1-10.png",
         "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-Thymosin-Alpha-1-10mg.webp",
@@ -392,7 +392,7 @@
           "metales pesados"
         ],
         "sourceDocumentTitle": "Certificate of Analysis — lote 33-05260628",
-        "verifiedAt": "2026-08-03T23:13:57Z"
+        "verifiedAt": "2026-08-04T04:21:36Z"
       }
     },
     {
@@ -414,11 +414,11 @@
         "priceEvidenceUrl": "https://ascensionpeptides.com/product/tesamorelin-5mg/",
         "sourceTitle": "Tesamorelin (5MG)",
         "sourcePresentation": "Tesamorelin (5MG)",
-        "fetchedAt": "2026-08-03T23:13:57Z"
+        "fetchedAt": "2026-08-04T04:21:36Z"
       },
       "stockQuantity": 1,
       "purchaseEnabled": true,
-      "basePriceCentavos": 135000,
+      "basePriceCentavos": 160000,
       "image": {
         "assetPath": "assets/images/products/tesa-5.png",
         "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-Tesamorelin-5mg.webp",
@@ -437,7 +437,7 @@
           "LC-MS"
         ],
         "sourceDocumentTitle": "Certificate of Analysis — lote 32-01260229",
-        "verifiedAt": "2026-08-03T23:13:57Z"
+        "verifiedAt": "2026-08-04T04:21:36Z"
       }
     },
     {
@@ -459,11 +459,11 @@
         "priceEvidenceUrl": "https://ascensionpeptides.com/product/epithalon-10mg/",
         "sourceTitle": "Epithalon (10mg)",
         "sourcePresentation": "Epithalon (10mg)",
-        "fetchedAt": "2026-08-03T23:13:57Z"
+        "fetchedAt": "2026-08-04T04:21:36Z"
       },
       "stockQuantity": 0,
       "purchaseEnabled": false,
-      "basePriceCentavos": 120000,
+      "basePriceCentavos": 150000,
       "image": {
         "assetPath": "assets/images/products/epithalon-10.png",
         "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/03/Ascension-Epithalon-10mg-scaled.jpg",
@@ -485,7 +485,7 @@
           "metales pesados"
         ],
         "sourceDocumentTitle": "Certificate of Analysis — lote 15-05260628",
-        "verifiedAt": "2026-08-03T23:13:57Z"
+        "verifiedAt": "2026-08-04T04:21:36Z"
       }
     },
     {
@@ -507,11 +507,11 @@
         "priceEvidenceUrl": "https://ascensionpeptides.com/product/kpv-10mg/",
         "sourceTitle": "KPV (10MG)",
         "sourcePresentation": "KPV (10MG)",
-        "fetchedAt": "2026-08-03T23:13:57Z"
+        "fetchedAt": "2026-08-04T04:21:36Z"
       },
       "stockQuantity": 0,
       "purchaseEnabled": false,
-      "basePriceCentavos": 135000,
+      "basePriceCentavos": 160000,
       "image": {
         "assetPath": "assets/images/products/kpv-10.png",
         "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-KPV-10mg.jpg",
@@ -533,7 +533,7 @@
           "metales pesados"
         ],
         "sourceDocumentTitle": "Certificate of Analysis — lote 20-05260628",
-        "verifiedAt": "2026-08-03T23:13:57Z"
+        "verifiedAt": "2026-08-04T04:21:36Z"
       }
     },
     {
@@ -555,11 +555,11 @@
         "priceEvidenceUrl": "https://ascensionpeptides.com/product/glow-advanced-peptide-blend-for-radiance-recovery/",
         "sourceTitle": "GHK-CU 50mg + BPC-157 10mg + TB-500 10mg (GLOW 70mg)",
         "sourcePresentation": "GHK-CU 50mg + BPC-157 10mg + TB-500 10mg (GLOW 70mg)",
-        "fetchedAt": "2026-08-03T23:13:57Z"
+        "fetchedAt": "2026-08-04T04:21:36Z"
       },
       "stockQuantity": 0,
       "purchaseEnabled": false,
-      "basePriceCentavos": 345000,
+      "basePriceCentavos": 305000,
       "image": {
         "assetPath": "assets/images/products/glow-70.png",
         "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2025/06/Ascension-Glow-70mg.webp",
@@ -581,7 +581,7 @@
           "metales pesados"
         ],
         "sourceDocumentTitle": "Certificate of Analysis — lote 07-05260628",
-        "verifiedAt": "2026-08-03T23:13:57Z"
+        "verifiedAt": "2026-08-04T04:21:36Z"
       }
     },
     {
@@ -603,11 +603,11 @@
         "priceEvidenceUrl": "https://ascensionpeptides.com/product/klow-ghk-cu-bpc-157-thymosin-beta4-kpv/",
         "sourceTitle": "GHK-Cu 50mg + BPC-157 10mg + TB-500 10mg + KPV 10mg (KLOW 80mg)",
         "sourcePresentation": "GHK-Cu 50mg + BPC-157 10mg + TB-500 10mg + KPV 10mg (KLOW 80mg)",
-        "fetchedAt": "2026-08-03T23:13:57Z"
+        "fetchedAt": "2026-08-04T04:21:36Z"
       },
       "stockQuantity": 1,
       "purchaseEnabled": true,
-      "basePriceCentavos": 345000,
+      "basePriceCentavos": 305000,
       "image": {
         "assetPath": "assets/images/products/klow-80.png",
         "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2025/10/Ascension-KLOW-80mg.webp",
@@ -626,7 +626,7 @@
           "LC-MS"
         ],
         "sourceDocumentTitle": "Certificate of Analysis — lote 46-01260229",
-        "verifiedAt": "2026-08-03T23:13:57Z"
+        "verifiedAt": "2026-08-04T04:21:36Z"
       }
     },
     {
@@ -648,11 +648,11 @@
         "priceEvidenceUrl": "https://ascensionpeptides.com/product/wolverine-stack/",
         "sourceTitle": "BPC-157 10mg + TB-500 10mg (Wolverine Stack 20mg)",
         "sourcePresentation": "BPC-157 10mg + TB-500 10mg (Wolverine Stack 20mg)",
-        "fetchedAt": "2026-08-03T23:13:57Z"
+        "fetchedAt": "2026-08-04T04:21:36Z"
       },
       "stockQuantity": 0,
       "purchaseEnabled": false,
-      "basePriceCentavos": 245000,
+      "basePriceCentavos": 240000,
       "image": {
         "assetPath": "assets/images/products/wolverine-10-10.png",
         "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2025/03/Ascension-Wolverine-Stack-20mg.webp",
@@ -674,7 +674,7 @@
           "metales pesados"
         ],
         "sourceDocumentTitle": "Certificate of Analysis — lote 08-05260628",
-        "verifiedAt": "2026-08-03T23:13:57Z"
+        "verifiedAt": "2026-08-04T04:21:36Z"
       }
     }
   ]
