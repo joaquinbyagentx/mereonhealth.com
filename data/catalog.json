@@ -1,0 +1,647 @@
+{
+  "schemaVersion": 3,
+  "generatedAt": "2026-08-03T23:13:57Z",
+  "sourceNotice": "Ascension Peptides public catalog data is a research input. No reseller, affiliate, authorization, or official-distributor relationship is implied.",
+  "pricingAssumptions": {
+    "fxMxnTenThousandthsPerUsd": 173288,
+    "fxSourceUrl": "https://www.dof.gob.mx/indicadores.php",
+    "fxSourceDate": "2026-08-03",
+    "ivaIncludedBasisPoints": 1600,
+    "cleanPriceIncrementCentavos": 5000,
+    "rule": "Public prices are IVA-inclusive and rounded to MXN 50. Checkout adds shipping only and extracts included IVA informationally."
+  },
+  "products": [
+    {
+      "code": "T-10",
+      "name": "T-10",
+      "presentation": "10 mg",
+      "status": "coa_pending",
+      "researchArea": "Identidad de catálogo sin ampliar",
+      "researchDescription": "Referencia conservada con el nombre exacto del pedido y del catálogo público de la fuente. Mereon no atribuye una identidad química adicional sin evidencia pública verificable.",
+      "brandSupplier": {
+        "brand": "Ascension Peptides",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/t-10/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/t-10/",
+        "sourceTitle": "T-10",
+        "sourcePresentation": "T-10",
+        "fetchedAt": "2026-08-03T23:13:57Z"
+      },
+      "stockQuantity": 3,
+      "purchaseEnabled": true,
+      "basePriceCentavos": 135000,
+      "image": {
+        "assetPath": "assets/images/products/t-10.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2025/08/Ascension-T-10-10mg.webp",
+        "alt": "Fotografía de referencia Ascension Peptides de T-10 10 mg",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": null,
+        "kind": "pending",
+        "label": "COA de referencia pendiente de revisión por Mereon.",
+        "lot": null,
+        "lab": null,
+        "methods": [],
+        "sourceDocumentTitle": null,
+        "verifiedAt": "2026-08-03T23:13:57Z"
+      }
+    },
+    {
+      "code": "BPC-157-10",
+      "name": "BPC-157",
+      "presentation": "10 mg",
+      "status": "coa_pending",
+      "researchArea": "Reparación de tejidos",
+      "researchDescription": "Investigado en modelos preclínicos para entender cómo responden los tejidos después de un daño y cómo se organizan durante su reparación, con especial interés en tejidos digestivos, musculares y conectivos.",
+      "brandSupplier": {
+        "brand": "Ascension Peptides",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/bpc-157-10mg/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/bpc-157-10mg/",
+        "sourceTitle": "BPC-157 (10mg)",
+        "sourcePresentation": "BPC-157 (10mg)",
+        "fetchedAt": "2026-08-03T23:13:57Z"
+      },
+      "stockQuantity": 1,
+      "purchaseEnabled": true,
+      "basePriceCentavos": 135000,
+      "image": {
+        "assetPath": "assets/images/products/bpc-157-10.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/03/Ascension-BPC-157-10mg-scaled.jpg",
+        "alt": "Fotografía de referencia Ascension Peptides de BPC-157 10 mg",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": null,
+        "kind": "pending",
+        "label": "COA pendiente de publicación por Ascension Peptides para esta referencia.",
+        "lot": null,
+        "lab": null,
+        "methods": [],
+        "sourceDocumentTitle": null,
+        "verifiedAt": "2026-08-03T23:13:57Z"
+      }
+    },
+    {
+      "code": "TB500-5",
+      "name": "TB-500",
+      "presentation": "5 mg",
+      "status": "available",
+      "researchArea": "Movimiento celular y reparación de tejidos",
+      "researchDescription": "Péptido relacionado con thymosin beta-4, investigado en modelos preclínicos para entender cómo se desplazan y organizan las células durante la respuesta de músculos, tendones y otros tejidos ante un daño.",
+      "brandSupplier": {
+        "brand": "Ascension Peptides",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/tb-500-5mg/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/tb-500-5mg/",
+        "sourceTitle": "TB-500 (5MG)",
+        "sourcePresentation": "TB-500 (5MG)",
+        "fetchedAt": "2026-08-03T23:13:57Z"
+      },
+      "stockQuantity": 0,
+      "purchaseEnabled": false,
+      "basePriceCentavos": 150000,
+      "image": {
+        "assetPath": "assets/images/products/tb500-5.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-TB-500-5mg.webp",
+        "alt": "Fotografía de referencia Ascension Peptides de TB-500 5 mg",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/03/COA_Thymosin_beta4_quant_31-01260229_20260214.pdf",
+        "sourceSha256": "92cdd2245957fb01cd54c4abd6827dab6db3d7e8ac1c99bb1dcddf53351232f2",
+        "kind": "source-reference",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "31-01260229",
+        "lab": "MZ Biolabs",
+        "methods": [
+          "HPLC",
+          "LC-MS"
+        ],
+        "sourceDocumentTitle": "Certificate of Analysis — lote 31-01260229",
+        "verifiedAt": "2026-08-03T23:13:57Z"
+      }
+    },
+    {
+      "code": "MOTSC-10",
+      "name": "MOTS-C",
+      "presentation": "10 mg",
+      "status": "available",
+      "researchArea": "Energía celular y metabolismo",
+      "researchDescription": "Péptido derivado de una secuencia mitocondrial, investigado para entender cómo las células utilizan la energía y responden ante cambios metabólicos y situaciones de estrés celular.",
+      "brandSupplier": {
+        "brand": "Ascension Peptides",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/mots-c-10mg/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/mots-c-10mg/",
+        "sourceTitle": "MOTS-C (10MG)",
+        "sourcePresentation": "MOTS-C (10MG)",
+        "fetchedAt": "2026-08-03T23:13:57Z"
+      },
+      "stockQuantity": 0,
+      "purchaseEnabled": false,
+      "basePriceCentavos": 135000,
+      "image": {
+        "assetPath": "assets/images/products/motsc-10.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-MOTS-C-10mg.jpg",
+        "alt": "Fotografía de referencia Ascension Peptides de MOTS-C 10 mg",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/03/COA_MOTS-C_quant_24-01260229_20260305.pdf",
+        "sourceSha256": "ace1d6f18d530a19c807f1aed83487ec3a52196a0e7b37dd4c2d828831b9a9f1",
+        "kind": "source-reference",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "24-01260229",
+        "lab": "MZ Biolabs",
+        "methods": [
+          "HPLC",
+          "LC-MS"
+        ],
+        "sourceDocumentTitle": "Certificate of Analysis — lote 24-01260229",
+        "verifiedAt": "2026-08-03T23:13:57Z"
+      }
+    },
+    {
+      "code": "GHKCU-100-10ML",
+      "name": "GHK-Cu",
+      "presentation": "100 mg · 10 mL",
+      "status": "coa_pending",
+      "researchArea": "Piel, colágeno y tejido conectivo",
+      "researchDescription": "Tripéptido capaz de unirse al cobre, investigado para entender su participación en la formación de colágeno y en la respuesta de la piel y otros tejidos conectivos durante procesos de renovación y reparación.",
+      "brandSupplier": {
+        "brand": "Ascension Peptides",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/ghk-cu-100mg-10ml/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/ghk-cu-100mg-10ml/",
+        "sourceTitle": "GHK-CU (100MG) 10mL",
+        "sourcePresentation": "GHK-CU (100MG) 10mL",
+        "fetchedAt": "2026-08-03T23:13:57Z"
+      },
+      "stockQuantity": 1,
+      "purchaseEnabled": true,
+      "basePriceCentavos": 205000,
+      "image": {
+        "assetPath": "assets/images/products/ghkcu-100-10ml.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2026/07/Ascension-GHK-Cu-100mg-10mL.webp",
+        "alt": "Fotografía de referencia Ascension Peptides de GHK-Cu 100 mg · 10 mL",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": null,
+        "kind": "pending",
+        "label": "COA de referencia pendiente de revisión por Mereon.",
+        "lot": null,
+        "lab": null,
+        "methods": [],
+        "sourceDocumentTitle": null,
+        "verifiedAt": "2026-08-03T23:13:57Z"
+      }
+    },
+    {
+      "code": "CJCIPA-5-5",
+      "name": "CJC-1295 No-DAC + Ipamorelin",
+      "presentation": "CJC-1295 No DAC 5 mg + Ipamorelin 5 mg · 10 mg total",
+      "status": "available",
+      "researchArea": "Señales hormonales y metabolismo",
+      "researchDescription": "Mezcla de dos péptidos investigada para entender las señales que regulan la liberación de hormona de crecimiento y su relación con el metabolismo, el uso de energía y el mantenimiento de los tejidos.",
+      "brandSupplier": {
+        "brand": "Ascension Peptides",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/fit-stack-cjc-1295-ipamorelin/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/fit-stack-cjc-1295-ipamorelin/",
+        "sourceTitle": "CJC-1295 No DAC 5mg + Ipamorelin 5mg (FIT Stack 10mg)",
+        "sourcePresentation": "CJC-1295 No DAC 5mg + Ipamorelin 5mg (FIT Stack 10mg)",
+        "fetchedAt": "2026-08-03T23:13:57Z"
+      },
+      "stockQuantity": 1,
+      "purchaseEnabled": true,
+      "basePriceCentavos": 190000,
+      "image": {
+        "assetPath": "assets/images/products/cjcipa-5-5.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2025/06/Ascension-FIT-Stack-CJC-1295IPAMORELIN.webp",
+        "alt": "Fotografía de referencia Ascension Peptides de CJC-1295 No-DAC + Ipamorelin CJC-1295 No DAC 5 mg + Ipamorelin 5 mg · 10 mg total",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/05/CJC-1295_No_DAC_Ipamorelin_06-05260628_COA.pdf",
+        "sourceSha256": "83fea5f4667f68af48c882197ef11786f1f0499618e4dd44f2946cab57e5d209",
+        "kind": "source-reference",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "06-05260628",
+        "lab": "Kovera Labs",
+        "methods": [
+          "RP-HPLC",
+          "LC-MS",
+          "endotoxinas",
+          "esterilidad",
+          "metales pesados"
+        ],
+        "sourceDocumentTitle": "Certificate of Analysis — lote 06-05260628",
+        "verifiedAt": "2026-08-03T23:13:57Z"
+      }
+    },
+    {
+      "code": "IPAMORELIN-5",
+      "name": "Ipamorelin",
+      "presentation": "5 mg",
+      "status": "coa_pending",
+      "researchArea": "Señales hormonales",
+      "researchDescription": "Pentapéptido investigado para entender la señalización del receptor de grelina y su relación experimental con la liberación de hormona de crecimiento.",
+      "brandSupplier": {
+        "brand": "Ascension Peptides",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/ipamorelin-5mg/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/ipamorelin-5mg/",
+        "sourceTitle": "Ipamorelin (5MG)",
+        "sourcePresentation": "Ipamorelin (5MG)",
+        "fetchedAt": "2026-08-03T23:13:57Z"
+      },
+      "stockQuantity": 1,
+      "purchaseEnabled": true,
+      "basePriceCentavos": 120000,
+      "image": {
+        "assetPath": "assets/images/products/ipamorelin-5.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-Ipamorelin-5mg.jpg",
+        "alt": "Fotografía de referencia Ascension Peptides de Ipamorelin 5 mg",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": null,
+        "kind": "pending",
+        "label": "COA de referencia pendiente de revisión por Mereon.",
+        "lot": null,
+        "lab": null,
+        "methods": [],
+        "sourceDocumentTitle": null,
+        "verifiedAt": "2026-08-03T23:13:57Z"
+      }
+    },
+    {
+      "code": "TA1-10",
+      "name": "Thymosin Alpha 1",
+      "presentation": "10 mg",
+      "status": "available",
+      "researchArea": "Respuesta inmunológica",
+      "researchDescription": "Investigado para entender cómo se comunican y coordinan las células del sistema inmunológico ante distintas señales y condiciones experimentales.",
+      "brandSupplier": {
+        "brand": "Ascension Peptides",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/thymosin-alpha-1-10mg/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/thymosin-alpha-1-10mg/",
+        "sourceTitle": "Thymosin Alpha 1 (10MG)",
+        "sourcePresentation": "Thymosin Alpha 1 (10MG)",
+        "fetchedAt": "2026-08-03T23:13:57Z"
+      },
+      "stockQuantity": 1,
+      "purchaseEnabled": true,
+      "basePriceCentavos": 195000,
+      "image": {
+        "assetPath": "assets/images/products/ta1-10.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-Thymosin-Alpha-1-10mg.webp",
+        "alt": "Fotografía de referencia Ascension Peptides de Thymosin Alpha 1 10 mg",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/05/Thymosin_alpha-1_33-05260628_COA.pdf",
+        "sourceSha256": "9b1b2ffb3c9dad063ab7534c4dde4220219e003f9234834e0b85b0e8b3fa312e",
+        "kind": "source-reference",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "33-05260628",
+        "lab": "Kovera Labs",
+        "methods": [
+          "RP-HPLC",
+          "LC-MS",
+          "endotoxinas",
+          "esterilidad",
+          "metales pesados"
+        ],
+        "sourceDocumentTitle": "Certificate of Analysis — lote 33-05260628",
+        "verifiedAt": "2026-08-03T23:13:57Z"
+      }
+    },
+    {
+      "code": "TESA-5",
+      "name": "Tesamorelin",
+      "presentation": "5 mg",
+      "status": "available",
+      "researchArea": "Regulación hormonal",
+      "researchDescription": "Análogo peptídico investigado para entender cómo se regula la liberación de hormona de crecimiento y cómo estas señales se relacionan con diferentes procesos metabólicos.",
+      "brandSupplier": {
+        "brand": "Ascension Peptides",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/tesamorelin-5mg/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/tesamorelin-5mg/",
+        "sourceTitle": "Tesamorelin (5MG)",
+        "sourcePresentation": "Tesamorelin (5MG)",
+        "fetchedAt": "2026-08-03T23:13:57Z"
+      },
+      "stockQuantity": 1,
+      "purchaseEnabled": true,
+      "basePriceCentavos": 135000,
+      "image": {
+        "assetPath": "assets/images/products/tesa-5.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-Tesamorelin-5mg.webp",
+        "alt": "Fotografía de referencia Ascension Peptides de Tesamorelin 5 mg",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/02/COA_Tesamorelin_quant_32-01260229_20260212.pdf",
+        "sourceSha256": "de121018334ead3efaba870acf1814f235c12ed32fd578a782f77f349a2985a4",
+        "kind": "source-reference",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "32-01260229",
+        "lab": "MZ Biolabs",
+        "methods": [
+          "HPLC",
+          "LC-MS"
+        ],
+        "sourceDocumentTitle": "Certificate of Analysis — lote 32-01260229",
+        "verifiedAt": "2026-08-03T23:13:57Z"
+      }
+    },
+    {
+      "code": "EPITHALON-10",
+      "name": "Epithalon",
+      "presentation": "10 mg",
+      "status": "available",
+      "researchArea": "Envejecimiento celular y telómeros",
+      "researchDescription": "Tetrapéptido investigado en modelos preclínicos para entender los cambios que ocurren en las células con el paso del tiempo y el papel de los telómeros en el mantenimiento celular.",
+      "brandSupplier": {
+        "brand": "Ascension Peptides",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/epithalon-10mg/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/epithalon-10mg/",
+        "sourceTitle": "Epithalon (10mg)",
+        "sourcePresentation": "Epithalon (10mg)",
+        "fetchedAt": "2026-08-03T23:13:57Z"
+      },
+      "stockQuantity": 0,
+      "purchaseEnabled": false,
+      "basePriceCentavos": 120000,
+      "image": {
+        "assetPath": "assets/images/products/epithalon-10.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/03/Ascension-Epithalon-10mg-scaled.jpg",
+        "alt": "Fotografía de referencia Ascension Peptides de Epithalon 10 mg",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/05/Epithalon_15-05260628_COA.pdf",
+        "sourceSha256": "cf40aad2b791b54b63223d9955350696530fd82cf9c404bef8c7148548931f2c",
+        "kind": "source-reference",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "15-05260628",
+        "lab": "Kovera Labs",
+        "methods": [
+          "RP-HPLC",
+          "LC-MS",
+          "endotoxinas",
+          "esterilidad",
+          "metales pesados"
+        ],
+        "sourceDocumentTitle": "Certificate of Analysis — lote 15-05260628",
+        "verifiedAt": "2026-08-03T23:13:57Z"
+      }
+    },
+    {
+      "code": "KPV-10",
+      "name": "KPV",
+      "presentation": "10 mg",
+      "status": "available",
+      "researchArea": "Respuesta inflamatoria",
+      "researchDescription": "Tripéptido investigado para entender cómo responden las células ante señales inflamatorias, especialmente en modelos relacionados con la piel y los tejidos del sistema digestivo.",
+      "brandSupplier": {
+        "brand": "Ascension Peptides",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/kpv-10mg/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/kpv-10mg/",
+        "sourceTitle": "KPV (10MG)",
+        "sourcePresentation": "KPV (10MG)",
+        "fetchedAt": "2026-08-03T23:13:57Z"
+      },
+      "stockQuantity": 0,
+      "purchaseEnabled": false,
+      "basePriceCentavos": 135000,
+      "image": {
+        "assetPath": "assets/images/products/kpv-10.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-KPV-10mg.jpg",
+        "alt": "Fotografía de referencia Ascension Peptides de KPV 10 mg",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/05/KPV_20-05260628_COA.pdf",
+        "sourceSha256": "ee84f58b6204e85449ba57fe40f131f5bcfd986536638a3f7210d8f78863fe7d",
+        "kind": "source-reference",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "20-05260628",
+        "lab": "Kovera Labs",
+        "methods": [
+          "RP-HPLC",
+          "LC-MS",
+          "endotoxinas",
+          "esterilidad",
+          "metales pesados"
+        ],
+        "sourceDocumentTitle": "Certificate of Analysis — lote 20-05260628",
+        "verifiedAt": "2026-08-03T23:13:57Z"
+      }
+    },
+    {
+      "code": "GLOW-70",
+      "name": "GLOW",
+      "presentation": "GHK-Cu 50 mg + BPC-157 10 mg + TB-500 10 mg · 70 mg total",
+      "status": "available",
+      "researchArea": "Piel, colágeno y reparación de tejidos",
+      "researchDescription": "Combina GHK-Cu, BPC-157 y TB-500, péptidos investigados en modelos preclínicos para entender la formación de colágeno, la organización celular y la respuesta de la piel y otros tejidos durante su reparación.",
+      "brandSupplier": {
+        "brand": "Ascension Peptides",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/glow-advanced-peptide-blend-for-radiance-recovery/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/glow-advanced-peptide-blend-for-radiance-recovery/",
+        "sourceTitle": "GHK-CU 50mg + BPC-157 10mg + TB-500 10mg (GLOW 70mg)",
+        "sourcePresentation": "GHK-CU 50mg + BPC-157 10mg + TB-500 10mg (GLOW 70mg)",
+        "fetchedAt": "2026-08-03T23:13:57Z"
+      },
+      "stockQuantity": 0,
+      "purchaseEnabled": false,
+      "basePriceCentavos": 345000,
+      "image": {
+        "assetPath": "assets/images/products/glow-70.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2025/06/Ascension-Glow-70mg.webp",
+        "alt": "Fotografía de referencia Ascension Peptides de GLOW GHK-Cu 50 mg + BPC-157 10 mg + TB-500 10 mg · 70 mg total",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/06/Glow_07-05260628_COA-combined.pdf",
+        "sourceSha256": "7a9ed6b6444ca1b8ab0f48bb29aeacbac60ae96b58265d1c208ac6376c573d21",
+        "kind": "source-reference",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "07-05260628",
+        "lab": "Kovera Labs",
+        "methods": [
+          "RP-HPLC",
+          "LC-MS",
+          "endotoxinas",
+          "esterilidad",
+          "metales pesados"
+        ],
+        "sourceDocumentTitle": "Certificate of Analysis — lote 07-05260628",
+        "verifiedAt": "2026-08-03T23:13:57Z"
+      }
+    },
+    {
+      "code": "KLOW-80",
+      "name": "KLOW",
+      "presentation": "GHK-Cu 50 mg + BPC-157 10 mg + TB-500 10 mg + KPV 10 mg · 80 mg total",
+      "status": "available",
+      "researchArea": "Reparación de tejidos y respuesta inflamatoria",
+      "researchDescription": "Combina GHK-Cu, BPC-157, TB-500 y KPV. Se investiga en modelos preclínicos para entender cómo se organizan los tejidos durante su reparación y cómo responden las células ante señales inflamatorias.",
+      "brandSupplier": {
+        "brand": "Ascension Peptides",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/klow-ghk-cu-bpc-157-thymosin-beta4-kpv/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/klow-ghk-cu-bpc-157-thymosin-beta4-kpv/",
+        "sourceTitle": "GHK-Cu 50mg + BPC-157 10mg + TB-500 10mg + KPV 10mg (KLOW 80mg)",
+        "sourcePresentation": "GHK-Cu 50mg + BPC-157 10mg + TB-500 10mg + KPV 10mg (KLOW 80mg)",
+        "fetchedAt": "2026-08-03T23:13:57Z"
+      },
+      "stockQuantity": 1,
+      "purchaseEnabled": true,
+      "basePriceCentavos": 345000,
+      "image": {
+        "assetPath": "assets/images/products/klow-80.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2025/10/Ascension-KLOW-80mg.webp",
+        "alt": "Fotografía de referencia Ascension Peptides de KLOW GHK-Cu 50 mg + BPC-157 10 mg + TB-500 10 mg + KPV 10 mg · 80 mg total",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/02/COA_KLOW_TB4_quant_46-01260229_20260212.pdf",
+        "sourceSha256": "c531a1bf872704c931579eaadf491db5bbabd2fda1ff83a5e93feee4315e6447",
+        "kind": "source-reference",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "46-01260229",
+        "lab": "MZ Biolabs",
+        "methods": [
+          "HPLC",
+          "LC-MS"
+        ],
+        "sourceDocumentTitle": "Certificate of Analysis — lote 46-01260229",
+        "verifiedAt": "2026-08-03T23:13:57Z"
+      }
+    },
+    {
+      "code": "WOLVERINE-10-10",
+      "name": "Wolverine Stack",
+      "presentation": "BPC-157 10 mg + TB-500 10 mg · 20 mg total",
+      "status": "available",
+      "researchArea": "Músculos, tendones y tejido conectivo",
+      "researchDescription": "Combina BPC-157 y TB-500, dos péptidos investigados en modelos preclínicos para entender la respuesta de músculos, tendones y tejido conectivo después de una lesión, daño o esfuerzo.",
+      "brandSupplier": {
+        "brand": "Ascension Peptides",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100",
+        "productUrl": "https://ascensionpeptides.com/product/wolverine-stack/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/wolverine-stack/",
+        "sourceTitle": "BPC-157 10mg + TB-500 10mg (Wolverine Stack 20mg)",
+        "sourcePresentation": "BPC-157 10mg + TB-500 10mg (Wolverine Stack 20mg)",
+        "fetchedAt": "2026-08-03T23:13:57Z"
+      },
+      "stockQuantity": 0,
+      "purchaseEnabled": false,
+      "basePriceCentavos": 245000,
+      "image": {
+        "assetPath": "assets/images/products/wolverine-10-10.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2025/03/Ascension-Wolverine-Stack-20mg.webp",
+        "alt": "Fotografía de referencia Ascension Peptides de Wolverine Stack BPC-157 10 mg + TB-500 10 mg · 20 mg total",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/06/BPC-157_TB-500_08-05260628_COA-combined.pdf",
+        "sourceSha256": "a18c0610b972b5a3ea2172c54b8f2a7f5d0c9a1eea98fea3fdfc6891f31b77e7",
+        "kind": "source-reference",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "08-05260628",
+        "lab": "Kovera Labs",
+        "methods": [
+          "RP-HPLC",
+          "LC-MS",
+          "endotoxinas",
+          "esterilidad",
+          "metales pesados"
+        ],
+        "sourceDocumentTitle": "Certificate of Analysis — lote 08-05260628",
+        "verifiedAt": "2026-08-03T23:13:57Z"
+      }
+    }
+  ]
+}

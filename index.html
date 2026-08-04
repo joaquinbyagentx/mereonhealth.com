@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2f3b32">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; connect-src 'self' https://api.mereonhealth.com; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+  <meta name="description" content="Mereon Health ofrece un catálogo premium de péptidos de investigación con precios claros, estado de COA y trazabilidad visible por referencia.">
+  <link rel="canonical" href="https://mereonhealth.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="Mereon Health — péptidos de investigación">
+  <meta property="og:description" content="Catálogo de péptidos de investigación con calidad documentada y trazabilidad visible.">
+  <meta property="og:url" content="https://mereonhealth.com/">
+  <meta property="og:image" content="https://mereonhealth.com/assets/images/hero-guided-shopping.webp">
+  <title>Mereon Health — péptidos de investigación</title>
+  <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="script.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <header class="site-header">
+    <a class="brand" href="#inicio" aria-label="Mereon, inicio">
+      <img src="assets/mereon-logo.svg" width="268" height="91" alt="">
+    </a>
+    <nav class="primary-nav" id="primary-nav" aria-label="Navegación principal">
+      <a href="#catalogo">Catálogo</a>
+      <a href="#calidad">Mereon Verified</a>
+      <a href="#faq">Preguntas</a>
+    </nav>
+    <button class="cart-trigger" type="button" data-cart-open aria-haspopup="dialog" aria-label="Abrir carrito, 0 artículos">
+      <span aria-hidden="true">Bolsa</span><span class="cart-count" data-cart-count>0</span>
+    </button>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Abrir navegación">
+      <span aria-hidden="true"></span><span aria-hidden="true"></span>
+    </button>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <img class="hero__image" src="assets/images/hero-guided-shopping.webp" width="1774" height="887" fetchpriority="high" alt="Preparación cuidadosa de un paquete en un espacio cálido">
+      <div class="hero__wash" aria-hidden="true"></div>
+      <div class="hero__copy">
+        <p class="eyebrow">Mereon Health · Péptidos de investigación</p>
+        <h1 id="hero-title">Tu salud merece <em>prioridad.</em></h1>
+        <p class="hero__lead">Un catálogo premium de péptidos de investigación, con precios claros, estado de COA y trazabilidad visible por referencia.</p>
+        <div class="hero__actions">
+          <a class="button button--primary" href="#catalogo">Explorar catálogo</a>
+          <a class="button button--quiet" href="#calidad">Conocer Mereon Verified</a>
+        </div>
+        <p class="hero__note">Exclusivamente para investigación y referencia analítica.</p>
+      </div>
+      <div class="hero__care-card" aria-label="Claves del catálogo Mereon">
+        <p>Información antes de comprar</p>
+        <ul>
+          <li><span>01</span><strong>14 referencias documentadas</strong></li>
+          <li><span>02</span><strong>Precios finales con IVA incluido</strong></li>
+          <li><span>03</span><strong>Estado de COA visible</strong></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="trust-strip" aria-label="Principios del catálogo Mereon">
+      <span>01 <b>Materiales de investigación</b></span>
+      <span>02 <b>Calidad documentada</b></span>
+      <span>03 <b>Trazabilidad documental</b></span>
+      <span>04 <b>Precios claros</b></span>
+    </section>
+
+    <section class="catalog section" id="catalogo" aria-labelledby="catalog-title">
+      <div class="section-heading">
+        <div><p class="eyebrow">Catálogo</p><h2 id="catalog-title">Péptidos de<br> investigación.</h2></div>
+        <div class="catalog-heading__aside">
+          <p>Precios incluyen IVA. Envío se calcula al pagar.</p>
+          <button class="catalog-explainer-link" type="button" data-research-open aria-haspopup="dialog" aria-controls="research-explainer">¿Qué significa?</button>
+        </div>
+      </div>
+      <aside class="catalog-context" aria-label="Contexto de las descripciones de investigación">
+        <strong>Contexto de investigación</strong>
+        <p>Las descripciones presentan áreas estudiadas en investigación preclínica y no establecen eficacia, seguridad ni una indicación terapéutica. Los materiales ofrecidos por Mereon son exclusivamente para investigación.</p>
+      </aside>
+      <div class="catalog-toolbar" aria-label="Filtros de catálogo">
+        <button type="button" class="filter is-active" data-filter="all" aria-pressed="true">Todos</button>
+        <button type="button" class="filter" data-filter="single" aria-pressed="false">Compuestos</button>
+        <button type="button" class="filter" data-filter="blend" aria-pressed="false">Mezclas</button>
+        <span data-catalog-status role="status">Cargando catálogo…</span>
+      </div>
+      <div class="product-grid" data-product-grid aria-live="polite"></div>
+      <noscript><p class="error-panel">Activa JavaScript para consultar precios, COA y carrito.</p></noscript>
+    </section>
+
+    <section class="quality section" id="calidad" aria-labelledby="quality-title">
+      <div class="quality__intro">
+        <p class="eyebrow">El estándar Mereon</p>
+        <div class="verified-mark" aria-label="Mereon Verified">
+          <span aria-hidden="true">M</span>
+          <strong>Mereon<br>Verified™</strong>
+        </div>
+        <h2 id="quality-title">Evidencia visible, referencia por referencia.</h2>
+        <p>Mereon Verified™ es la designación propia de Mereon para productos actualmente disponibles. No equivale a un COA; el estado documental de cada referencia se muestra por separado.</p>
+        <p class="verified-promise"><strong>Origen claro. Estado documental visible.</strong><br>Procedencia estadounidense, pruebas independientes cuando están publicadas y selección Mereon cuidadosa.</p>
+      </div>
+      <ol class="evidence-list" aria-label="Criterios Mereon Verified">
+        <li><span>01</span><div><h3>Origen estadounidense</h3><p>Abastecimiento, marcas premium y procedencia de laboratorio en Estados Unidos, claramente identificados.</p><b aria-hidden="true">✓</b></div></li>
+        <li><span>02</span><div><h3>Pruebas independientes</h3><p>La revisión por laboratorios independientes es central en nuestra evaluación de calidad.</p><b aria-hidden="true">✓</b></div></li>
+        <li><span>03</span><div><h3>Evidencia documentada</h3><p>COA y resultados analíticos, cuando están publicados, permiten revisar identidad y pureza. Cada referencia muestra su estado documental.</p><b aria-hidden="true">✓</b></div></li>
+        <li><span>04</span><div><h3>Trazabilidad y selección</h3><p>Documentación de origen y una selección Mereon cuidadosa para cada referencia.</p><b aria-hidden="true">✓</b></div></li>
+      </ol>
+    </section>
+
+    <section class="faq section" id="faq" aria-labelledby="faq-title">
+      <div class="faq__heading"><p class="eyebrow">Preguntas claras</p><h2 id="faq-title">Antes de avanzar.</h2></div>
+      <div class="faq__items">
+        <details open><summary>¿Qué significa Mereon Verified™?</summary><p>Es la designación propia de Mereon para un producto actualmente disponible. No sustituye ni implica un COA publicado; consulta por separado el estado documental de cada referencia.</p></details>
+        <details><summary>¿Qué es un COA?</summary><p>Es el certificado de análisis que documenta datos como identidad, pureza, métodos y resultados de la muestra.</p></details>
+        <details><summary>¿El precio incluye IVA y envío?</summary><p>Precios incluyen IVA. Envío se calcula al pagar.</p></details>
+        <details data-research-faq><summary><span id="research-explainer-title" role="heading" aria-level="3">¿Qué significa “péptido de investigación”?</span></summary><div class="research-dialog__copy"><p>Algunas moléculas de nuestro catálogo continúan siendo estudiadas por la comunidad científica en etapas preclínicas o clínicas. Otras comparten ingredientes activos con medicamentos ya autorizados en determinadas presentaciones y jurisdicciones.</p><p>La clasificación de investigación corresponde específicamente al material ofrecido por Mereon y no implica registro sanitario, equivalencia farmacéutica ni aprobación para una indicación terapéutica. Consulta la ficha técnica y la documentación de cada producto para conocer su condición particular.</p></div></details>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a class="brand brand--footer" href="#inicio" aria-label="Mereon, inicio"><img src="assets/mereon-logo.svg" width="268" height="91" alt=""></a>
+    <p>Péptidos de investigación con calidad y trazabilidad visibles.</p>
+    <div><a href="#catalogo">Catálogo</a><a href="#calidad">Mereon Verified</a><a href="#faq">Preguntas</a></div>
+    <small>© <span data-year></span> Mereon Health · México</small>
+  </footer>
+
+  <dialog class="dialog product-dialog" data-product-dialog aria-labelledby="detail-title">
+    <div data-product-detail></div>
+  </dialog>
+
+  <dialog class="dialog research-dialog" id="research-explainer" data-research-dialog aria-labelledby="research-explainer-title">
+    <div class="dialog-shell research-dialog__shell">
+      <header class="research-dialog__header">
+        <p class="eyebrow">Información del catálogo</p>
+        <button class="icon-button" type="button" data-research-close aria-label="Cerrar explicación" autofocus>×</button>
+      </header>
+      <div data-research-dialog-content></div>
+    </div>
+  </dialog>
+
+  <dialog class="dialog cart-dialog" data-cart-dialog aria-labelledby="cart-title">
+    <div class="dialog-shell cart-shell">
+      <header class="dialog-header">
+        <div><p class="eyebrow">Resumen de compra</p><h2 id="cart-title">Tu selección</h2></div>
+        <button class="icon-button" type="button" data-cart-close aria-label="Cerrar carrito">×</button>
+      </header>
+      <div class="cart-layout">
+        <section aria-labelledby="items-title">
+          <h3 class="sr-only" id="items-title">Artículos</h3>
+          <div data-cart-items></div>
+        </section>
+        <section class="checkout" aria-labelledby="checkout-title">
+          <p class="eyebrow">Resumen</p><h3 id="checkout-title">Envío y total</h3>
+          <fieldset class="shipping-options">
+            <legend>Selecciona envío</legend>
+            <div data-shipping-options></div>
+          </fieldset>
+          <dl class="totals" aria-live="polite">
+            <div><dt>Subtotal de productos</dt><dd data-subtotal>$0.00</dd></div>
+            <div><dt>Envío</dt><dd data-shipping>$0.00</dd></div>
+            <div class="totals__iva"><dt>De este total, IVA incluido (16%)</dt><dd data-iva>$0.00</dd></div>
+            <div class="totals__final"><dt>Total final</dt><dd data-total>$0.00</dd></div>
+          </dl>
+          <p class="iva-note">IVA se muestra como dato informativo y no se suma nuevamente.</p>
+          <p class="checkout-availability" data-checkout-availability role="status">Validando existencias…</p>
+          <button class="button button--primary button--checkout" type="button" data-payment-button disabled>Validando existencias…</button>
+        </section>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="dialog checkout-dialog" data-checkout-dialog aria-labelledby="customer-checkout-title">
+    <form class="checkout-form" data-checkout-form novalidate>
+      <header class="dialog-header">
+        <div><p class="eyebrow">Entrega en México</p><h2 id="customer-checkout-title">Datos de envío</h2></div>
+        <button class="icon-button" type="button" data-checkout-close aria-label="Cerrar datos de envío">×</button>
+      </header>
+      <p class="form-intro">Usaremos estos datos únicamente para procesar y entregar tu pedido. El pago se completa de forma segura en Stripe.</p>
+      <div class="form-grid">
+        <label class="field field--wide"><span>Nombre completo</span><input name="fullName" autocomplete="name" maxlength="120" required></label>
+        <label class="field"><span>Correo electrónico</span><input name="email" type="email" autocomplete="email" maxlength="254" required></label>
+        <label class="field"><span>Teléfono en México</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="18" placeholder="55 1234 5678" required></label>
+        <label class="field field--wide"><span>Calle y número exterior</span><input name="address1" autocomplete="address-line1" maxlength="160" required></label>
+        <label class="field"><span>Número interior <small>(opcional)</small></span><input name="interior" autocomplete="address-line2" maxlength="40"></label>
+        <label class="field"><span>Colonia</span><input name="colonia" maxlength="100" required></label>
+        <label class="field"><span>Municipio o alcaldía</span><input name="municipality" autocomplete="address-level2" maxlength="100" required></label>
+        <label class="field"><span>Ciudad o localidad</span><input name="city" autocomplete="address-level2" maxlength="100" required></label>
+        <label class="field"><span>Estado</span><select name="state" autocomplete="address-level1" required><option value="">Selecciona</option><option>AGS</option><option>BCN</option><option>BCS</option><option>CAM</option><option>CHH</option><option>CHP</option><option>CMX</option><option>COA</option><option>COL</option><option>DUR</option><option>GRO</option><option>GUA</option><option>HID</option><option>JAL</option><option>MEX</option><option>MIC</option><option>MOR</option><option>NAY</option><option>NLE</option><option>OAX</option><option>PUE</option><option>QUE</option><option>ROO</option><option>SIN</option><option>SLP</option><option>SON</option><option>TAB</option><option>TAM</option><option>TLA</option><option>VER</option><option>YUC</option><option>ZAC</option></select></label>
+        <label class="field"><span>Código postal</span><input name="postalCode" autocomplete="postal-code" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" required></label>
+        <label class="field"><span>País</span><input value="México" disabled><input name="country" type="hidden" value="MX"></label>
+        <label class="field field--wide"><span>Notas de entrega <small>(opcional)</small></span><textarea name="notes" maxlength="500" rows="3"></textarea></label>
+      </div>
+      <label class="ruo-acceptance"><input name="ruoAccepted" type="checkbox" required><span>Confirmo que los materiales son exclusivamente para investigación y referencia analítica, no para uso humano, diagnóstico o tratamiento.</span></label>
+      <p class="form-error" data-checkout-error role="alert" hidden></p>
+      <button class="button button--primary button--checkout" type="submit" data-checkout-submit>Continuar a Stripe · pago seguro</button>
+      <p class="payment-boundary">Mereon no recibe ni almacena los datos de tu tarjeta. Serás redirigido a Stripe Checkout.</p>
+    </form>
+  </dialog>
+
+  <div class="toast" data-toast role="status" aria-live="polite"></div>
+</body>
+</html>
