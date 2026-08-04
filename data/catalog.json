@@ -13,11 +13,11 @@
   "products": [
     {
       "code": "T-10",
-      "name": "T-10",
+      "name": "Tirzepatida (T-10)",
       "presentation": "10 mg",
       "status": "coa_pending",
-      "researchArea": "Identidad de catálogo sin ampliar",
-      "researchDescription": "Referencia conservada con el nombre exacto del pedido y del catálogo público de la fuente. Mereon no atribuye una identidad química adicional sin evidencia pública verificable.",
+      "researchArea": "Agonismo dual GIP/GLP-1 y metabolismo",
+      "researchDescription": "Tirzepatida, péptido sintético investigado como agonista dual de los receptores GIP y GLP-1 para estudiar señalización metabólica, regulación de glucosa y balance energético en modelos de investigación. Exclusivamente para investigación; no para uso humano.",
       "brandSupplier": {
         "brand": "Ascension Peptides",
         "role": "Marca / proveedor de referencia",
@@ -38,7 +38,7 @@
       "image": {
         "assetPath": "assets/images/products/t-10.png",
         "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2025/08/Ascension-T-10-10mg.webp",
-        "alt": "Fotografía de referencia Ascension Peptides de T-10 10 mg",
+        "alt": "Fotografía de referencia Ascension Peptides de tirzepatida T-10 10 mg",
         "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
       },
       "coa": {

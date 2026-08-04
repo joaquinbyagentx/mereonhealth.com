@@ -38,6 +38,9 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
     const card = page.locator(`.product-card:has([data-detail="${product.code}"])`);
     await expect(card.locator('.product-card__research-area')).toHaveText(product.researchArea);
   }
+  const tirzepatidaCard = page.locator('.product-card:has([data-detail="T-10"])');
+  await expect(tirzepatidaCard.locator('h3')).toHaveText('Tirzepatida (T-10)');
+  await expect(tirzepatidaCard.locator('.product-card__research-area')).toHaveText('Agonismo dual GIP/GLP-1 y metabolismo');
   const clarification = 'Las descripciones presentan áreas estudiadas en investigación preclínica y no establecen eficacia, seguridad ni una indicación terapéutica. Los materiales ofrecidos por Mereon son exclusivamente para investigación.';
   await expect(page.getByText(clarification, { exact: true })).toHaveCount(1);
   const faqItems = page.locator('.faq__items > details');

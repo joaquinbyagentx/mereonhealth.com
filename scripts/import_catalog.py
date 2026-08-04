@@ -67,14 +67,14 @@ def confirmed_inventory_line(code: str) -> Optional[Dict[str, int]]:
 SELECTIONS = [
     {
         "code": "T-10",
-        "name": "T-10",
+        "name": "Tirzepatida (T-10)",
         "slug": "t-10",
         "sourceTitle": "T-10",
         "presentation": "10 mg",
         "coa": None,
         "sourceCoaReviewPending": True,
-        "researchArea": "Identidad de catálogo sin ampliar",
-        "researchDescription": "Referencia conservada con el nombre exacto del pedido y del catálogo público de la fuente. Mereon no atribuye una identidad química adicional sin evidencia pública verificable.",
+        "researchArea": "Agonismo dual GIP/GLP-1 y metabolismo",
+        "researchDescription": "Tirzepatida, péptido sintético investigado como agonista dual de los receptores GIP y GLP-1 para estudiar señalización metabólica, regulación de glucosa y balance energético en modelos de investigación. Exclusivamente para investigación; no para uso humano.",
     },
     {
         "code": "BPC-157-10",

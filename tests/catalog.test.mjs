@@ -9,7 +9,7 @@ import { paymentAdapter } from '../payment-adapter.js';
 const isSellable = (product) => product.purchaseEnabled === true && product.stockQuantity > 0;
 
 const EXPECTED_RESEARCH_COPY = {
-  'T-10': ['Identidad de catálogo sin ampliar', 'Referencia conservada con el nombre exacto del pedido y del catálogo público de la fuente. Mereon no atribuye una identidad química adicional sin evidencia pública verificable.'],
+  'Tirzepatida (T-10)': ['Agonismo dual GIP/GLP-1 y metabolismo', 'Tirzepatida, péptido sintético investigado como agonista dual de los receptores GIP y GLP-1 para estudiar señalización metabólica, regulación de glucosa y balance energético en modelos de investigación. Exclusivamente para investigación; no para uso humano.'],
   'BPC-157': ['Reparación de tejidos', 'Investigado en modelos preclínicos para entender cómo responden los tejidos después de un daño y cómo se organizan durante su reparación, con especial interés en tejidos digestivos, musculares y conectivos.'],
   Semax: ['Neuroprotección y función cognitiva', 'Heptapéptido sintético derivado de ACTH, investigado en modelos preclínicos para estudiar mecanismos de neuroprotección, función cognitiva y regulación de BDNF, sin implicar uso humano ni eficacia terapéutica.'],
   'TB-500': ['Movimiento celular y reparación de tejidos', 'Péptido relacionado con thymosin beta-4, investigado en modelos preclínicos para entender cómo se desplazan y organizan las células durante la respuesta de músculos, tendones y otros tejidos ante un daño.'],
