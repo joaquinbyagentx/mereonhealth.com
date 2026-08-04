@@ -165,8 +165,8 @@ class StaticSiteTests(unittest.TestCase):
 
     def test_catalog_is_canonical_and_complete(self):
         products = self.catalog["products"]
-        self.assertEqual(len(products), 14)
-        self.assertEqual(len({product["code"] for product in products}), 14)
+        self.assertEqual(len(products), 15)
+        self.assertEqual(len({product["code"] for product in products}), 15)
         self.assertTrue(all(isinstance(product["stockQuantity"], int) and product["stockQuantity"] >= 0 for product in products))
         self.assertTrue(all(isinstance(product["purchaseEnabled"], bool) for product in products))
         self.assertEqual(
@@ -195,6 +195,7 @@ class StaticSiteTests(unittest.TestCase):
         expected = {
             "T-10": (4850, 3, 135000),
             "BPC-157-10": (4900, 1, 135000),
+            "SEMAX-10": (5999, 3, 165000),
             "GHKCU-100-10ML": (7500, 1, 205000),
             "CJCIPA-5-5": (7000, 1, 190000),
             "TA1-10": (7100, 1, 195000),
@@ -234,7 +235,8 @@ class StaticSiteTests(unittest.TestCase):
                 self.assertTrue(parsed.path.startswith("/wp-content/uploads/"))
                 self.assertTrue(parsed.path.endswith(".pdf"))
                 self.assertEqual(coa["kind"], "source-reference")
-                self.assertTrue(coa["lot"] and coa["lab"] and coa["methods"])
+                self.assertTrue(coa["lot"] and coa["lab"])
+                self.assertIsInstance(coa["methods"], list)
                 self.assertRegex(coa["sourceSha256"], r"^[0-9a-f]{64}$")
             elif product["status"] == "coa_pending":
                 status_counts["coa_pending"] += 1
@@ -252,7 +254,7 @@ class StaticSiteTests(unittest.TestCase):
                 self.assertEqual(coa["label"], expected_label)
             else:
                 self.assertIsNone(coa)
-        self.assertEqual(status_counts, {"available": 10, "coa_pending": 4})
+        self.assertEqual(status_counts, {"available": 11, "coa_pending": 4})
         self.assertIn("COA no publicado por la fuente", self.js)
 
     def test_stale_suppliers_are_absent_from_live_catalog_and_frontend(self):

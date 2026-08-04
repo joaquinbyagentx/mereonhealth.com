@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 
 import { SHIPPING_OPTIONS, calculateCheckoutTotals, normalizeCart, updateQuantity } from '../pricing.js';
 import catalog from '../data/catalog.json' with { type: 'json' };
@@ -10,6 +11,7 @@ const isSellable = (product) => product.purchaseEnabled === true && product.stoc
 const EXPECTED_RESEARCH_COPY = {
   'T-10': ['Identidad de catálogo sin ampliar', 'Referencia conservada con el nombre exacto del pedido y del catálogo público de la fuente. Mereon no atribuye una identidad química adicional sin evidencia pública verificable.'],
   'BPC-157': ['Reparación de tejidos', 'Investigado en modelos preclínicos para entender cómo responden los tejidos después de un daño y cómo se organizan durante su reparación, con especial interés en tejidos digestivos, musculares y conectivos.'],
+  Semax: ['Neuroprotección y función cognitiva', 'Heptapéptido sintético derivado de ACTH, investigado en modelos preclínicos para estudiar mecanismos de neuroprotección, función cognitiva y regulación de BDNF, sin implicar uso humano ni eficacia terapéutica.'],
   'TB-500': ['Movimiento celular y reparación de tejidos', 'Péptido relacionado con thymosin beta-4, investigado en modelos preclínicos para entender cómo se desplazan y organizan las células durante la respuesta de músculos, tendones y otros tejidos ante un daño.'],
   'MOTS-C': ['Energía celular y metabolismo', 'Péptido derivado de una secuencia mitocondrial, investigado para entender cómo las células utilizan la energía y responden ante cambios metabólicos y situaciones de estrés celular.'],
   'GHK-Cu': ['Piel, colágeno y tejido conectivo', 'Tripéptido capaz de unirse al cobre, investigado para entender su participación en la formación de colágeno y en la respuesta de la piel y otros tejidos conectivos durante procesos de renovación y reparación.'],
@@ -35,9 +37,9 @@ test('browser catalog preserves public FX provenance without exposing supplier e
   assert.doesNotMatch(catalog.pricingAssumptions.rule, /supplier|cost|markup|uplift/i);
 });
 
-test('catalog keeps 14 unique references without exposing order costs', () => {
-  assert.equal(catalog.products.length, 14);
-  assert.equal(new Set(catalog.products.map((product) => product.code)).size, 14);
+test('catalog keeps 15 unique references without exposing order costs', () => {
+  assert.equal(catalog.products.length, 15);
+  assert.equal(new Set(catalog.products.map((product) => product.code)).size, 15);
   for (const product of catalog.products) {
     assert.equal(product.brandSupplier.brand, 'Ascension Peptides');
     assert.match(product.source.productUrl, /^https:\/\/ascensionpeptides\.com\/product\//);
@@ -51,6 +53,11 @@ test('catalog keeps 14 unique references without exposing order costs', () => {
   }
 });
 
+test('frontend completeness guard matches the canonical 15-product catalog', () => {
+  const frontend = readFileSync(new URL('../script.js', import.meta.url), 'utf8');
+  assert.match(frontend, /payload\.products\.length !== 15/);
+});
+
 test('every positive-stock purchase-enabled SKU receives the Mereon designation independently of COA state', () => {
   const sellable = catalog.products.filter(isSellable);
   assert.ok(sellable.some((product) => product.status === 'available'), 'coverage includes a sellable SKU with a published source COA');
@@ -61,9 +68,10 @@ test('every positive-stock purchase-enabled SKU receives the Mereon designation 
   );
 });
 
-test('the reviewed order is the only sellable inventory and exposes only approved clean prices', () => {
+test('confirmed inventory is the only sellable inventory and exposes only approved clean prices', () => {
   const expected = {
     'T-10': [3, 135000], 'BPC-157-10': [1, 135000],
+    'SEMAX-10': [3, 165000],
     'KLOW-80': [1, 345000], 'CJCIPA-5-5': [1, 190000],
     'TA1-10': [1, 195000], 'IPAMORELIN-5': [1, 120000],
     'TESA-5': [1, 135000], 'GHKCU-100-10ML': [1, 205000]
@@ -79,8 +87,8 @@ test('the reviewed order is the only sellable inventory and exposes only approve
   assert.equal(products.has('GHKCU-100-3ML'), false);
 });
 
-test('all 14 products have the approved exact research areas and descriptions', () => {
-  assert.equal(Object.keys(EXPECTED_RESEARCH_COPY).length, 14);
+test('all 15 products have the approved exact research areas and descriptions', () => {
+  assert.equal(Object.keys(EXPECTED_RESEARCH_COPY).length, 15);
   assert.deepEqual(
     Object.fromEntries(catalog.products.map(({ name, researchArea, researchDescription }) => [
       name,

@@ -94,6 +94,48 @@
       }
     },
     {
+      "code": "SEMAX-10",
+      "name": "Semax",
+      "presentation": "10 mg",
+      "status": "available",
+      "researchArea": "Neuroprotección y función cognitiva",
+      "researchDescription": "Heptapéptido sintético derivado de ACTH, investigado en modelos preclínicos para estudiar mecanismos de neuroprotección, función cognitiva y regulación de BDNF, sin implicar uso humano ni eficacia terapéutica.",
+      "brandSupplier": {
+        "brand": "Ascension Peptides",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://ascensionpeptides.com/shop/",
+        "apiUrl": "https://ascensionpeptides.com/wp-json/wc/store/v1/products?slug=semax-10mg",
+        "productUrl": "https://ascensionpeptides.com/product/semax-10mg/",
+        "priceEvidenceUrl": "https://ascensionpeptides.com/product/semax-10mg/",
+        "sourceTitle": "Semax (10MG)",
+        "sourcePresentation": "Semax (10MG)",
+        "fetchedAt": "2026-08-03T23:13:57Z"
+      },
+      "stockQuantity": 3,
+      "purchaseEnabled": true,
+      "basePriceCentavos": 165000,
+      "image": {
+        "assetPath": "assets/images/products/semax-10.png",
+        "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2024/05/Ascension-Semax-10mg-1024x1024.webp",
+        "alt": "Fotografía de referencia Ascension Peptides de Semax 10 mg",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": "https://ascensionpeptides.com/wp-content/uploads/2026/06/Semax_30-05260628_COA-combined.pdf",
+        "sourceSha256": "ce473d2e7f0c3d5965e04f2366098082f35209d4438746e7d9ef47c1b1abf41e",
+        "kind": "source-reference",
+        "label": "COA de referencia publicado por Ascension Peptides",
+        "lot": "30-05260628",
+        "lab": "Kovera Labs",
+        "methods": [],
+        "sourceDocumentTitle": "Certificate of Analysis — lote 30-05260628 (2026-06-23)",
+        "verifiedAt": "2026-08-03T23:13:57Z"
+      }
+    },
+    {
       "code": "TB500-5",
       "name": "TB-500",
       "presentation": "5 mg",

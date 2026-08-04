@@ -29,10 +29,10 @@ async function trackRuntimeFailures(page) {
 test('responsive catalog has no runtime errors or horizontal overflow', async ({ page }) => {
   const errors = await trackRuntimeFailures(page);
   await page.goto('/');
-  await expect(page.locator('.product-card')).toHaveCount(14);
-  await expect(page.locator('.product-card .product-card__research-area')).toHaveCount(14);
+  await expect(page.locator('.product-card')).toHaveCount(15);
+  await expect(page.locator('.product-card .product-card__research-area')).toHaveCount(15);
   await expect(page.locator('.product-card .mereon-verified-badge')).toHaveCount(liveProducts.length);
-  await expect(page.locator('[data-catalog-status]')).toContainText('14 de 14');
+  await expect(page.locator('[data-catalog-status]')).toContainText('15 de 15');
   const catalogPayload = await page.request.get('/data/catalog.json').then((response) => response.json());
   for (const product of catalogPayload.products) {
     const card = page.locator(`.product-card:has([data-detail="${product.code}"])`);
@@ -70,7 +70,7 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   await expect(researchDialog).not.toBeVisible();
   await expect(researchTrigger).toBeFocused();
   await expect(page.locator('.faq__items > details').last().locator('summary')).toHaveText('¿Qué significa “péptido de investigación”?');
-  await expect(page.locator('.coa-card-link[href]')).toHaveCount(10);
+  await expect(page.locator('.coa-card-link[href]')).toHaveCount(11);
   await expect(page.locator('.coa-card-link--disabled')).toHaveCount(4);
   for (const link of await page.locator('.coa-card-link[href]').all()) {
     await expect(link).toHaveAttribute('target', '_blank');
@@ -79,14 +79,14 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   }
   await page.getByRole('button', { name: 'Mezclas' }).click();
   await expect(page.locator('.product-card')).toHaveCount(4);
-  await expect(page.locator('[data-catalog-status]')).toContainText('4 de 14');
+  await expect(page.locator('[data-catalog-status]')).toContainText('4 de 15');
   await page.getByRole('button', { name: 'Compuestos' }).click();
-  await expect(page.locator('.product-card')).toHaveCount(10);
+  await expect(page.locator('.product-card')).toHaveCount(11);
   await page.getByRole('button', { name: 'Todos' }).click();
-  await expect(page.locator('.product-card')).toHaveCount(14);
+  await expect(page.locator('.product-card')).toHaveCount(15);
 
   const productImages = page.locator('.product-visual--photo img');
-  await expect(productImages).toHaveCount(14);
+  await expect(productImages).toHaveCount(15);
   for (const image of await productImages.all()) {
     await image.scrollIntoViewIfNeeded();
     await expect(image).toHaveJSProperty('complete', true);
@@ -191,7 +191,7 @@ test('reduced-motion preference disables smooth scrolling and transitions', asyn
   test.skip(testInfo.project.name !== 'desktop', 'CSS behavior is viewport-independent.');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
-  await expect(page.locator('.product-card')).toHaveCount(14);
+  await expect(page.locator('.product-card')).toHaveCount(15);
   const motion = await page.evaluate(() => ({
     scrollBehavior: getComputedStyle(document.documentElement).scrollBehavior,
     transitionSeconds: parseFloat(getComputedStyle(document.querySelector('.product-card')).transitionDuration)

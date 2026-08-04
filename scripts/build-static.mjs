@@ -1,4 +1,4 @@
-import { cp, lstat, mkdir, rm } from 'node:fs/promises';
+import { cp, lstat, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -7,6 +7,7 @@ const output = join(root, 'dist');
 const productImages = [
   'bpc-157-10.png', 'cjcipa-5-5.png', 'epithalon-10.png', 'ghkcu-100-10ml.png',
   'glow-70.png', 'ipamorelin-5.png', 'klow-80.png', 'kpv-10.png', 'motsc-10.png',
+  'semax-10.png',
   't-10.png', 'ta1-10.png', 'tb500-5.png', 'tesa-5.png', 'wolverine-10-10.png'
 ].map((name) => `assets/images/products/${name}`);
 
@@ -28,6 +29,12 @@ for (const relativePath of PUBLIC_FILES) {
   }
   const destination = join(output, relativePath);
   await mkdir(dirname(destination), { recursive: true });
-  await cp(source, destination, { dereference: false, errorOnExist: true });
+  if (relativePath === 'data/catalog.json') {
+    const catalog = JSON.parse(await readFile(source, 'utf8'));
+    delete catalog.pricingAssumptions;
+    await writeFile(destination, `${JSON.stringify(catalog, null, 2)}\n`, { flag: 'wx' });
+  } else {
+    await cp(source, destination, { dereference: false, errorOnExist: true });
+  }
 }
 console.log(`Built ${PUBLIC_FILES.length} allowlisted static files in dist/`);

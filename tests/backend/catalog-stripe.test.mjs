@@ -13,6 +13,8 @@ const customer = {
 test('canonical catalog matches launch stock and prices independently of the browser payload', () => {
   assert.equal(CATALOG['T-10'].unitAmount, 135000);
   assert.equal(CATALOG['T-10'].initialStock, 3);
+  assert.equal(CATALOG['SEMAX-10'].unitAmount, 165000);
+  assert.equal(CATALOG['SEMAX-10'].initialStock, 3);
   assert.equal(SHIPPING.standard.unitAmount, 25000);
   assert.equal(SHIPPING.express.unitAmount, 34900);
 });

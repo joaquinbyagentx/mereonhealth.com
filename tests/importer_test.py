@@ -21,6 +21,7 @@ class ImporterSecurityTests(unittest.TestCase):
         expected = {
             "T-10": 135000,
             "BPC-157-10": 135000,
+            "SEMAX-10": 165000,
             "KLOW-80": 345000,
             "CJCIPA-5-5": 190000,
             "TA1-10": 195000,
@@ -30,7 +31,8 @@ class ImporterSecurityTests(unittest.TestCase):
         }
         self.assertEqual(IMPORTER.FX_MXN_TEN_THOUSANDTHS_PER_USD, 173288)
         for code, clean_price in expected.items():
-            line = IMPORTER.SUPPLIER_ORDER["lines"][code]
+            line = IMPORTER.confirmed_inventory_line(code)
+            self.assertIsNotNone(line, code)
             numerator = (
                 line["unitUsdCents"]
                 * 173288
@@ -63,14 +65,21 @@ class ImporterSecurityTests(unittest.TestCase):
             for selection in IMPORTER.SELECTIONS
         ]
 
-        self.assertEqual(len(actual), 14)
+        self.assertEqual(len(actual), 15)
         self.assertEqual(actual, expected)
         for product in catalog["products"]:
             self.assertEqual(
                 product["purchaseEnabled"],
-                product["code"] in IMPORTER.SUPPLIER_ORDER["lines"],
+                IMPORTER.confirmed_inventory_line(product["code"]) is not None,
                 product["code"],
             )
+
+    def test_semax_inventory_is_not_falsely_attributed_to_order_33332(self):
+        self.assertNotIn("SEMAX-10", IMPORTER.SUPPLIER_ORDER["lines"])
+        self.assertEqual(
+            IMPORTER.ADDITIONAL_CONFIRMED_INVENTORY["SEMAX-10"],
+            {"quantity": 3, "unitUsdCents": 5999},
+        )
 
     def test_cross_origin_redirect_fails_before_body_is_read(self):
         class RedirectedResponse:
@@ -174,7 +183,7 @@ class ImporterSecurityTests(unittest.TestCase):
                 )
 
     def test_catalog_build_rejects_missing_reviewed_product(self):
-        unrelated = [{"slug": f"unrelated-{index}"} for index in range(14)]
+        unrelated = [{"slug": f"unrelated-{index}"} for index in range(15)]
         with patch.object(IMPORTER, "fetch_exchange_rate", return_value=173288), patch.object(
             IMPORTER, "fetch", return_value=json.dumps(unrelated).encode()
         ):

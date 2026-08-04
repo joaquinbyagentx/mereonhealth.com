@@ -53,6 +53,17 @@ SUPPLIER_ORDER = {
     },
 }
 
+# Confirmed Mereon inventory that is not attributed to supplier order #33332.
+# Keep this separate so stock can be sold without fabricating purchase-order
+# provenance. The current public supplier price is the approved cost basis.
+ADDITIONAL_CONFIRMED_INVENTORY = {
+    "SEMAX-10": {"quantity": 3, "unitUsdCents": 5999},
+}
+
+
+def confirmed_inventory_line(code: str) -> Optional[Dict[str, int]]:
+    return SUPPLIER_ORDER["lines"].get(code) or ADDITIONAL_CONFIRMED_INVENTORY.get(code)
+
 SELECTIONS = [
     {
         "code": "T-10",
@@ -74,6 +85,20 @@ SELECTIONS = [
         "coa": None,
         "researchArea": "Reparación de tejidos",
         "researchDescription": "Investigado en modelos preclínicos para entender cómo responden los tejidos después de un daño y cómo se organizan durante su reparación, con especial interés en tejidos digestivos, musculares y conectivos.",
+    },
+    {
+        "code": "SEMAX-10",
+        "name": "Semax",
+        "slug": "semax-10mg",
+        "sourceTitle": "Semax (10MG)",
+        "presentation": "10 mg",
+        "coa": {
+            "url": "https://ascensionpeptides.com/wp-content/uploads/2026/06/Semax_30-05260628_COA-combined.pdf",
+            "sha256": "ce473d2e7f0c3d5965e04f2366098082f35209d4438746e7d9ef47c1b1abf41e",
+            "lot": "30-05260628", "lab": "Kovera Labs", "methods": [],
+        },
+        "researchArea": "Neuroprotección y función cognitiva",
+        "researchDescription": "Heptapéptido sintético derivado de ACTH, investigado en modelos preclínicos para estudiar mecanismos de neuroprotección, función cognitiva y regulación de BDNF, sin implicar uso humano ni eficacia terapéutica.",
     },
     {
         "code": "TB500-5",
@@ -450,8 +475,8 @@ def build_catalog() -> Dict[str, Any]:
         if not str(prices.get("price", "")).isdigit() or int(prices["price"]) <= 0:
             raise RuntimeError(f"{selection['slug']}: missing or invalid public USD price")
         public_source_usd_cents = int(prices["price"])
-        order_line = SUPPLIER_ORDER["lines"].get(selection["code"])
-        source_usd_cents = order_line["unitUsdCents"] if order_line else public_source_usd_cents
+        inventory_line = confirmed_inventory_line(selection["code"])
+        source_usd_cents = inventory_line["unitUsdCents"] if inventory_line else public_source_usd_cents
         price_centavos = base_price_centavos(
             source_usd_cents, fx_mxn_ten_thousandths_per_usd
         )
@@ -499,8 +524,8 @@ def build_catalog() -> Dict[str, Any]:
                 "sourcePresentation": source_title,
                 "fetchedAt": fetched_at,
             },
-            "stockQuantity": order_line["quantity"] if order_line else 0,
-            "purchaseEnabled": order_line is not None,
+            "stockQuantity": inventory_line["quantity"] if inventory_line else 0,
+            "purchaseEnabled": inventory_line is not None,
             "basePriceCentavos": price_centavos,
             "image": {
                 "assetPath": f"assets/images/products/{image_filename}",

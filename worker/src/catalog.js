@@ -3,6 +3,7 @@ const product = (code, name, presentation, unitAmount, initialStock) => Object.f
 export const CATALOG = Object.freeze(Object.fromEntries([
   product('T-10', 'T-10', '10 mg', 135000, 3),
   product('BPC-157-10', 'BPC-157', '10 mg', 135000, 1),
+  product('SEMAX-10', 'Semax', '10 mg', 165000, 3),
   product('KLOW-80', 'KLOW', 'GHK-Cu 50 mg + BPC-157 10 mg + TB-500 10 mg + KPV 10 mg', 345000, 1),
   product('CJCIPA-5-5', 'CJC-1295 No-DAC + Ipamorelin', '5 mg + 5 mg', 190000, 1),
   product('TA1-10', 'Thymosin Alpha 1', '10 mg', 195000, 1),
