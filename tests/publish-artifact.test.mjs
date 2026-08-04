@@ -16,7 +16,7 @@ const productImages = [
 const expectedFiles = [
   'CNAME', 'checkout-cancel.html', 'checkout-state.js', 'checkout-success.html',
   'data/catalog.json', 'index.html', 'payment-adapter.js', 'pricing.js', 'script.js',
-  'styles.css', 'assets/mark.svg', 'assets/mereon-logo.svg',
+  'styles.css', 'terminos/index.html', 'privacidad/index.html', 'assets/mark.svg', 'assets/mereon-logo.svg',
   'assets/images/hero-guided-shopping.webp', ...productImages
 ].sort();
 
@@ -32,7 +32,7 @@ test('production static build publishes only the exact storefront allowlist', ()
   const actual = filesBelow(publishRoot).sort();
   assert.deepEqual(actual, expectedFiles);
 
-  for (const internalPath of ['scripts/import_catalog.py', 'tests/importer_test.py', 'worker/src/catalog.js', 'docs/checkout-runbook.md', 'package.json', 'wrangler.jsonc']) {
+  for (const internalPath of ['legal/TERMINOS.md', 'legal/AVISO-DE-PRIVACIDAD.md', 'scripts/import_catalog.py', 'tests/importer_test.py', 'worker/src/catalog.js', 'docs/checkout-runbook.md', 'package.json', 'wrangler.jsonc']) {
     assert.equal(actual.includes(internalPath), false, `${internalPath} must not be publishable`);
   }
 
@@ -44,4 +44,6 @@ test('production static build publishes only the exact storefront allowlist', ()
   const publishedCatalog = JSON.parse(readFileSync(join(publishRoot, 'data/catalog.json'), 'utf8'));
   assert.equal('pricingAssumptions' in publishedCatalog, false, 'FX and pricing assumptions must remain internal');
   assert.doesNotMatch(publishedText, /fxMxnTenThousandthsPerUsd|fxSourceDate|fxSourceUrl|173288|17\.3288/i);
+  assert.match(readFileSync(join(publishRoot, 'terminos/index.html'), 'utf8'), /Aviso importante \(Research Use Only — RUO\)/);
+  assert.match(readFileSync(join(publishRoot, 'privacidad/index.html'), 'utf8'), /5\. Derechos ARCO/);
 });

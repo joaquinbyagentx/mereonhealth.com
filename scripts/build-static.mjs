@@ -16,7 +16,7 @@ const productImages = [
 const PUBLIC_FILES = [
   'CNAME', 'checkout-cancel.html', 'checkout-state.js', 'checkout-success.html',
   'data/catalog.json', 'index.html', 'payment-adapter.js', 'pricing.js', 'script.js',
-  'styles.css', 'assets/mark.svg', 'assets/mereon-logo.svg',
+  'styles.css', 'terminos/index.html', 'privacidad/index.html', 'assets/mark.svg', 'assets/mereon-logo.svg',
   'assets/images/hero-guided-shopping.webp', ...productImages
 ];
 

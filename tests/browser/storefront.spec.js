@@ -319,6 +319,16 @@ test('checkout validates Mexico delivery data and sends no client prices before 
   await page.locator('[data-payment-button]').click();
   const form = page.locator('[data-checkout-form]');
   await expect(form).toBeVisible();
+  const termsLink = form.getByRole('link', { name: 'Términos y condiciones' });
+  const privacyLink = form.getByRole('link', { name: 'Aviso de privacidad' });
+  await expect(termsLink).toHaveAttribute('href', 'terminos/');
+  await expect(privacyLink).toHaveAttribute('href', 'privacidad/');
+  await termsLink.focus();
+  await expect(termsLink).toBeFocused();
+  await termsLink.evaluate((link) => link.addEventListener('click', (event) => event.preventDefault(), { once: true }));
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/\/$/);
+  await expect(form.locator('[name="ruoAccepted"]')).not.toBeChecked();
   await form.locator('[data-checkout-submit]').click();
   await expect(form.locator('[name="fullName"]')).toBeFocused();
   await form.locator('[name="fullName"]').fill('Cliente Interno');
@@ -343,6 +353,30 @@ test('checkout validates Mexico delivery data and sends no client prices before 
   expect(checkoutPayload.customer.country).toBe('MX');
   expect(checkoutPayload.ruoAccepted).toBe(true);
   expect(JSON.stringify(checkoutPayload)).not.toMatch(/unitAmount|unitPrice|subtotal|shippingAmount|total|iva|tax/i);
+});
+
+test('legal routes and storefront footer are responsive, accessible, and error free', async ({ page }) => {
+  for (const route of ['terminos', 'privacidad']) {
+    const errors = await trackRuntimeFailures(page);
+    await page.goto(`/${route}/`);
+    await expect(page.locator('main h1')).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Volver a la tienda' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Mereon, inicio', exact: true })).toHaveCount(2);
+    await page.getByRole('link', { name: 'Volver a la tienda' }).focus();
+    await expect(page.getByRole('link', { name: 'Volver a la tienda' })).toBeFocused();
+    const overflow = await page.evaluate(() => ({
+      document: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      body: document.body.scrollWidth - document.body.clientWidth,
+      article: document.querySelector('.legal-document').scrollWidth - document.querySelector('.legal-document').clientWidth
+    }));
+    expect(Math.max(...Object.values(overflow))).toBeLessThanOrEqual(1);
+    expect(errors).toEqual([]);
+  }
+
+  await page.goto('/');
+  const footer = page.locator('footer');
+  await expect(footer.getByRole('link', { name: 'Términos y condiciones' })).toHaveAttribute('href', 'terminos/');
+  await expect(footer.getByRole('link', { name: 'Aviso de privacidad' })).toHaveAttribute('href', 'privacidad/');
 });
 
 test('success and cancellation pages trust only API-verified state', async ({ page }, testInfo) => {

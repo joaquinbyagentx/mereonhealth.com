@@ -29,6 +29,7 @@ class SiteParser(HTMLParser):
         self.hrefs = []
         self.local_assets = []
         self.script_sources = []
+        self.text = []
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
@@ -40,6 +41,9 @@ class SiteParser(HTMLParser):
             self.local_assets.append(attrs["src"])
         if tag == "link" and attrs.get("href") and attrs.get("rel") in {"stylesheet", "icon"}:
             self.local_assets.append(attrs["href"])
+
+    def handle_data(self, data):
+        self.text.append(data)
 
 
 class StaticSiteTests(unittest.TestCase):
@@ -75,6 +79,64 @@ class StaticSiteTests(unittest.TestCase):
         self.assertNotIn("<rect", logo, "the transparent logo must not carry a background block")
         self.assertRegex(logo, r'<circle[^>]+stroke="(?:#fff|white)"')
         self.assertIn('data-wordmark="Mereon"', logo)
+
+    def test_legal_routes_preserve_approved_source_and_metadata(self):
+        routes = {
+            "terminos": {
+                "source": "TERMINOS.md",
+                "title": "Términos y Condiciones — Mereon Health",
+                "description": "Términos y condiciones de compra y uso de Mereon Health para materiales de investigación y referencia analítica.",
+                "headings": ["Aviso importante (Research Use Only — RUO)", "6. Política de devoluciones, reembolsos y garantía", "Contacto"],
+            },
+            "privacidad": {
+                "source": "AVISO-DE-PRIVACIDAD.md",
+                "title": "Aviso de Privacidad — Mereon Health",
+                "description": "Aviso de privacidad integral de Mereon Health para el tratamiento de datos personales en mereonhealth.com.",
+                "headings": ["1. Responsable del tratamiento", "5. Derechos ARCO", "7. Aviso de privacidad integral"],
+            },
+        }
+        for route, expected in routes.items():
+            legal_path = ROOT / route / "index.html"
+            self.assertTrue(legal_path.is_file(), f"/{route}/ must have a source page")
+            html = legal_path.read_text(encoding="utf-8")
+            parser = SiteParser()
+            parser.feed(html)
+            visible_text = " ".join("".join(parser.text).split())
+            source = (ROOT / "legal" / expected["source"]).read_text(encoding="utf-8")
+
+            self.assertIn('<html lang="es-MX">', html)
+            self.assertIn('<meta name="viewport" content="width=device-width, initial-scale=1">', html)
+            self.assertIn(f'<title>{expected["title"]}</title>', html)
+            self.assertIn(f'<meta name="description" content="{expected["description"]}">', html)
+            self.assertIn(f'<link rel="canonical" href="https://mereonhealth.com/{route}/">', html)
+            self.assertEqual(html.count("<h1"), 1)
+            self.assertEqual(html.count('src="../assets/mereon-logo.svg"'), 2)
+            self.assertIn('href="../">Volver a la tienda</a>', html)
+            self.assertIn('href="../terminos/">Términos y condiciones</a>', html)
+            self.assertIn('href="../privacidad/">Aviso de privacidad</a>', html)
+            self.assertIn("Solo para investigación y referencia analítica.", visible_text)
+            for heading in expected["headings"]:
+                self.assertIn(heading, visible_text)
+
+            # Every approved non-separator source line must survive as visible text;
+            # only Markdown punctuation may be removed by mechanical HTML formatting.
+            for line in source.splitlines():
+                line = line.strip()
+                if not line or line == "---":
+                    continue
+                plain = re.sub(r"^#{1,6}\s+|^-\s+", "", line)
+                plain = plain.replace("**", "").replace("`", "")
+                self.assertIn(" ".join(plain.split()), visible_text, f"missing approved text in /{route}/: {plain}")
+
+    def test_storefront_footer_and_checkout_link_to_legal_routes(self):
+        footer = self.html.split("<footer>", 1)[1].split("</footer>", 1)[0]
+        self.assertIn('href="terminos/">Términos y condiciones</a>', footer)
+        self.assertIn('href="privacidad/">Aviso de privacidad</a>', footer)
+        acceptance = self.html.split('<label class="ruo-acceptance">', 1)[1].split("</label>", 1)[0]
+        self.assertIn('input name="ruoAccepted" type="checkbox" required', acceptance)
+        self.assertIn('href="terminos/">Términos y condiciones</a>', acceptance)
+        self.assertIn('href="privacidad/">Aviso de privacidad</a>', acceptance)
+        self.assertIn("ruoAccepted: form.get('ruoAccepted') === 'on'", self.js)
 
 
     def test_research_peptide_explainer_is_exact_and_accessible(self):
