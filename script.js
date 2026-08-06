@@ -109,7 +109,7 @@ function visualMarkup(product, index) {
   const shortName = product.name.replace(' blend', '').slice(0, 18);
   if (product.image?.assetPath) {
     return `<figure class="product-visual product-visual--photo" data-index="${String(index + 1).padStart(2, '0')}" style="--tone:${tone};--tone-light:${light}">
-      <img src="${escapeHtml(product.image.assetPath)}" alt="${escapeHtml(product.image.alt)}" loading="lazy" width="800" height="533">
+      <img src="${escapeHtml(product.image.assetPath)}" alt="${escapeHtml(product.image.alt)}" loading="lazy" width="800" height="800">
       <figcaption>Fotografía de referencia de la fuente · presentación indicada en ficha</figcaption>
     </figure>`;
   }
@@ -125,8 +125,9 @@ function renderCatalog() {
     const index = catalog.findIndex((item) => item.code === product.code);
     const purchasable = isPurchasable(product);
     const price = product.status === 'evaluation' ? 'Precio por confirmar' : formatMxn(product.basePriceCentavos);
-    const coaAction = product.coa?.url
-      ? `<a class="coa-card-link" href="${escapeHtml(product.coa.url)}" target="_blank" rel="noopener noreferrer" aria-label="Ver COA de referencia de ${escapeHtml(product.name)} en sitio externo">Ver COA <span aria-hidden="true">↗</span></a>`
+    const coaHref = product.coa?.assetPath || product.coa?.url;
+    const coaAction = coaHref
+      ? `<a class="coa-card-link" href="${escapeHtml(coaHref)}" target="_blank" rel="noopener noreferrer" aria-label="Ver COA de referencia de ${escapeHtml(product.name)}">Ver COA <span aria-hidden="true">↗</span></a>`
       : `<span class="coa-card-link coa-card-link--disabled" aria-disabled="true">${escapeHtml(product.coa?.label || 'COA no publicado por la fuente')}</span>`;
     const verificationBadge = purchasable
       ? `<span class="mereon-verified-badge" aria-label="Designación propia de Mereon"><span aria-hidden="true"></span><strong>${MEREON_DESIGNATION}</strong></span>`
@@ -257,10 +258,11 @@ function renderDetail(product) {
         <p>Designación propia de Mereon para este producto disponible. El estado del COA se muestra por separado.</p>
       </div>`
     : '';
-  const coaMarkup = coa?.url ? `<div class="coa-box">
+  const coaHref = coa?.assetPath || coa?.url;
+  const coaMarkup = coaHref ? `<div class="coa-box">
       <h3>${escapeHtml(coa.label)}</h3>
       <dl class="coa-meta"><dt>Lote de la fuente</dt><dd>${escapeHtml(coa.lot)}</dd><dt>Laboratorio publicado</dt><dd>${escapeHtml(coa.lab)}</dd><dt>Métodos publicados</dt><dd>${escapeHtml(coa.methods.join(' · '))}</dd></dl>
-      <a href="${escapeHtml(coa.url)}" target="_blank" rel="noopener noreferrer">Ver COA en sitio externo <span aria-hidden="true">↗</span></a>
+      <a href="${escapeHtml(coaHref)}" target="_blank" rel="noopener noreferrer">Ver COA de referencia <span aria-hidden="true">↗</span></a>
       <p class="external-note">Documento público de referencia del catálogo fuente. No corresponde todavía a un lote Mereon y no implica afiliación, autorización o reventa oficial.</p>
     </div>` : `<div class="coa-box"><h3>COA pendiente</h3><p>${escapeHtml(coa?.label || 'COA no publicado por la fuente.')}</p><span class="button" aria-disabled="true">Ver COA no disponible</span></div>`;
   productDetail.innerHTML = `<div class="product-detail__layout">
@@ -270,7 +272,7 @@ function renderDetail(product) {
       <p class="eyebrow">${escapeHtml(product.code)}</p><h2 id="detail-title">${escapeHtml(product.name)}</h2>
       <p class="product-detail__presentation">${escapeHtml(product.presentation)}</p>
       ${verificationMarkup}
-      <dl class="supplier-detail"><dt>${escapeHtml(product.brandSupplier.role)}</dt><dd>${escapeHtml(product.brandSupplier.brand)}</dd><dt>Ficha pública de la fuente</dt><dd><a href="${escapeHtml(product.source.productUrl)}" target="_blank" rel="noopener noreferrer">Ver producto en Ascension Peptides <span aria-hidden="true">↗</span></a></dd><dt>Plataforma comercial</dt><dd>Mereon Health</dd></dl>
+      <dl class="supplier-detail"><dt>${escapeHtml(product.brandSupplier.role)}</dt><dd>${escapeHtml(product.brandSupplier.brand)}</dd><dt>Ficha pública de la fuente</dt><dd><a href="${escapeHtml(product.source.productUrl)}" target="_blank" rel="noopener noreferrer">Ver producto en ${escapeHtml(product.brandSupplier.brand)} <span aria-hidden="true">↗</span></a></dd><dt>Plataforma comercial</dt><dd>Mereon Health</dd></dl>
       <section class="product-detail__research" aria-labelledby="detail-research-label">
         <p class="product-detail__research-label" id="detail-research-label">Área de investigación</p>
         <h3 class="product-detail__research-area">${escapeHtml(product.researchArea)}</h3>
@@ -441,7 +443,7 @@ try {
   const response = await fetch('./data/catalog.json', { cache: 'no-store' });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const payload = await response.json();
-  if (!Array.isArray(payload.products) || payload.products.length !== 15) throw new Error('Catálogo incompleto');
+  if (!Array.isArray(payload.products) || payload.products.length !== 16) throw new Error('Catálogo incompleto');
   catalog = payload.products;
   productByCode = new Map(catalog.map((product) => [product.code, product]));
   cart = normalizeCart(readStoredCart(), stockByCode());
