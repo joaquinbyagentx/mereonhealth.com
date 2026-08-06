@@ -18,6 +18,16 @@ test('canonical catalog matches launch stock and prices independently of the bro
   assert.equal(CATALOG['SERMORELIN-5'].unitAmount, 170000);
   assert.equal(CATALOG['SERMORELIN-5'].initialStock, 0);
   assert.notEqual(CATALOG['SERMORELIN-5'].unitAmount, 155000);
+  assert.deepEqual(
+    {
+      GLP2: [CATALOG['GLP2-15'].unitAmount, CATALOG['GLP2-15'].initialStock],
+      Ipamorelin10: [CATALOG['IPAMORELIN-10'].unitAmount, CATALOG['IPAMORELIN-10'].initialStock],
+      KLOW: [CATALOG['KLOW-80'].unitAmount, CATALOG['KLOW-80'].initialStock]
+    },
+    { GLP2: [335000, 4], Ipamorelin10: [210000, 4], KLOW: [405000, 2] }
+  );
+  assert.equal(CATALOG['IPAMORELIN-5'].presentation, '5 mg');
+  assert.equal(CATALOG['IPAMORELIN-10'].presentation, '10 mg');
   assert.equal(SHIPPING.standard.unitAmount, 25000);
   assert.equal(SHIPPING.express.unitAmount, 34900);
 });

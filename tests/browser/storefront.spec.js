@@ -29,10 +29,10 @@ async function trackRuntimeFailures(page) {
 test('responsive catalog has no runtime errors or horizontal overflow', async ({ page }) => {
   const errors = await trackRuntimeFailures(page);
   await page.goto('/');
-  await expect(page.locator('.product-card')).toHaveCount(16);
-  await expect(page.locator('.product-card .product-card__research-area')).toHaveCount(16);
+  await expect(page.locator('.product-card')).toHaveCount(18);
+  await expect(page.locator('.product-card .product-card__research-area')).toHaveCount(18);
   await expect(page.locator('.product-card .mereon-verified-badge')).toHaveCount(liveProducts.length);
-  await expect(page.locator('[data-catalog-status]')).toContainText('16 de 16');
+  await expect(page.locator('[data-catalog-status]')).toContainText('18 de 18');
   const catalogPayload = await page.request.get('/data/catalog.json').then((response) => response.json());
   for (const product of catalogPayload.products) {
     const card = page.locator(`.product-card:has([data-detail="${product.code}"])`);
@@ -73,7 +73,7 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   await expect(researchDialog).not.toBeVisible();
   await expect(researchTrigger).toBeFocused();
   await expect(page.locator('.faq__items > details').last().locator('summary')).toHaveText('¿Qué significa “péptido de investigación”?');
-  await expect(page.locator('.coa-card-link[href]')).toHaveCount(12);
+  await expect(page.locator('.coa-card-link[href]')).toHaveCount(14);
   await expect(page.locator('.coa-card-link--disabled')).toHaveCount(4);
   for (const link of await page.locator('.coa-card-link[href^="https://ascensionpeptides.com/"]').all()) {
     await expect(link).toHaveAttribute('target', '_blank');
@@ -85,16 +85,29 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   await expect(sermorelinCoa).toHaveAttribute('target', '_blank');
   await expect(page.locator('[data-add="SERMORELIN-5"]')).toBeDisabled();
   await expect(page.locator('.product-card:has([data-detail="SERMORELIN-5"]) .stock-label')).toHaveText('Agotado');
+
+  const glp2Card = page.locator('.product-card:has([data-detail="GLP2-15"])');
+  await expect(glp2Card).toContainText('$3,350.00');
+  await expect(glp2Card.locator('.stock-label')).toHaveText('4 disponibles');
+  await expect(glp2Card.locator('.coa-card-link')).toHaveAttribute('href', 'assets/documents/glp2-15-coa-2606180382.pdf');
+  const ipamorelin10Card = page.locator('.product-card:has([data-detail="IPAMORELIN-10"])');
+  await expect(ipamorelin10Card).toContainText('$2,100.00');
+  await expect(ipamorelin10Card).toContainText('10 mg');
+  await expect(ipamorelin10Card.locator('.coa-card-link')).toHaveAttribute('href', 'assets/documents/ipamorelin-10-coa-2606260176.pdf');
+  await expect(page.locator('.product-card:has([data-detail="IPAMORELIN-5"])')).toContainText('5 mg');
+  const klowCard = page.locator('.product-card:has([data-detail="KLOW-80"])');
+  await expect(klowCard).toContainText('$4,050.00');
+  await expect(klowCard.locator('.stock-label')).toHaveText('2 disponibles');
   await page.getByRole('button', { name: 'Mezclas' }).click();
   await expect(page.locator('.product-card')).toHaveCount(4);
-  await expect(page.locator('[data-catalog-status]')).toContainText('4 de 16');
+  await expect(page.locator('[data-catalog-status]')).toContainText('4 de 18');
   await page.getByRole('button', { name: 'Compuestos' }).click();
-  await expect(page.locator('.product-card')).toHaveCount(12);
+  await expect(page.locator('.product-card')).toHaveCount(14);
   await page.getByRole('button', { name: 'Todos' }).click();
-  await expect(page.locator('.product-card')).toHaveCount(16);
+  await expect(page.locator('.product-card')).toHaveCount(18);
 
   const productImages = page.locator('.product-visual--photo img');
-  await expect(productImages).toHaveCount(16);
+  await expect(productImages).toHaveCount(18);
   for (const image of await productImages.all()) {
     await image.scrollIntoViewIfNeeded();
     await expect(image).toHaveJSProperty('complete', true);
@@ -223,7 +236,7 @@ test('reduced-motion preference disables smooth scrolling and transitions', asyn
   test.skip(testInfo.project.name !== 'desktop', 'CSS behavior is viewport-independent.');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
-  await expect(page.locator('.product-card')).toHaveCount(16);
+  await expect(page.locator('.product-card')).toHaveCount(18);
   const motion = await page.evaluate(() => ({
     scrollBehavior: getComputedStyle(document.documentElement).scrollBehavior,
     transitionSeconds: parseFloat(getComputedStyle(document.querySelector('.product-card')).transitionDuration)
@@ -317,22 +330,37 @@ test('stock availability disables unordered products and clamps restored carts',
   await page.addInitScript(() => localStorage.setItem('mereon-research-cart-v1', JSON.stringify([
     { code: 'T-10', quantity: 99 },
     { code: 'BPC-157-10', quantity: 4 },
-    { code: 'TB500-5', quantity: 2 }
+    { code: 'TB500-5', quantity: 2 },
+    { code: 'GLP2-15', quantity: 99 },
+    { code: 'IPAMORELIN-10', quantity: 99 },
+    { code: 'KLOW-80', quantity: 99 }
   ])));
   await page.goto('/');
 
   await expect(page.locator('.product-card:has([data-detail="TB500-5"]) .stock-label')).toHaveText('Agotado');
   await expect(page.locator('[data-add="TB500-5"]')).toBeDisabled();
   await expect(page.locator('.product-card:has([data-detail="BPC-157-10"]) .stock-label')).toHaveText('Última unidad');
-  await expect(page.locator('[data-cart-count]')).toHaveText('4');
+  await expect(page.locator('[data-cart-count]')).toHaveText('14');
 
   const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('mereon-research-cart-v1')));
-  expect(stored).toEqual([{ code: 'T-10', quantity: 3 }, { code: 'BPC-157-10', quantity: 1 }]);
+  expect(stored).toEqual([
+    { code: 'T-10', quantity: 3 },
+    { code: 'BPC-157-10', quantity: 1 },
+    { code: 'GLP2-15', quantity: 4 },
+    { code: 'IPAMORELIN-10', quantity: 4 },
+    { code: 'KLOW-80', quantity: 2 }
+  ]);
 
   await page.locator('[data-cart-open]').click();
   const t10 = page.locator('.cart-item:has-text("T-10")');
   await expect(t10.getByRole('button', { name: 'Aumentar cantidad' })).toBeDisabled();
   await expect(t10).toContainText('Máximo disponible: 3');
+  const glp2 = page.locator('.cart-item:has([data-quantity="GLP2-15"])');
+  await expect(glp2.getByRole('button', { name: 'Aumentar cantidad' })).toBeDisabled();
+  await expect(glp2).toContainText('Máximo disponible: 4');
+  const klow = page.locator('.cart-item:has([data-quantity="KLOW-80"])');
+  await expect(klow.getByRole('button', { name: 'Aumentar cantidad' })).toBeDisabled();
+  await expect(klow).toContainText('Máximo disponible: 2');
 });
 
 test('checkout validates Mexico delivery data and sends no client prices before Stripe redirect', async ({ page }) => {

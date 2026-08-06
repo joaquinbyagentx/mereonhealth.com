@@ -443,7 +443,7 @@ try {
   const response = await fetch('./data/catalog.json', { cache: 'no-store' });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const payload = await response.json();
-  if (!Array.isArray(payload.products) || payload.products.length !== 16) throw new Error('Catálogo incompleto');
+  if (!Array.isArray(payload.products) || payload.products.length !== 18) throw new Error('Catálogo incompleto');
   catalog = payload.products;
   productByCode = new Map(catalog.map((product) => [product.code, product]));
   cart = normalizeCart(readStoredCart(), stockByCode());

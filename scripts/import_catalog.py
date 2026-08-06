@@ -34,6 +34,16 @@ SERMORELIN_IMAGE_URL = "https://protidehealth.com/wp-content/uploads/2026/02/Ser
 SERMORELIN_COA_SHA256 = "5a086b451f3e6a3d40601ee509963211b9510fe4cd4147063407d37b7eba80a6"
 SERMORELIN_IMAGE_SHA256 = "736b9e2a4f875cec6768a8e40c15af68284013bcdcbbc4e619911f412609dbc6"
 SERMORELIN_LOCAL_IMAGE_SHA256 = "eeef35a4f4cd70f2ce81d054c4b8d6ed3b387519b518515ea9ec176075805a58"
+GLP2_15_PRODUCT_URL = "https://protidehealth.com/product/glp2/"
+GLP2_15_API_URL = "https://protidehealth.com/wp-json/wc/store/v1/products/19465"
+GLP2_15_IMAGE_URL = "https://protidehealth.com/wp-content/uploads/2026/03/GLP-2-15mg.png"
+GLP2_15_COA_PAGE_URL = "https://protidehealth.com/certificates/glp-2-15mg-coa-2606180382/"
+GLP2_15_COA_PDF_URL = "https://protidehealth.com/wp-content/uploads/2026/06/GLP-2-15mg-June-23rd-COA.pdf"
+IPAMORELIN_10_PRODUCT_URL = "https://protidehealth.com/product/ipamorelin-10mg/"
+IPAMORELIN_10_API_URL = "https://protidehealth.com/wp-json/wc/store/v1/products/11892"
+IPAMORELIN_10_IMAGE_URL = "https://protidehealth.com/wp-content/uploads/2026/02/Ipamorelin_Protide-Cover-Image-1.png"
+IPAMORELIN_10_COA_PAGE_URL = "https://protidehealth.com/certificates/ipamorelin-10mg-coa-2606260176/"
+IPAMORELIN_10_COA_PDF_URL = "https://protidehealth.com/wp-content/uploads/2026/06/Ipamorelin-10mg-June-.pdf"
 ALLOWED_SOURCE_ORIGINS = {SOURCE_ORIGIN, PROTIDE_ORIGIN}
 # The historical www host now serves a mismatched TLS certificate; use the
 # certificate-valid apex host and the official date-range endpoint.
@@ -74,6 +84,14 @@ ADDITIONAL_CONFIRMED_INVENTORY = {
     "SEMAX-10": {"quantity": 3, "unitUsdCents": 5999},
 }
 
+# Current, physically confirmed Protide inventory. These values are importer-only
+# pricing inputs and are intentionally omitted from the generated public catalog.
+PROTIDE_CONFIRMED_INVENTORY = {
+    "GLP2-15": {"quantity": 4, "unitUsdCents": 13900},
+    "IPAMORELIN-10": {"quantity": 4, "unitUsdCents": 7500},
+    "KLOW-80": {"quantity": 2, "unitUsdCents": 17500},
+}
+
 # Existing catalog prices are release-approved values. A supplier's later
 # storefront price change must not silently reprice unrelated Mereon products
 # during a narrowly scoped import.
@@ -91,13 +109,17 @@ APPROVED_EXISTING_PUBLIC_PRICES_CENTAVOS = {
     "EPITHALON-10": 150_000,
     "KPV-10": 160_000,
     "GLOW-70": 305_000,
-    "KLOW-80": 305_000,
+    "KLOW-80": 405_000,
     "WOLVERINE-10-10": 240_000,
 }
 
 
 def confirmed_inventory_line(code: str) -> Optional[Dict[str, int]]:
-    return SUPPLIER_ORDER["lines"].get(code) or ADDITIONAL_CONFIRMED_INVENTORY.get(code)
+    return (
+        PROTIDE_CONFIRMED_INVENTORY.get(code)
+        or SUPPLIER_ORDER["lines"].get(code)
+        or ADDITIONAL_CONFIRMED_INVENTORY.get(code)
+    )
 
 SELECTIONS = [
     {
@@ -306,6 +328,59 @@ SERMORELIN_SELECTION = {
     "researchArea": "Señalización de GHRH",
     "researchDescription": "Péptido sintético investigado en modelos preclínicos para estudiar la señalización del receptor de la hormona liberadora de hormona de crecimiento (GHRH) y sus respuestas celulares. Exclusivamente para investigación; no para uso humano.",
 }
+
+PROTIDE_SELECTIONS = [
+    {
+        "code": "GLP2-15",
+        "name": "GLP-2",
+        "presentation": "15 mg · polvo liofilizado · vial de 3 mL",
+        "researchArea": "Señalización intestinal de GLP-2",
+        "researchDescription": "Péptido sintético investigado en modelos preclínicos para estudiar la señalización del receptor GLP-2 y las respuestas celulares de modelos intestinales. Exclusivamente para investigación; no para uso humano.",
+        "productUrl": GLP2_15_PRODUCT_URL,
+        "apiUrl": GLP2_15_API_URL,
+        "sourceTitle": "GLP-2 - 15mg",
+        "sourceSku": "SQ3259733-15",
+        "sourceDescription": "15mg lyophilized vial of GLP-2.",
+        "sourceUsdCents": 13900,
+        "imageUrl": GLP2_15_IMAGE_URL,
+        "imageSha256": "745aa9a0047a7123b4cc9ae2ec3f8bba3e6e3ab777275fb4b72ccd30963d582e",
+        "localImageSha256": "633b74292857498cbeec43a1d08434bcf2a807cec06949c050ac854e0e0ca3f9",
+        "imageAssetPath": "assets/images/products/glp2-15.png",
+        "coaPageUrl": GLP2_15_COA_PAGE_URL,
+        "coaPdfUrl": GLP2_15_COA_PDF_URL,
+        "coaSha256": "b6b15ad7df3ec9b04fad0bfe825ed8aa11901e6aa2210fbe53a3a3807dff2d47",
+        "coaAssetPath": "assets/documents/glp2-15-coa-2606180382.pdf",
+        "coaNumber": "2606180382",
+        "lot": "PH-ze15-0410",
+        "purityPercent": "99.52%",
+        "reportedDate": "2026-06-22",
+    },
+    {
+        "code": "IPAMORELIN-10",
+        "name": "Ipamorelin",
+        "presentation": "10 mg · polvo liofilizado · vial de 3 mL",
+        "researchArea": "Señalización del receptor de grelina",
+        "researchDescription": "Pentapéptido sintético investigado en modelos preclínicos para estudiar la señalización del receptor de grelina GHS-R1a y sus respuestas celulares. Exclusivamente para investigación; no para uso humano.",
+        "productUrl": IPAMORELIN_10_PRODUCT_URL,
+        "apiUrl": IPAMORELIN_10_API_URL,
+        "sourceTitle": "Ipamorelin 10mg",
+        "sourceSku": "SQ1051651",
+        "sourceDescription": "Ipamorelin 10mg Lyophilized Powder in 3mL vial.",
+        "sourceUsdCents": 7500,
+        "imageUrl": IPAMORELIN_10_IMAGE_URL,
+        "imageSha256": "e109762ce41bf22d0e8d978fc10b73448db309025591627614cf3991c00e15a5",
+        "localImageSha256": "df4a7642bc2b528ad2bf3d73535dca9a5b6bc57ff7e7c3bc1d3d925ff2a114d4",
+        "imageAssetPath": "assets/images/products/ipamorelin-10.png",
+        "coaPageUrl": IPAMORELIN_10_COA_PAGE_URL,
+        "coaPdfUrl": IPAMORELIN_10_COA_PDF_URL,
+        "coaSha256": "f7bb2f84b21f5b2ebdd24810cbd138be1c0a8d3077cfa847987778e45c8e7762",
+        "coaAssetPath": "assets/documents/ipamorelin-10-coa-2606260176.pdf",
+        "coaNumber": "2606260176",
+        "lot": "PH-ip10-0313",
+        "purityPercent": "99.82%",
+        "reportedDate": "2026-06-29",
+    },
+]
 
 
 class PageParser(HTMLParser):
@@ -664,10 +739,147 @@ def sermorelin_record(verified_at: str, fx_mxn_ten_thousandths_per_usd: int) -> 
     }
 
 
+def protide_record(selection: Dict[str, Any], verified_at: str, fx_rate: int) -> Dict[str, Any]:
+    """Validate one exact Protide SKU, its media, and its reviewed COA."""
+    for url, prefix in [
+        (selection["productUrl"], "/product/"),
+        (selection["apiUrl"], "/wp-json/wc/store/v1/products/"),
+        (selection["imageUrl"], "/wp-content/uploads/"),
+        (selection["coaPageUrl"], "/certificates/"),
+        (selection["coaPdfUrl"], "/wp-content/uploads/"),
+    ]:
+        require_public_source_url(url, prefix, PROTIDE_ORIGIN)
+
+    product_html = fetch(selection["productUrl"]).decode("utf-8", "replace")
+    product_markers = [
+        f'"sku":"{selection["sourceSku"]}"',
+        f'"name":"{selection["sourceTitle"]}"',
+        '"priceCurrency":"USD"',
+        selection["sourceDescription"],
+    ]
+    page_price = selection["sourceUsdCents"] // 100
+    if f'"price":"{page_price}"' not in product_html and f'"price":{page_price},' not in product_html:
+        product_markers.append(f'exact USD page price {page_price}')
+    missing = [marker for marker in product_markers if marker not in product_html]
+    if missing:
+        raise RuntimeError(f'{selection["code"]}: exact public product evidence changed: ' + ", ".join(missing))
+
+    api_product = json.loads(fetch(selection["apiUrl"]).decode("utf-8"))
+    prices = api_product.get("prices", {})
+    images = api_product.get("images") or []
+    if (
+        api_product.get("sku") != selection["sourceSku"]
+        or prices.get("currency_code") != "USD"
+        or prices.get("currency_minor_unit") != 2
+        or prices.get("price") != str(selection["sourceUsdCents"])
+        or not images
+        or images[0].get("src") != selection["imageUrl"]
+    ):
+        raise RuntimeError(f'{selection["code"]}: exact Store API variant evidence changed')
+
+    coa_page = fetch(selection["coaPageUrl"])
+    coa_parser = PageParser()
+    coa_parser.feed(coa_page.decode("utf-8", "replace"))
+    coa_text = " ".join(coa_parser.text)
+    display_date = datetime.strptime(selection["reportedDate"], "%Y-%m-%d").strftime("%m/%d/%Y")
+    coa_markers = [
+        selection["sourceTitle"].replace(" - ", " "),
+        f'Lot {selection["lot"]}',
+        f'COA {selection["coaNumber"]}',
+        f'Reported {display_date}',
+        selection["purityPercent"],
+        "Freedom Diagnostics",
+        "HPLC-MS",
+    ]
+    missing = [marker for marker in coa_markers if marker not in coa_text]
+    if missing:
+        raise RuntimeError(f'{selection["code"]}: reviewed COA page evidence changed: ' + ", ".join(missing))
+    linked_pdfs = {
+        link for link in coa_parser.links
+        if link.startswith(f"https://{PROTIDE_ORIGIN}/wp-content/uploads/")
+        and urlparse(link).path.lower().endswith(".pdf")
+    }
+    if selection["coaPdfUrl"] not in linked_pdfs:
+        raise RuntimeError(f'{selection["code"]}: reviewed COA PDF is no longer linked')
+
+    image_document = fetch(selection["imageUrl"])
+    if not image_document.startswith(b"\x89PNG\r\n\x1a\n"):
+        raise RuntimeError(f'{selection["code"]}: reviewed source image is not a PNG')
+    image_sha256 = require_sha256(image_document, selection["imageSha256"], selection["imageUrl"])
+    local_image = Path(selection["imageAssetPath"])
+    if not local_image.is_file() or hashlib.sha256(local_image.read_bytes()).hexdigest() != selection["localImageSha256"]:
+        raise RuntimeError(f'{selection["code"]}: localized image is missing or changed')
+
+    coa_document = fetch(selection["coaPdfUrl"])
+    if not coa_document.startswith(b"%PDF-"):
+        raise RuntimeError(f'{selection["code"]}: reviewed COA is not a PDF')
+    coa_sha256 = require_sha256(coa_document, selection["coaSha256"], selection["coaPdfUrl"])
+    local_coa = Path(selection["coaAssetPath"])
+    if not local_coa.is_file() or hashlib.sha256(local_coa.read_bytes()).hexdigest() != coa_sha256:
+        raise RuntimeError(f'{selection["code"]}: localized COA is missing or changed')
+
+    inventory = confirmed_inventory_line(selection["code"])
+    if not inventory or inventory["unitUsdCents"] != selection["sourceUsdCents"]:
+        raise RuntimeError(f'{selection["code"]}: confirmed inventory does not match the exact source variant')
+    price_centavos = base_price_centavos(selection["sourceUsdCents"], fx_rate)
+    expected_prices = {"GLP2-15": 335_000, "IPAMORELIN-10": 210_000}
+    if price_centavos != expected_prices[selection["code"]]:
+        raise RuntimeError(f'{selection["code"]}: corrected public price guard failed')
+
+    return {
+        "code": selection["code"],
+        "name": selection["name"],
+        "presentation": selection["presentation"],
+        "status": "available",
+        "researchArea": selection["researchArea"],
+        "researchDescription": selection["researchDescription"],
+        "brandSupplier": {
+            "brand": "Protide Health",
+            "role": "Marca / proveedor de referencia",
+            "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial.",
+        },
+        "source": {
+            "catalogUrl": selection["productUrl"],
+            "apiUrl": selection["apiUrl"],
+            "productUrl": selection["productUrl"],
+            "priceEvidenceUrl": selection["productUrl"],
+            "sourceTitle": selection["sourceTitle"],
+            "sourcePresentation": selection["sourceDescription"],
+            "fetchedAt": verified_at,
+        },
+        "stockQuantity": inventory["quantity"],
+        "purchaseEnabled": True,
+        "basePriceCentavos": price_centavos,
+        "image": {
+            "assetPath": selection["imageAssetPath"],
+            "sourceUrl": selection["imageUrl"],
+            "sourceSha256": image_sha256,
+            "localizedSha256": selection["localImageSha256"],
+            "alt": f'Fotografía de referencia Protide Health de {selection["name"]} {selection["presentation"]}',
+            "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización.",
+        },
+        "coa": {
+            "url": selection["coaPdfUrl"],
+            "assetPath": selection["coaAssetPath"],
+            "sourcePageUrl": selection["coaPageUrl"],
+            "sourceSha256": coa_sha256,
+            "kind": "source-reference",
+            "label": "COA de referencia publicado por Protide Health",
+            "lot": selection["lot"],
+            "lab": "Freedom Diagnostics",
+            "methods": ["HPLC-MS", "identidad", "endotoxinas"],
+            "purityPercent": selection["purityPercent"],
+            "reportedDate": selection["reportedDate"],
+            "sourceDocumentTitle": f'Certificate of Analysis — {selection["sourceTitle"]} — {selection["coaNumber"]}',
+            "verifiedAt": verified_at,
+        },
+    }
+
+
 def build_catalog() -> Dict[str, Any]:
     fetched_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
     fx_mxn_ten_thousandths_per_usd = fetch_exchange_rate()
-    sermorelin_fx_mxn_ten_thousandths_per_usd = fetch_exchange_rate(
+    protide_fx_mxn_ten_thousandths_per_usd = fetch_exchange_rate(
         SERMORELIN_FX_SOURCE_DATE,
         SERMORELIN_FX_MXN_TEN_THOUSANDTHS_PER_USD,
     )
@@ -699,15 +911,20 @@ def build_catalog() -> Dict[str, Any]:
         source_usd_cents = inventory_line["unitUsdCents"] if inventory_line else public_source_usd_cents
         price_centavos = APPROVED_EXISTING_PUBLIC_PRICES_CENTAVOS[selection["code"]]
         if inventory_line:
+            pricing_fx = (
+                protide_fx_mxn_ten_thousandths_per_usd
+                if selection["code"] == "KLOW-80"
+                else fx_mxn_ten_thousandths_per_usd
+            )
             computed_price = base_price_centavos(
-                source_usd_cents, fx_mxn_ten_thousandths_per_usd
+                source_usd_cents, pricing_fx
             )
             if computed_price != price_centavos:
                 raise RuntimeError(
                     f"{selection['slug']}: baseline FX no longer reproduces the approved public price"
                 )
             profit_margin = profit_margin_centavos(
-                source_usd_cents, price_centavos, fx_mxn_ten_thousandths_per_usd
+                source_usd_cents, price_centavos, pricing_fx
             )
             if not ACCEPTED_EFFECTIVE_MARGIN_CENTAVOS[0] <= profit_margin <= ACCEPTED_EFFECTIVE_MARGIN_CENTAVOS[1]:
                 raise RuntimeError(f"{selection['slug']}: rounded effective margin MXN {profit_margin / 100:.2f} is outside guardrails")
@@ -776,7 +993,11 @@ def build_catalog() -> Dict[str, Any]:
         }
         normalized.append(record)
 
-    normalized.append(sermorelin_record(fetched_at, sermorelin_fx_mxn_ten_thousandths_per_usd))
+    normalized.append(sermorelin_record(fetched_at, protide_fx_mxn_ten_thousandths_per_usd))
+    normalized.extend(
+        protide_record(selection, fetched_at, protide_fx_mxn_ten_thousandths_per_usd)
+        for selection in PROTIDE_SELECTIONS
+    )
 
     return {
         "schemaVersion": 3,

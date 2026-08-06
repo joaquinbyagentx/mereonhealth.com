@@ -228,8 +228,8 @@ class StaticSiteTests(unittest.TestCase):
 
     def test_catalog_is_canonical_and_complete(self):
         products = self.catalog["products"]
-        self.assertEqual(len(products), 16)
-        self.assertEqual(len({product["code"] for product in products}), 16)
+        self.assertEqual(len(products), 18)
+        self.assertEqual(len({product["code"] for product in products}), 18)
         self.assertTrue(all(isinstance(product["stockQuantity"], int) and product["stockQuantity"] >= 0 for product in products))
         self.assertTrue(all(isinstance(product["purchaseEnabled"], bool) for product in products))
         self.assertEqual(
@@ -248,7 +248,7 @@ class StaticSiteTests(unittest.TestCase):
                 self.assertEqual(image_source.scheme, "https")
                 self.assertIn(image_source.netloc, {"ascensionpeptides.com", "protidehealth.com"})
                 self.assertIn("no implica afiliación o autorización", image["notice"])
-                expected_brand = "Protide Health" if product["code"] == "SERMORELIN-5" else "Ascension Peptides"
+                expected_brand = "Protide Health" if product["code"] in {"SERMORELIN-5", "GLP2-15", "IPAMORELIN-10"} else "Ascension Peptides"
                 self.assertEqual(product["brandSupplier"]["brand"], expected_brand)
                 self.assertIn("no implica afiliación", product["brandSupplier"]["notice"])
         self.assertIn('product.image?.assetPath', self.js)
@@ -265,18 +265,22 @@ class StaticSiteTests(unittest.TestCase):
             "TA1-10": (7100, 1, 200000),
             "IPAMORELIN-5": (4400, 1, 150000),
             "TESA-5": (5000, 1, 160000),
-            "KLOW-80": (12500, 1, 305000),
+            "KLOW-80": (17500, 2, 405000),
+            "GLP2-15": (13900, 4, 335000),
+            "IPAMORELIN-10": (7500, 4, 210000),
         }
         products = {product["code"]: product for product in self.catalog["products"]}
         self.assertEqual({code for code, product in products.items() if product["stockQuantity"] > 0}, set(expected))
         for code, (usd_cents, stock, mxn_centavos) in expected.items():
             product = products[code]
-            self.assertEqual(product["brandSupplier"]["brand"], "Ascension Peptides")
+            expected_brand = "Protide Health" if code in {"GLP2-15", "IPAMORELIN-10"} else "Ascension Peptides"
+            self.assertEqual(product["brandSupplier"]["brand"], expected_brand)
             self.assertEqual(product["stockQuantity"], stock)
             self.assertEqual(product["basePriceCentavos"], mxn_centavos)
             self.assertNotIn("sourceUsdCents", product)
             self.assertNotIn("profitMarkupBasisPoints", product)
-            self.assertTrue(product["source"]["priceEvidenceUrl"].startswith("https://ascensionpeptides.com/product/"))
+            expected_origin = "protidehealth.com" if code in {"GLP2-15", "IPAMORELIN-10"} else "ascensionpeptides.com"
+            self.assertTrue(product["source"]["priceEvidenceUrl"].startswith(f"https://{expected_origin}/product/"))
 
         for product in self.catalog["products"]:
             image_path = ROOT / product["image"]["assetPath"]
@@ -310,8 +314,8 @@ class StaticSiteTests(unittest.TestCase):
                 self.assertTrue(coa["lot"] and coa["lab"])
                 self.assertIsInstance(coa["methods"], list)
                 self.assertRegex(coa["sourceSha256"], r"^[0-9a-f]{64}$")
-                if product["code"] == "SERMORELIN-5":
-                    self.assertEqual(coa["assetPath"], "assets/documents/sermorelin-5-coa-2605280407.pdf")
+                if product["code"] in {"SERMORELIN-5", "GLP2-15", "IPAMORELIN-10"}:
+                    self.assertTrue(coa["assetPath"].startswith("assets/documents/"))
                     local_coa = ROOT / coa["assetPath"]
                     self.assertTrue(local_coa.is_file())
                     self.assertTrue(local_coa.read_bytes().startswith(b"%PDF-"))
@@ -332,7 +336,7 @@ class StaticSiteTests(unittest.TestCase):
                 self.assertEqual(coa["label"], expected_label)
             else:
                 self.assertIsNone(coa)
-        self.assertEqual(status_counts, {"available": 12, "coa_pending": 4})
+        self.assertEqual(status_counts, {"available": 14, "coa_pending": 4})
         self.assertIn("COA no publicado por la fuente", self.js)
 
     def test_only_current_suppliers_are_present_in_live_catalog_and_frontend(self):
@@ -344,7 +348,7 @@ class StaticSiteTests(unittest.TestCase):
         ])
         self.assertNotRegex(live_surface, r"(?i)\blimitless(?: biotech)?\b")
         protide = [product for product in self.catalog["products"] if product["brandSupplier"]["brand"] == "Protide Health"]
-        self.assertEqual([product["code"] for product in protide], ["SERMORELIN-5"])
+        self.assertEqual([product["code"] for product in protide], ["SERMORELIN-5", "GLP2-15", "IPAMORELIN-10"])
 
     def test_internal_anchors_and_local_assets_resolve(self):
         broken = [href for href in self.parser.hrefs if href.startswith("#") and href[1:] not in self.parser.ids]

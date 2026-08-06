@@ -9,7 +9,7 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 const publishRoot = join(root, 'dist');
 const productImages = [
   'bpc-157-10.png', 'cjcipa-5-5.png', 'epithalon-10.png', 'ghkcu-100-10ml.png',
-  'glow-70.png', 'ipamorelin-5.png', 'klow-80.png', 'kpv-10.png', 'motsc-10.png',
+  'glow-70.png', 'glp2-15.png', 'ipamorelin-5.png', 'ipamorelin-10.png', 'klow-80.png', 'kpv-10.png', 'motsc-10.png',
   'semax-10.png',
   'sermorelin-5.png',
   't-10.png', 'ta1-10.png', 'tb500-5.png', 'tesa-5.png', 'wolverine-10-10.png'
@@ -18,7 +18,11 @@ const expectedFiles = [
   'CNAME', 'checkout-cancel.html', 'checkout-state.js', 'checkout-success.html',
   'data/catalog.json', 'index.html', 'payment-adapter.js', 'pricing.js', 'script.js',
   'styles.css', 'terminos/index.html', 'privacidad/index.html', 'assets/mark.svg', 'assets/mereon-logo.svg',
-  'assets/images/hero-guided-shopping.webp', 'assets/documents/sermorelin-5-coa-2605280407.pdf', ...productImages
+  'assets/images/hero-guided-shopping.webp',
+  'assets/documents/sermorelin-5-coa-2605280407.pdf',
+  'assets/documents/glp2-15-coa-2606180382.pdf',
+  'assets/documents/ipamorelin-10-coa-2606260176.pdf',
+  ...productImages
 ].sort();
 
 function filesBelow(directory) {
@@ -43,6 +47,19 @@ test('production static build publishes only the exact storefront allowlist', ()
     .join('\n');
   assert.doesNotMatch(publishedText, /SUPPLIER_ORDER|unitUsdCents|LANDED_UPLIFT|TARGET_PROFIT|profitMarkup|landedUplift|supplier order|supplier cost|profit markup|markup basis|landed uplift|uplift basis|33332|(?:17\.2317|172317|17\.3288|173288).{0,80}(?:1\.13|11300).{0,80}(?:1\.40|14000)/is);
   const publishedCatalog = JSON.parse(readFileSync(join(publishRoot, 'data/catalog.json'), 'utf8'));
+  const byCode = new Map(publishedCatalog.products.map((product) => [product.code, product]));
+  assert.deepEqual(
+    Object.fromEntries(['SERMORELIN-5', 'GLP2-15', 'IPAMORELIN-10', 'KLOW-80'].map((code) => [
+      code,
+      [byCode.get(code).basePriceCentavos, byCode.get(code).stockQuantity]
+    ])),
+    {
+      'SERMORELIN-5': [170000, 0],
+      'GLP2-15': [335000, 4],
+      'IPAMORELIN-10': [210000, 4],
+      'KLOW-80': [405000, 2]
+    }
+  );
   assert.equal('pricingAssumptions' in publishedCatalog, false, 'FX and pricing assumptions must remain internal');
   assert.doesNotMatch(publishedText, /fxMxnTenThousandthsPerUsd|fxSourceDate|fxSourceUrl|172317|17\.2317|173288|17\.3288/i);
   assert.match(readFileSync(join(publishRoot, 'terminos/index.html'), 'utf8'), /Aviso importante \(Research Use Only — RUO\)/);

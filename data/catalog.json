@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "generatedAt": "2026-08-06T20:56:24Z",
+  "generatedAt": "2026-08-06T21:52:39Z",
   "sourceNotice": "Los datos públicos del catálogo del proveedor son una referencia de investigación. No se implica ninguna relación de reventa, afiliación, autorización o distribución oficial.",
   "pricingAssumptions": {
     "fxMxnTenThousandthsPerUsd": 173288,
@@ -613,9 +613,9 @@
         "sourcePresentation": "GHK-Cu 50mg + BPC-157 10mg + TB-500 10mg + KPV 10mg (KLOW 80mg)",
         "fetchedAt": "2026-08-04T04:21:36Z"
       },
-      "stockQuantity": 1,
+      "stockQuantity": 2,
       "purchaseEnabled": true,
-      "basePriceCentavos": 305000,
+      "basePriceCentavos": 405000,
       "image": {
         "assetPath": "assets/images/products/klow-80.png",
         "sourceUrl": "https://ascensionpeptides.com/wp-content/uploads/2025/10/Ascension-KLOW-80mg.webp",
@@ -703,7 +703,7 @@
         "priceEvidenceUrl": "https://protidehealth.com/product/sermorelin/",
         "sourceTitle": "Sermorelin - 5mg",
         "sourcePresentation": "5mg Lyophilized Powder in 3ml Vial",
-        "fetchedAt": "2026-08-06T20:56:24Z"
+        "fetchedAt": "2026-08-06T21:52:39Z"
       },
       "stockQuantity": 0,
       "purchaseEnabled": false,
@@ -731,7 +731,111 @@
         "purityPercent": "99.21%",
         "reportedDate": "2026-05-30",
         "sourceDocumentTitle": "Certificate of Analysis — Sermorelin 5 mg — 2605280407",
-        "verifiedAt": "2026-08-06T20:56:24Z"
+        "verifiedAt": "2026-08-06T21:52:39Z"
+      }
+    },
+    {
+      "code": "GLP2-15",
+      "name": "GLP-2",
+      "presentation": "15 mg · polvo liofilizado · vial de 3 mL",
+      "status": "available",
+      "researchArea": "Señalización intestinal de GLP-2",
+      "researchDescription": "Péptido sintético investigado en modelos preclínicos para estudiar la señalización del receptor GLP-2 y las respuestas celulares de modelos intestinales. Exclusivamente para investigación; no para uso humano.",
+      "brandSupplier": {
+        "brand": "Protide Health",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://protidehealth.com/product/glp2/",
+        "apiUrl": "https://protidehealth.com/wp-json/wc/store/v1/products/19465",
+        "productUrl": "https://protidehealth.com/product/glp2/",
+        "priceEvidenceUrl": "https://protidehealth.com/product/glp2/",
+        "sourceTitle": "GLP-2 - 15mg",
+        "sourcePresentation": "15mg lyophilized vial of GLP-2.",
+        "fetchedAt": "2026-08-06T21:52:39Z"
+      },
+      "stockQuantity": 4,
+      "purchaseEnabled": true,
+      "basePriceCentavos": 335000,
+      "image": {
+        "assetPath": "assets/images/products/glp2-15.png",
+        "sourceUrl": "https://protidehealth.com/wp-content/uploads/2026/03/GLP-2-15mg.png",
+        "sourceSha256": "745aa9a0047a7123b4cc9ae2ec3f8bba3e6e3ab777275fb4b72ccd30963d582e",
+        "localizedSha256": "633b74292857498cbeec43a1d08434bcf2a807cec06949c050ac854e0e0ca3f9",
+        "alt": "Fotografía de referencia Protide Health de GLP-2 15 mg · polvo liofilizado · vial de 3 mL",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": "https://protidehealth.com/wp-content/uploads/2026/06/GLP-2-15mg-June-23rd-COA.pdf",
+        "assetPath": "assets/documents/glp2-15-coa-2606180382.pdf",
+        "sourcePageUrl": "https://protidehealth.com/certificates/glp-2-15mg-coa-2606180382/",
+        "sourceSha256": "b6b15ad7df3ec9b04fad0bfe825ed8aa11901e6aa2210fbe53a3a3807dff2d47",
+        "kind": "source-reference",
+        "label": "COA de referencia publicado por Protide Health",
+        "lot": "PH-ze15-0410",
+        "lab": "Freedom Diagnostics",
+        "methods": [
+          "HPLC-MS",
+          "identidad",
+          "endotoxinas"
+        ],
+        "purityPercent": "99.52%",
+        "reportedDate": "2026-06-22",
+        "sourceDocumentTitle": "Certificate of Analysis — GLP-2 - 15mg — 2606180382",
+        "verifiedAt": "2026-08-06T21:52:39Z"
+      }
+    },
+    {
+      "code": "IPAMORELIN-10",
+      "name": "Ipamorelin",
+      "presentation": "10 mg · polvo liofilizado · vial de 3 mL",
+      "status": "available",
+      "researchArea": "Señalización del receptor de grelina",
+      "researchDescription": "Pentapéptido sintético investigado en modelos preclínicos para estudiar la señalización del receptor de grelina GHS-R1a y sus respuestas celulares. Exclusivamente para investigación; no para uso humano.",
+      "brandSupplier": {
+        "brand": "Protide Health",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://protidehealth.com/product/ipamorelin-10mg/",
+        "apiUrl": "https://protidehealth.com/wp-json/wc/store/v1/products/11892",
+        "productUrl": "https://protidehealth.com/product/ipamorelin-10mg/",
+        "priceEvidenceUrl": "https://protidehealth.com/product/ipamorelin-10mg/",
+        "sourceTitle": "Ipamorelin 10mg",
+        "sourcePresentation": "Ipamorelin 10mg Lyophilized Powder in 3mL vial.",
+        "fetchedAt": "2026-08-06T21:52:39Z"
+      },
+      "stockQuantity": 4,
+      "purchaseEnabled": true,
+      "basePriceCentavos": 210000,
+      "image": {
+        "assetPath": "assets/images/products/ipamorelin-10.png",
+        "sourceUrl": "https://protidehealth.com/wp-content/uploads/2026/02/Ipamorelin_Protide-Cover-Image-1.png",
+        "sourceSha256": "e109762ce41bf22d0e8d978fc10b73448db309025591627614cf3991c00e15a5",
+        "localizedSha256": "df4a7642bc2b528ad2bf3d73535dca9a5b6bc57ff7e7c3bc1d3d925ff2a114d4",
+        "alt": "Fotografía de referencia Protide Health de Ipamorelin 10 mg · polvo liofilizado · vial de 3 mL",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": "https://protidehealth.com/wp-content/uploads/2026/06/Ipamorelin-10mg-June-.pdf",
+        "assetPath": "assets/documents/ipamorelin-10-coa-2606260176.pdf",
+        "sourcePageUrl": "https://protidehealth.com/certificates/ipamorelin-10mg-coa-2606260176/",
+        "sourceSha256": "f7bb2f84b21f5b2ebdd24810cbd138be1c0a8d3077cfa847987778e45c8e7762",
+        "kind": "source-reference",
+        "label": "COA de referencia publicado por Protide Health",
+        "lot": "PH-ip10-0313",
+        "lab": "Freedom Diagnostics",
+        "methods": [
+          "HPLC-MS",
+          "identidad",
+          "endotoxinas"
+        ],
+        "purityPercent": "99.82%",
+        "reportedDate": "2026-06-29",
+        "sourceDocumentTitle": "Certificate of Analysis — Ipamorelin 10mg — 2606260176",
+        "verifiedAt": "2026-08-06T21:52:39Z"
       }
     }
   ]

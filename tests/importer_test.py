@@ -22,7 +22,7 @@ class ImporterSecurityTests(unittest.TestCase):
             "T-10": 155000,
             "BPC-157-10": 160000,
             "SEMAX-10": 180000,
-            "KLOW-80": 305000,
+
             "CJCIPA-5-5": 200000,
             "TA1-10": 200000,
             "IPAMORELIN-5": 150000,
@@ -64,10 +64,10 @@ class ImporterSecurityTests(unittest.TestCase):
                 "researchArea": selection["researchArea"],
                 "researchDescription": selection["researchDescription"],
             }
-            for selection in [*IMPORTER.SELECTIONS, IMPORTER.SERMORELIN_SELECTION]
+            for selection in [*IMPORTER.SELECTIONS, IMPORTER.SERMORELIN_SELECTION, *IMPORTER.PROTIDE_SELECTIONS]
         ]
 
-        self.assertEqual(len(actual), 16)
+        self.assertEqual(len(actual), 18)
         self.assertEqual(actual, expected)
         for product in catalog["products"]:
             self.assertEqual(
@@ -210,6 +210,21 @@ class ImporterSecurityTests(unittest.TestCase):
         price = IMPORTER.base_price_centavos(5500, 172317)
         self.assertEqual(price, 170000)
         self.assertNotEqual(price, 155000)
+
+    def test_current_protide_prices_use_the_corrected_fx_and_no_extra_multiplier(self):
+        expected = {
+            "GLP2-15": (13900, 335000),
+            "IPAMORELIN-10": (7500, 210000),
+            "KLOW-80": (17500, 405000),
+        }
+        for code, (usd_cents, public_price) in expected.items():
+            line = IMPORTER.confirmed_inventory_line(code)
+            self.assertEqual(line["unitUsdCents"], usd_cents, code)
+            self.assertEqual(
+                IMPORTER.base_price_centavos(usd_cents, IMPORTER.SERMORELIN_FX_MXN_TEN_THOUSANDTHS_PER_USD),
+                public_price,
+                code,
+            )
 
 
 if __name__ == "__main__":

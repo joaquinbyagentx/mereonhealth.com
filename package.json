@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build:static": "node scripts/build-static.mjs",
-    "test": "node --test tests/catalog.test.mjs && python3 tests/static_checks.py && python3 tests/importer_test.py && node --test tests/publish-artifact.test.mjs",
+    "test": "node --test tests/catalog.test.mjs tests/protide-onboarding.test.mjs && python3 tests/static_checks.py && python3 tests/importer_test.py && node --test tests/publish-artifact.test.mjs",
     "test:browser": "playwright test",
     "test:backend": "node --test tests/backend/*.test.mjs",
     "worker:dev": "wrangler dev",

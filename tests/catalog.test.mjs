@@ -16,7 +16,7 @@ const EXPECTED_RESEARCH_COPY = {
   'MOTS-C': ['Energía celular y metabolismo', 'Péptido derivado de una secuencia mitocondrial, investigado para entender cómo las células utilizan la energía y responden ante cambios metabólicos y situaciones de estrés celular.'],
   'GHK-Cu': ['Piel, colágeno y tejido conectivo', 'Tripéptido capaz de unirse al cobre, investigado para entender su participación en la formación de colágeno y en la respuesta de la piel y otros tejidos conectivos durante procesos de renovación y reparación.'],
   'CJC-1295 No-DAC + Ipamorelin': ['Señales hormonales y metabolismo', 'Mezcla de dos péptidos investigada para entender las señales que regulan la liberación de hormona de crecimiento y su relación con el metabolismo, el uso de energía y el mantenimiento de los tejidos.'],
-  Ipamorelin: ['Señales hormonales', 'Pentapéptido investigado para entender la señalización del receptor de grelina y su relación experimental con la liberación de hormona de crecimiento.'],
+  'Ipamorelin 5 mg': ['Señales hormonales', 'Pentapéptido investigado para entender la señalización del receptor de grelina y su relación experimental con la liberación de hormona de crecimiento.'],
   'Thymosin Alpha 1': ['Respuesta inmunológica', 'Investigado para entender cómo se comunican y coordinan las células del sistema inmunológico ante distintas señales y condiciones experimentales.'],
   Tesamorelin: ['Regulación hormonal', 'Análogo peptídico investigado para entender cómo se regula la liberación de hormona de crecimiento y cómo estas señales se relacionan con diferentes procesos metabólicos.'],
   Epithalon: ['Envejecimiento celular y telómeros', 'Tetrapéptido investigado en modelos preclínicos para entender los cambios que ocurren en las células con el paso del tiempo y el papel de los telómeros en el mantenimiento celular.'],
@@ -24,7 +24,9 @@ const EXPECTED_RESEARCH_COPY = {
   GLOW: ['Piel, colágeno y reparación de tejidos', 'Combina GHK-Cu, BPC-157 y TB-500, péptidos investigados en modelos preclínicos para entender la formación de colágeno, la organización celular y la respuesta de la piel y otros tejidos durante su reparación.'],
   KLOW: ['Reparación de tejidos y respuesta inflamatoria', 'Combina GHK-Cu, BPC-157, TB-500 y KPV. Se investiga en modelos preclínicos para entender cómo se organizan los tejidos durante su reparación y cómo responden las células ante señales inflamatorias.'],
   'Wolverine Stack': ['Músculos, tendones y tejido conectivo', 'Combina BPC-157 y TB-500, dos péptidos investigados en modelos preclínicos para entender la respuesta de músculos, tendones y tejido conectivo después de una lesión, daño o esfuerzo.'],
-  Sermorelin: ['Señalización de GHRH', 'Péptido sintético investigado en modelos preclínicos para estudiar la señalización del receptor de la hormona liberadora de hormona de crecimiento (GHRH) y sus respuestas celulares. Exclusivamente para investigación; no para uso humano.']
+  Sermorelin: ['Señalización de GHRH', 'Péptido sintético investigado en modelos preclínicos para estudiar la señalización del receptor de la hormona liberadora de hormona de crecimiento (GHRH) y sus respuestas celulares. Exclusivamente para investigación; no para uso humano.'],
+  'GLP-2': ['Señalización intestinal de GLP-2', 'Péptido sintético investigado en modelos preclínicos para estudiar la señalización del receptor GLP-2 y las respuestas celulares de modelos intestinales. Exclusivamente para investigación; no para uso humano.'],
+  'Ipamorelin 10 mg': ['Señalización del receptor de grelina', 'Pentapéptido sintético investigado en modelos preclínicos para estudiar la señalización del receptor de grelina GHS-R1a y sus respuestas celulares. Exclusivamente para investigación; no para uso humano.']
 };
 
 test('browser catalog preserves public FX provenance without exposing supplier economics', () => {
@@ -38,12 +40,13 @@ test('browser catalog preserves public FX provenance without exposing supplier e
   assert.doesNotMatch(catalog.pricingAssumptions.rule, /supplier|cost|markup|uplift/i);
 });
 
-test('catalog keeps 16 unique references without exposing order costs', () => {
-  assert.equal(catalog.products.length, 16);
-  assert.equal(new Set(catalog.products.map((product) => product.code)).size, 16);
+test('catalog keeps 18 unique references without exposing order costs', () => {
+  assert.equal(catalog.products.length, 18);
+  assert.equal(new Set(catalog.products.map((product) => product.code)).size, 18);
   for (const product of catalog.products) {
-    const sourceOrigin = product.code === 'SERMORELIN-5' ? 'protidehealth.com' : 'ascensionpeptides.com';
-    assert.equal(product.brandSupplier.brand, product.code === 'SERMORELIN-5' ? 'Protide Health' : 'Ascension Peptides');
+    const protideCodes = new Set(['SERMORELIN-5', 'GLP2-15', 'IPAMORELIN-10']);
+    const sourceOrigin = protideCodes.has(product.code) ? 'protidehealth.com' : 'ascensionpeptides.com';
+    assert.equal(product.brandSupplier.brand, protideCodes.has(product.code) ? 'Protide Health' : 'Ascension Peptides');
     assert.match(product.source.productUrl, new RegExp(`^https://${sourceOrigin.replace('.', '\\.')}/product/`));
     assert.match(product.source.priceEvidenceUrl, new RegExp(`^https://${sourceOrigin.replace('.', '\\.')}/product/`));
     assert.match(product.image.sourceUrl, new RegExp(`^https://${sourceOrigin.replace('.', '\\.')}/wp-content/uploads/`));
@@ -55,9 +58,9 @@ test('catalog keeps 16 unique references without exposing order costs', () => {
   }
 });
 
-test('frontend completeness guard matches the canonical 16-product catalog', () => {
+test('frontend completeness guard matches the canonical 18-product catalog', () => {
   const frontend = readFileSync(new URL('../script.js', import.meta.url), 'utf8');
-  assert.match(frontend, /payload\.products\.length !== 16/);
+  assert.match(frontend, /payload\.products\.length !== 18/);
 });
 
 test('every positive-stock purchase-enabled SKU receives the Mereon designation independently of COA state', () => {
@@ -74,9 +77,10 @@ test('confirmed inventory is the only sellable inventory and exposes only approv
   const expected = {
     'T-10': [3, 155000], 'BPC-157-10': [1, 160000],
     'SEMAX-10': [3, 180000],
-    'KLOW-80': [1, 305000], 'CJCIPA-5-5': [1, 200000],
+    'KLOW-80': [2, 405000], 'CJCIPA-5-5': [1, 200000],
     'TA1-10': [1, 200000], 'IPAMORELIN-5': [1, 150000],
-    'TESA-5': [1, 160000], 'GHKCU-100-10ML': [1, 210000]
+    'TESA-5': [1, 160000], 'GHKCU-100-10ML': [1, 210000],
+    'GLP2-15': [4, 335000], 'IPAMORELIN-10': [4, 210000]
   };
   const products = new Map(catalog.products.map((product) => [product.code, product]));
   assert.deepEqual(new Set(catalog.products.filter(isSellable).map((product) => product.code)), new Set(Object.keys(expected)));
@@ -95,11 +99,11 @@ test('confirmed inventory is the only sellable inventory and exposes only approv
   assert.equal(sermorelin.status, 'available', 'reviewed source COA remains visible independently of stock');
 });
 
-test('all 16 products have the approved exact research areas and descriptions', () => {
-  assert.equal(Object.keys(EXPECTED_RESEARCH_COPY).length, 16);
+test('all 18 products have the approved exact research areas and descriptions', () => {
+  assert.equal(Object.keys(EXPECTED_RESEARCH_COPY).length, 18);
   assert.deepEqual(
-    Object.fromEntries(catalog.products.map(({ name, researchArea, researchDescription }) => [
-      name,
+    Object.fromEntries(catalog.products.map(({ name, presentation, researchArea, researchDescription }) => [
+      name === 'Ipamorelin' ? `${name} ${presentation.split(' · ')[0]}` : name,
       [researchArea, researchDescription]
     ])),
     EXPECTED_RESEARCH_COPY
