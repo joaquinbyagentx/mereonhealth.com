@@ -23,12 +23,13 @@ const EXPECTED_RESEARCH_COPY = {
   KPV: ['Respuesta inflamatoria', 'Tripéptido investigado para entender cómo responden las células ante señales inflamatorias, especialmente en modelos relacionados con la piel y los tejidos del sistema digestivo.'],
   GLOW: ['Piel, colágeno y reparación de tejidos', 'Combina GHK-Cu, BPC-157 y TB-500, péptidos investigados en modelos preclínicos para entender la formación de colágeno, la organización celular y la respuesta de la piel y otros tejidos durante su reparación.'],
   KLOW: ['Reparación de tejidos y respuesta inflamatoria', 'Combina GHK-Cu, BPC-157, TB-500 y KPV. Se investiga en modelos preclínicos para entender cómo se organizan los tejidos durante su reparación y cómo responden las células ante señales inflamatorias.'],
-  'Wolverine Stack': ['Músculos, tendones y tejido conectivo', 'Combina BPC-157 y TB-500, dos péptidos investigados en modelos preclínicos para entender la respuesta de músculos, tendones y tejido conectivo después de una lesión, daño o esfuerzo.']
+  'Wolverine Stack': ['Músculos, tendones y tejido conectivo', 'Combina BPC-157 y TB-500, dos péptidos investigados en modelos preclínicos para entender la respuesta de músculos, tendones y tejido conectivo después de una lesión, daño o esfuerzo.'],
+  Sermorelin: ['Señalización de GHRH', 'Péptido sintético investigado en modelos preclínicos para estudiar la señalización del receptor de la hormona liberadora de hormona de crecimiento (GHRH) y sus respuestas celulares. Exclusivamente para investigación; no para uso humano.']
 };
 
 test('browser catalog preserves public FX provenance without exposing supplier economics', () => {
   assert.equal(catalog.pricingAssumptions.fxSourceDate, '2026-08-03');
-  assert.equal(catalog.pricingAssumptions.fxSourceUrl, 'https://www.dof.gob.mx/indicadores.php');
+  assert.equal(catalog.pricingAssumptions.fxSourceUrl, 'https://dof.gob.mx/indicadores_detalle.php');
   assert.equal(catalog.pricingAssumptions.fxMxnTenThousandthsPerUsd, 173_288);
   assert.equal(catalog.pricingAssumptions.ivaIncludedBasisPoints, 1600);
   for (const privateKey of ['supplierOrderNumber', 'supplierOrderDate', 'landedUpliftBasisPoints', 'targetProfitMarkupBasisPoints', 'acceptedEffectiveMarkupRangeBasisPoints']) {
@@ -37,14 +38,15 @@ test('browser catalog preserves public FX provenance without exposing supplier e
   assert.doesNotMatch(catalog.pricingAssumptions.rule, /supplier|cost|markup|uplift/i);
 });
 
-test('catalog keeps 15 unique references without exposing order costs', () => {
-  assert.equal(catalog.products.length, 15);
-  assert.equal(new Set(catalog.products.map((product) => product.code)).size, 15);
+test('catalog keeps 16 unique references without exposing order costs', () => {
+  assert.equal(catalog.products.length, 16);
+  assert.equal(new Set(catalog.products.map((product) => product.code)).size, 16);
   for (const product of catalog.products) {
-    assert.equal(product.brandSupplier.brand, 'Ascension Peptides');
-    assert.match(product.source.productUrl, /^https:\/\/ascensionpeptides\.com\/product\//);
-    assert.match(product.source.priceEvidenceUrl, /^https:\/\/ascensionpeptides\.com\/product\//);
-    assert.match(product.image.sourceUrl, /^https:\/\/ascensionpeptides\.com\/wp-content\/uploads\//);
+    const sourceOrigin = product.code === 'SERMORELIN-5' ? 'protidehealth.com' : 'ascensionpeptides.com';
+    assert.equal(product.brandSupplier.brand, product.code === 'SERMORELIN-5' ? 'Protide Health' : 'Ascension Peptides');
+    assert.match(product.source.productUrl, new RegExp(`^https://${sourceOrigin.replace('.', '\\.')}/product/`));
+    assert.match(product.source.priceEvidenceUrl, new RegExp(`^https://${sourceOrigin.replace('.', '\\.')}/product/`));
+    assert.match(product.image.sourceUrl, new RegExp(`^https://${sourceOrigin.replace('.', '\\.')}/wp-content/uploads/`));
     assert.ok(Number.isInteger(product.stockQuantity) && product.stockQuantity >= 0, product.code);
     assert.equal(typeof product.purchaseEnabled, 'boolean', `${product.code}: canonical purchaseEnabled flag`);
     assert.equal('sourceUsdCents' in product, false, `${product.code}: supplier cost must not ship to browsers`);
@@ -53,9 +55,9 @@ test('catalog keeps 15 unique references without exposing order costs', () => {
   }
 });
 
-test('frontend completeness guard matches the canonical 15-product catalog', () => {
+test('frontend completeness guard matches the canonical 16-product catalog', () => {
   const frontend = readFileSync(new URL('../script.js', import.meta.url), 'utf8');
-  assert.match(frontend, /payload\.products\.length !== 15/);
+  assert.match(frontend, /payload\.products\.length !== 16/);
 });
 
 test('every positive-stock purchase-enabled SKU receives the Mereon designation independently of COA state', () => {
@@ -85,10 +87,16 @@ test('confirmed inventory is the only sellable inventory and exposes only approv
   }
   assert.equal(products.get('GHKCU-100-10ML').presentation, '100 mg · 10 mL');
   assert.equal(products.has('GHKCU-100-3ML'), false);
+  const sermorelin = products.get('SERMORELIN-5');
+  assert.equal(sermorelin.basePriceCentavos, 170000, 'corrected formula must publish MXN 1,700');
+  assert.notEqual(sermorelin.basePriceCentavos, 155000, 'obsolete MXN 1,550 formula must never be reused');
+  assert.equal(sermorelin.stockQuantity, 0);
+  assert.equal(sermorelin.purchaseEnabled, false);
+  assert.equal(sermorelin.status, 'available', 'reviewed source COA remains visible independently of stock');
 });
 
-test('all 15 products have the approved exact research areas and descriptions', () => {
-  assert.equal(Object.keys(EXPECTED_RESEARCH_COPY).length, 15);
+test('all 16 products have the approved exact research areas and descriptions', () => {
+  assert.equal(Object.keys(EXPECTED_RESEARCH_COPY).length, 16);
   assert.deepEqual(
     Object.fromEntries(catalog.products.map(({ name, researchArea, researchDescription }) => [
       name,

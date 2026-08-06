@@ -1,14 +1,14 @@
 {
   "schemaVersion": 3,
-  "generatedAt": "2026-08-04T04:21:36Z",
-  "sourceNotice": "Ascension Peptides public catalog data is a research input. No reseller, affiliate, authorization, or official-distributor relationship is implied.",
+  "generatedAt": "2026-08-06T20:56:24Z",
+  "sourceNotice": "Los datos públicos del catálogo del proveedor son una referencia de investigación. No se implica ninguna relación de reventa, afiliación, autorización o distribución oficial.",
   "pricingAssumptions": {
     "fxMxnTenThousandthsPerUsd": 173288,
-    "fxSourceUrl": "https://www.dof.gob.mx/indicadores.php",
+    "fxSourceUrl": "https://dof.gob.mx/indicadores_detalle.php",
     "fxSourceDate": "2026-08-03",
     "ivaIncludedBasisPoints": 1600,
     "cleanPriceIncrementCentavos": 5000,
-    "rule": "Public prices are IVA-inclusive and rounded to MXN 50. Checkout adds shipping only and extracts included IVA informationally."
+    "rule": "Los precios públicos incluyen IVA y se redondean a MXN 50. El pago solo agrega envío y desglosa el IVA incluido con fines informativos."
   },
   "products": [
     {
@@ -683,6 +683,55 @@
         ],
         "sourceDocumentTitle": "Certificate of Analysis — lote 08-05260628",
         "verifiedAt": "2026-08-04T04:21:36Z"
+      }
+    },
+    {
+      "code": "SERMORELIN-5",
+      "name": "Sermorelin",
+      "presentation": "5 mg · polvo liofilizado · vial de 3 mL",
+      "status": "available",
+      "researchArea": "Señalización de GHRH",
+      "researchDescription": "Péptido sintético investigado en modelos preclínicos para estudiar la señalización del receptor de la hormona liberadora de hormona de crecimiento (GHRH) y sus respuestas celulares. Exclusivamente para investigación; no para uso humano.",
+      "brandSupplier": {
+        "brand": "Protide Health",
+        "role": "Marca / proveedor de referencia",
+        "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial."
+      },
+      "source": {
+        "catalogUrl": "https://protidehealth.com/product/sermorelin/",
+        "productUrl": "https://protidehealth.com/product/sermorelin/",
+        "priceEvidenceUrl": "https://protidehealth.com/product/sermorelin/",
+        "sourceTitle": "Sermorelin - 5mg",
+        "sourcePresentation": "5mg Lyophilized Powder in 3ml Vial",
+        "fetchedAt": "2026-08-06T20:56:24Z"
+      },
+      "stockQuantity": 0,
+      "purchaseEnabled": false,
+      "basePriceCentavos": 170000,
+      "image": {
+        "assetPath": "assets/images/products/sermorelin-5.png",
+        "sourceUrl": "https://protidehealth.com/wp-content/uploads/2026/02/Sermorelin_Protide-Cover-Image-1.png",
+        "sourceSha256": "736b9e2a4f875cec6768a8e40c15af68284013bcdcbbc4e619911f412609dbc6",
+        "localizedSha256": "eeef35a4f4cd70f2ce81d054c4b8d6ed3b387519b518515ea9ec176075805a58",
+        "alt": "Fotografía de referencia Protide Health de Sermorelin 5 mg en vial",
+        "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización."
+      },
+      "coa": {
+        "url": "https://protidehealth.com/wp-content/uploads/2026/06/Sermorelin-5mg-June.pdf",
+        "assetPath": "assets/documents/sermorelin-5-coa-2605280407.pdf",
+        "sourcePageUrl": "https://protidehealth.com/certificates/sermorelin-5mg-coa-2605280407/",
+        "sourceSha256": "5a086b451f3e6a3d40601ee509963211b9510fe4cd4147063407d37b7eba80a6",
+        "kind": "source-reference",
+        "label": "COA de referencia publicado por Protide Health",
+        "lot": "PH-sm5-0327",
+        "lab": "Freedom Diagnostics",
+        "methods": [
+          "HPLC-MS"
+        ],
+        "purityPercent": "99.21%",
+        "reportedDate": "2026-05-30",
+        "sourceDocumentTitle": "Certificate of Analysis — Sermorelin 5 mg — 2605280407",
+        "verifiedAt": "2026-08-06T20:56:24Z"
       }
     }
   ]

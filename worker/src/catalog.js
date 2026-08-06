@@ -9,6 +9,7 @@ export const CATALOG = Object.freeze(Object.fromEntries([
   product('TA1-10', 'Thymosin Alpha 1', '10 mg', 200000, 1),
   product('IPAMORELIN-5', 'Ipamorelin', '5 mg', 150000, 1),
   product('TESA-5', 'Tesamorelin', '5 mg', 160000, 1),
+  product('SERMORELIN-5', 'Sermorelin', '5 mg', 170000, 0),
   product('GHKCU-100-10ML', 'GHK-Cu', '100 mg · 10 mL', 210000, 1)
 ].map((item) => [item.code, item])));
 

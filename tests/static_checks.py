@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import hashlib
 import json
 
 import re
@@ -227,8 +228,8 @@ class StaticSiteTests(unittest.TestCase):
 
     def test_catalog_is_canonical_and_complete(self):
         products = self.catalog["products"]
-        self.assertEqual(len(products), 15)
-        self.assertEqual(len({product["code"] for product in products}), 15)
+        self.assertEqual(len(products), 16)
+        self.assertEqual(len({product["code"] for product in products}), 16)
         self.assertTrue(all(isinstance(product["stockQuantity"], int) and product["stockQuantity"] >= 0 for product in products))
         self.assertTrue(all(isinstance(product["purchaseEnabled"], bool) for product in products))
         self.assertEqual(
@@ -245,9 +246,10 @@ class StaticSiteTests(unittest.TestCase):
                 self.assertTrue((ROOT / image["assetPath"]).is_file())
                 image_source = urlparse(image["sourceUrl"])
                 self.assertEqual(image_source.scheme, "https")
-                self.assertEqual(image_source.netloc, "ascensionpeptides.com")
+                self.assertIn(image_source.netloc, {"ascensionpeptides.com", "protidehealth.com"})
                 self.assertIn("no implica afiliación o autorización", image["notice"])
-                self.assertEqual(product["brandSupplier"]["brand"], "Ascension Peptides")
+                expected_brand = "Protide Health" if product["code"] == "SERMORELIN-5" else "Ascension Peptides"
+                self.assertEqual(product["brandSupplier"]["brand"], expected_brand)
                 self.assertIn("no implica afiliación", product["brandSupplier"]["notice"])
         self.assertIn('product.image?.assetPath', self.js)
         self.assertIn('Fotografía de referencia de la fuente', self.js)
@@ -284,6 +286,14 @@ class StaticSiteTests(unittest.TestCase):
             self.assertEqual(struct.unpack(">II", header[16:24]), (800, 800), product["code"])
         self.assertIn("object-fit: contain", self.css)
 
+        sermorelin = products["SERMORELIN-5"]
+        self.assertEqual(sermorelin["basePriceCentavos"], 170000)
+        self.assertNotEqual(sermorelin["basePriceCentavos"], 155000)
+        self.assertEqual(sermorelin["stockQuantity"], 0)
+        self.assertFalse(sermorelin["purchaseEnabled"])
+        sermorelin_image = ROOT / sermorelin["image"]["assetPath"]
+        self.assertEqual(hashlib.sha256(sermorelin_image.read_bytes()).hexdigest(), sermorelin["image"]["localizedSha256"])
+
     def test_coa_links_and_metadata_are_fail_closed(self):
         status_counts = {"available": 0, "coa_pending": 0}
         for product in self.catalog["products"]:
@@ -293,13 +303,19 @@ class StaticSiteTests(unittest.TestCase):
                 self.assertIsNotNone(coa, product["code"])
                 parsed = urlparse(coa["url"])
                 self.assertEqual(parsed.scheme, "https")
-                self.assertEqual(parsed.netloc, "ascensionpeptides.com")
+                self.assertIn(parsed.netloc, {"ascensionpeptides.com", "protidehealth.com"})
                 self.assertTrue(parsed.path.startswith("/wp-content/uploads/"))
                 self.assertTrue(parsed.path.endswith(".pdf"))
                 self.assertEqual(coa["kind"], "source-reference")
                 self.assertTrue(coa["lot"] and coa["lab"])
                 self.assertIsInstance(coa["methods"], list)
                 self.assertRegex(coa["sourceSha256"], r"^[0-9a-f]{64}$")
+                if product["code"] == "SERMORELIN-5":
+                    self.assertEqual(coa["assetPath"], "assets/documents/sermorelin-5-coa-2605280407.pdf")
+                    local_coa = ROOT / coa["assetPath"]
+                    self.assertTrue(local_coa.is_file())
+                    self.assertTrue(local_coa.read_bytes().startswith(b"%PDF-"))
+                    self.assertEqual(hashlib.sha256(local_coa.read_bytes()).hexdigest(), coa["sourceSha256"])
             elif product["status"] == "coa_pending":
                 status_counts["coa_pending"] += 1
                 self.assertIsNotNone(coa)
@@ -316,18 +332,19 @@ class StaticSiteTests(unittest.TestCase):
                 self.assertEqual(coa["label"], expected_label)
             else:
                 self.assertIsNone(coa)
-        self.assertEqual(status_counts, {"available": 11, "coa_pending": 4})
+        self.assertEqual(status_counts, {"available": 12, "coa_pending": 4})
         self.assertIn("COA no publicado por la fuente", self.js)
 
-    def test_stale_suppliers_are_absent_from_live_catalog_and_frontend(self):
+    def test_only_current_suppliers_are_present_in_live_catalog_and_frontend(self):
         live_surface = "\n".join([
             json.dumps(self.catalog, ensure_ascii=False),
             self.html,
             self.js,
             self.css,
         ])
-        self.assertNotRegex(live_surface, r"(?i)\bprotide\b")
         self.assertNotRegex(live_surface, r"(?i)\blimitless(?: biotech)?\b")
+        protide = [product for product in self.catalog["products"] if product["brandSupplier"]["brand"] == "Protide Health"]
+        self.assertEqual([product["code"] for product in protide], ["SERMORELIN-5"])
 
     def test_internal_anchors_and_local_assets_resolve(self):
         broken = [href for href in self.parser.hrefs if href.startswith("#") and href[1:] not in self.parser.ids]

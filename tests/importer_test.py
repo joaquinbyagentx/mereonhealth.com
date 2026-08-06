@@ -64,10 +64,10 @@ class ImporterSecurityTests(unittest.TestCase):
                 "researchArea": selection["researchArea"],
                 "researchDescription": selection["researchDescription"],
             }
-            for selection in IMPORTER.SELECTIONS
+            for selection in [*IMPORTER.SELECTIONS, IMPORTER.SERMORELIN_SELECTION]
         ]
 
-        self.assertEqual(len(actual), 15)
+        self.assertEqual(len(actual), 16)
         self.assertEqual(actual, expected)
         for product in catalog["products"]:
             self.assertEqual(
@@ -134,12 +134,23 @@ class ImporterSecurityTests(unittest.TestCase):
                 )
 
     def test_exchange_rate_is_fetched_and_validated_exactly(self):
-        payload = b'<html><body>Tipo de Cambio y Tasas al 03/08/2026 <span>DOLAR</span> 17.3288</body></html>'
+        payload = b'<html><body>DOLAR FECHA 03/08/2026 a 03/08/2026 Fecha Valor 03-08-2026 17.328800</body></html>'
         with patch.object(IMPORTER, "fetch", return_value=payload):
             self.assertEqual(IMPORTER.fetch_exchange_rate(), 173288)
 
+    def test_sermorelin_exchange_rate_is_separate_and_validated_exactly(self):
+        payload = b'<html><body>DOLAR FECHA 06/08/2026 a 06/08/2026 Fecha Valor 06-08-2026 17.231700</body></html>'
+        with patch.object(IMPORTER, "fetch", return_value=payload):
+            self.assertEqual(
+                IMPORTER.fetch_exchange_rate(
+                    IMPORTER.SERMORELIN_FX_SOURCE_DATE,
+                    IMPORTER.SERMORELIN_FX_MXN_TEN_THOUSANDTHS_PER_USD,
+                ),
+                172317,
+            )
+
     def test_exchange_rate_change_fails_closed(self):
-        payload = b'<html><body>Tipo de Cambio y Tasas al 03/08/2026 <span>DOLAR</span> 17.3289</body></html>'
+        payload = b'<html><body>DOLAR FECHA 03/08/2026 a 03/08/2026 Fecha Valor 03-08-2026 17.328900</body></html>'
         with patch.object(IMPORTER, "fetch", return_value=payload):
             with self.assertRaisesRegex(RuntimeError, "rate changed"):
                 IMPORTER.fetch_exchange_rate()
@@ -186,11 +197,19 @@ class ImporterSecurityTests(unittest.TestCase):
 
     def test_catalog_build_rejects_missing_reviewed_product(self):
         unrelated = [{"slug": f"unrelated-{index}"} for index in range(15)]
-        with patch.object(IMPORTER, "fetch_exchange_rate", return_value=173288), patch.object(
+        with patch.object(IMPORTER, "fetch_exchange_rate", return_value=172317), patch.object(
             IMPORTER, "fetch", return_value=json.dumps(unrelated).encode()
         ):
             with self.assertRaisesRegex(RuntimeError, "reviewed product is missing"):
                 IMPORTER.build_catalog()
+
+    def test_sermorelin_corrected_formula_rounds_up_and_rejects_obsolete_price(self):
+        raw_numerator = 5500 * 172317 * 11300 + 60000 * 10000 * 10000
+        raw_denominator = 10000 * 10000
+        self.assertEqual(raw_numerator / raw_denominator, 167095.0155)
+        price = IMPORTER.base_price_centavos(5500, 172317)
+        self.assertEqual(price, 170000)
+        self.assertNotEqual(price, 155000)
 
 
 if __name__ == "__main__":

@@ -15,6 +15,9 @@ test('canonical catalog matches launch stock and prices independently of the bro
   assert.equal(CATALOG['T-10'].initialStock, 3);
   assert.equal(CATALOG['SEMAX-10'].unitAmount, 180000);
   assert.equal(CATALOG['SEMAX-10'].initialStock, 3);
+  assert.equal(CATALOG['SERMORELIN-5'].unitAmount, 170000);
+  assert.equal(CATALOG['SERMORELIN-5'].initialStock, 0);
+  assert.notEqual(CATALOG['SERMORELIN-5'].unitAmount, 155000);
   assert.equal(SHIPPING.standard.unitAmount, 25000);
   assert.equal(SHIPPING.express.unitAmount, 34900);
 });

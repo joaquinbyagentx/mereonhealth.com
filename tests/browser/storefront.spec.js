@@ -29,10 +29,10 @@ async function trackRuntimeFailures(page) {
 test('responsive catalog has no runtime errors or horizontal overflow', async ({ page }) => {
   const errors = await trackRuntimeFailures(page);
   await page.goto('/');
-  await expect(page.locator('.product-card')).toHaveCount(15);
-  await expect(page.locator('.product-card .product-card__research-area')).toHaveCount(15);
+  await expect(page.locator('.product-card')).toHaveCount(16);
+  await expect(page.locator('.product-card .product-card__research-area')).toHaveCount(16);
   await expect(page.locator('.product-card .mereon-verified-badge')).toHaveCount(liveProducts.length);
-  await expect(page.locator('[data-catalog-status]')).toContainText('15 de 15');
+  await expect(page.locator('[data-catalog-status]')).toContainText('16 de 16');
   const catalogPayload = await page.request.get('/data/catalog.json').then((response) => response.json());
   for (const product of catalogPayload.products) {
     const card = page.locator(`.product-card:has([data-detail="${product.code}"])`);
@@ -73,23 +73,28 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   await expect(researchDialog).not.toBeVisible();
   await expect(researchTrigger).toBeFocused();
   await expect(page.locator('.faq__items > details').last().locator('summary')).toHaveText('¿Qué significa “péptido de investigación”?');
-  await expect(page.locator('.coa-card-link[href]')).toHaveCount(11);
+  await expect(page.locator('.coa-card-link[href]')).toHaveCount(12);
   await expect(page.locator('.coa-card-link--disabled')).toHaveCount(4);
-  for (const link of await page.locator('.coa-card-link[href]').all()) {
+  for (const link of await page.locator('.coa-card-link[href^="https://ascensionpeptides.com/"]').all()) {
     await expect(link).toHaveAttribute('target', '_blank');
     await expect(link).toHaveAttribute('rel', /noopener/);
     await expect(link).toHaveAttribute('href', /^https:\/\/ascensionpeptides\.com\/wp-content\/uploads\/.*\.pdf$/);
   }
+  const sermorelinCoa = page.locator('.product-card:has([data-detail="SERMORELIN-5"]) .coa-card-link');
+  await expect(sermorelinCoa).toHaveAttribute('href', 'assets/documents/sermorelin-5-coa-2605280407.pdf');
+  await expect(sermorelinCoa).toHaveAttribute('target', '_blank');
+  await expect(page.locator('[data-add="SERMORELIN-5"]')).toBeDisabled();
+  await expect(page.locator('.product-card:has([data-detail="SERMORELIN-5"]) .stock-label')).toHaveText('Agotado');
   await page.getByRole('button', { name: 'Mezclas' }).click();
   await expect(page.locator('.product-card')).toHaveCount(4);
-  await expect(page.locator('[data-catalog-status]')).toContainText('4 de 15');
+  await expect(page.locator('[data-catalog-status]')).toContainText('4 de 16');
   await page.getByRole('button', { name: 'Compuestos' }).click();
-  await expect(page.locator('.product-card')).toHaveCount(11);
+  await expect(page.locator('.product-card')).toHaveCount(12);
   await page.getByRole('button', { name: 'Todos' }).click();
-  await expect(page.locator('.product-card')).toHaveCount(15);
+  await expect(page.locator('.product-card')).toHaveCount(16);
 
   const productImages = page.locator('.product-visual--photo img');
-  await expect(productImages).toHaveCount(15);
+  await expect(productImages).toHaveCount(16);
   for (const image of await productImages.all()) {
     await image.scrollIntoViewIfNeeded();
     await expect(image).toHaveJSProperty('complete', true);
@@ -131,6 +136,30 @@ test('responsive catalog has no runtime errors or horizontal overflow', async ({
   await page.keyboard.press('Escape');
   await expect(page.locator('[data-cart-dialog]')).not.toBeVisible();
   expect(errors).toEqual([]);
+});
+
+test('Sermorelin 5 mg is localized, priced at MXN 1,700, and visible but unavailable', async ({ page }) => {
+  const externalMediaRequests = [];
+  page.on('request', (request) => {
+    if (new URL(request.url()).hostname === 'protidehealth.com') externalMediaRequests.push(request.url());
+  });
+  await page.goto('/');
+  const card = page.locator('.product-card').filter({ hasText: 'Sermorelin' });
+  await expect(card).toHaveCount(1);
+  await expect(card).toContainText('$1,700.00');
+  await expect(card).toContainText('IVA incluido');
+  await expect(card.locator('[data-add="SERMORELIN-5"]')).toBeDisabled();
+  await expect(card.locator('[data-add="SERMORELIN-5"]')).toHaveText('Agotado');
+  await expect(card.locator('img')).toHaveAttribute('src', 'assets/images/products/sermorelin-5.png');
+  await expect(card.locator('.coa-card-link')).toHaveAttribute('href', 'assets/documents/sermorelin-5-coa-2605280407.pdf');
+
+  await card.locator('[data-detail="SERMORELIN-5"]').click();
+  const detail = page.locator('[data-product-dialog]');
+  await expect(detail).toContainText('Protide Health');
+  await expect(detail).toContainText('Exclusivamente para investigación; no para uso humano.');
+  await expect(detail.locator('[data-add="SERMORELIN-5"]')).toBeDisabled();
+  await expect(detail.locator('.coa-box a')).toHaveAttribute('href', 'assets/documents/sermorelin-5-coa-2605280407.pdf');
+  expect(externalMediaRequests).toEqual([]);
 });
 
 test('every sellable catalog SKU shows the exact Mereon designation on card and detail', async ({ page }) => {
@@ -194,7 +223,7 @@ test('reduced-motion preference disables smooth scrolling and transitions', asyn
   test.skip(testInfo.project.name !== 'desktop', 'CSS behavior is viewport-independent.');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
-  await expect(page.locator('.product-card')).toHaveCount(15);
+  await expect(page.locator('.product-card')).toHaveCount(16);
   const motion = await page.evaluate(() => ({
     scrollBehavior: getComputedStyle(document.documentElement).scrollBehavior,
     transitionSeconds: parseFloat(getComputedStyle(document.querySelector('.product-card')).transitionDuration)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Import Mereon's catalog from Ascension Peptides' public storefront.
+"""Import Mereon's catalog from reviewed public supplier storefronts.
 
 This script uses only public, unauthenticated pages. Supplier data is a research
 input, not evidence of reseller affiliation. Descriptions are original and any
@@ -21,17 +21,31 @@ from datetime import datetime, timezone
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, quote, urlparse
 
 SOURCE_ORIGIN = "ascensionpeptides.com"
 SHOP_URL = "https://ascensionpeptides.com/shop/"
 API_URL = "https://ascensionpeptides.com/wp-json/wc/store/v1/products?per_page=100"
-FX_SOURCE_URL = "https://www.dof.gob.mx/indicadores.php"
+PROTIDE_ORIGIN = "protidehealth.com"
+SERMORELIN_PRODUCT_URL = "https://protidehealth.com/product/sermorelin/"
+SERMORELIN_COA_PAGE_URL = "https://protidehealth.com/certificates/sermorelin-5mg-coa-2605280407/"
+SERMORELIN_COA_PDF_URL = "https://protidehealth.com/wp-content/uploads/2026/06/Sermorelin-5mg-June.pdf"
+SERMORELIN_IMAGE_URL = "https://protidehealth.com/wp-content/uploads/2026/02/Sermorelin_Protide-Cover-Image-1.png"
+SERMORELIN_COA_SHA256 = "5a086b451f3e6a3d40601ee509963211b9510fe4cd4147063407d37b7eba80a6"
+SERMORELIN_IMAGE_SHA256 = "736b9e2a4f875cec6768a8e40c15af68284013bcdcbbc4e619911f412609dbc6"
+SERMORELIN_LOCAL_IMAGE_SHA256 = "eeef35a4f4cd70f2ce81d054c4b8d6ed3b387519b518515ea9ec176075805a58"
+ALLOWED_SOURCE_ORIGINS = {SOURCE_ORIGIN, PROTIDE_ORIGIN}
+# The historical www host now serves a mismatched TLS certificate; use the
+# certificate-valid apex host and the official date-range endpoint.
+FX_SOURCE_URL = "https://dof.gob.mx/indicadores_detalle.php"
 FX_SOURCE_DATE = "2026-08-03"
+EXISTING_RECORD_VERIFIED_AT = "2026-08-04T04:21:36Z"
 USER_AGENT = "MereonCatalogImporter/2.0 (+https://mereonhealth.com)"
 OUTPUT_PATH = Path("data/catalog.json")
 
 FX_MXN_TEN_THOUSANDTHS_PER_USD = 173_288
+SERMORELIN_FX_MXN_TEN_THOUSANDTHS_PER_USD = 172_317
+SERMORELIN_FX_SOURCE_DATE = "2026-08-06"
 LANDED_UPLIFT_BPS = 1300
 TARGET_PROFIT_CENTAVOS = 60_000
 IVA_BPS = 1600
@@ -58,6 +72,27 @@ SUPPLIER_ORDER = {
 # provenance. The current public supplier price is the approved cost basis.
 ADDITIONAL_CONFIRMED_INVENTORY = {
     "SEMAX-10": {"quantity": 3, "unitUsdCents": 5999},
+}
+
+# Existing catalog prices are release-approved values. A supplier's later
+# storefront price change must not silently reprice unrelated Mereon products
+# during a narrowly scoped import.
+APPROVED_EXISTING_PUBLIC_PRICES_CENTAVOS = {
+    "T-10": 155_000,
+    "BPC-157-10": 160_000,
+    "SEMAX-10": 180_000,
+    "TB500-5": 170_000,
+    "MOTSC-10": 160_000,
+    "GHKCU-100-10ML": 210_000,
+    "CJCIPA-5-5": 200_000,
+    "IPAMORELIN-5": 150_000,
+    "TA1-10": 200_000,
+    "TESA-5": 160_000,
+    "EPITHALON-10": 150_000,
+    "KPV-10": 160_000,
+    "GLOW-70": 305_000,
+    "KLOW-80": 305_000,
+    "WOLVERINE-10-10": 240_000,
 }
 
 
@@ -264,6 +299,14 @@ SELECTIONS = [
     },
 ]
 
+SERMORELIN_SELECTION = {
+    "code": "SERMORELIN-5",
+    "name": "Sermorelin",
+    "presentation": "5 mg · polvo liofilizado · vial de 3 mL",
+    "researchArea": "Señalización de GHRH",
+    "researchDescription": "Péptido sintético investigado en modelos preclínicos para estudiar la señalización del receptor de la hormona liberadora de hormona de crecimiento (GHRH) y sus respuestas celulares. Exclusivamente para investigación; no para uso humano.",
+}
+
 
 class PageParser(HTMLParser):
     def __init__(self) -> None:
@@ -293,11 +336,11 @@ class PageParser(HTMLParser):
                 self.title.append(clean)
 
 
-def require_source_origin(url: str) -> None:
+def require_source_origin(url: str, expected_origin: str = SOURCE_ORIGIN) -> None:
     parsed = urlparse(url)
     if (
         parsed.scheme != "https"
-        or parsed.hostname != SOURCE_ORIGIN
+        or parsed.hostname != expected_origin
         or parsed.port is not None
         or parsed.username is not None
         or parsed.password is not None
@@ -305,20 +348,49 @@ def require_source_origin(url: str) -> None:
         raise RuntimeError(f"unexpected public source URL: {url}")
 
 
-def require_fetch_url(url: str) -> None:
-    if url == FX_SOURCE_URL:
+def require_fx_source_url(url: str) -> None:
+    parsed = urlparse(url)
+    query = parse_qs(parsed.query, keep_blank_values=True)
+    if (
+        parsed.scheme != "https"
+        or parsed.hostname not in {"www.dof.gob.mx", "dof.gob.mx"}
+        or parsed.path != "/indicadores_detalle.php"
+        or parsed.port is not None
+        or parsed.username is not None
+        or parsed.password is not None
+        or parsed.fragment
+        or set(query) != {"cod_tipo_indicador", "dfecha", "hfecha"}
+        or query["cod_tipo_indicador"] != ["158"]
+        or query["dfecha"] != query["hfecha"]
+        or len(query["dfecha"]) != 1
+        or not re.fullmatch(r"\d{2}/\d{2}/\d{4}", query["dfecha"][0])
+    ):
+        raise RuntimeError(f"unexpected public source URL: {url}")
+
+
+def require_fetch_url(url: str, expected_origin: Optional[str] = None) -> None:
+    parsed = urlparse(url)
+    if parsed.hostname in {"www.dof.gob.mx", "dof.gob.mx"}:
+        require_fx_source_url(url)
         return
-    require_source_origin(url)
+    origin = expected_origin or urlparse(url).hostname or ""
+    if origin not in ALLOWED_SOURCE_ORIGINS:
+        raise RuntimeError(f"unexpected public source URL: {url}")
+    require_source_origin(url, origin)
 
 
 def fetch(url: str) -> bytes:
-    require_fetch_url(url)
+    expected_origin = urlparse(url).hostname
+    require_fetch_url(url, expected_origin)
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     try:
         with urllib.request.urlopen(request, timeout=30) as response:
             if response.status != 200:
                 raise RuntimeError(f"HTTP {response.status} for {url}")
-            require_fetch_url(response.geturl())
+            if expected_origin in {"www.dof.gob.mx", "dof.gob.mx"}:
+                require_fx_source_url(response.geturl())
+            else:
+                require_source_origin(response.geturl(), expected_origin or "")
             return response.read()
     except (urllib.error.URLError, TimeoutError) as exc:
         raise RuntimeError(f"Unable to fetch public source {url}: {exc}") from exc
@@ -330,8 +402,8 @@ def parse_page(url: str) -> PageParser:
     return parser
 
 
-def require_public_source_url(url: str, path_prefix: str) -> None:
-    require_source_origin(url)
+def require_public_source_url(url: str, path_prefix: str, expected_origin: str = SOURCE_ORIGIN) -> None:
+    require_source_origin(url, expected_origin)
     parsed = urlparse(url)
     if (
         not parsed.path.startswith(path_prefix)
@@ -381,18 +453,39 @@ def plain_source(product: Dict[str, Any]) -> str:
     return " ".join(parser.text)
 
 
-def fetch_exchange_rate() -> int:
-    page = fetch(FX_SOURCE_URL).decode("utf-8", "replace")
+def fetch_exchange_rate(
+    source_date: str = FX_SOURCE_DATE,
+    expected_scaled_rate: int = FX_MXN_TEN_THOUSANDTHS_PER_USD,
+) -> int:
+    try:
+        display_date = datetime.strptime(source_date, "%Y-%m-%d").strftime("%d/%m/%Y")
+    except ValueError as exc:
+        raise RuntimeError(f"invalid reviewed DOF source date: {source_date}") from exc
+    if expected_scaled_rate <= 0:
+        raise RuntimeError("invalid reviewed DOF USD/MXN rate")
+    source_url = (
+        f"{FX_SOURCE_URL}?cod_tipo_indicador=158"
+        f"&dfecha={quote(display_date, safe='')}&hfecha={quote(display_date, safe='')}"
+    )
+    page = fetch(source_url).decode("utf-8", "replace")
+    parsed_page = PageParser()
+    parsed_page.feed(page)
+    page_text = " ".join(parsed_page.text)
+    row_date = datetime.strptime(source_date, "%Y-%m-%d").strftime("%d-%m-%Y")
     match = re.search(
-        rf"Tipo de Cambio y Tasas al\s+{re.escape('03/08/2026')}.*?DOLAR.*?([0-9]+\.[0-9]{{4}})",
-        page,
-        re.DOTALL,
+        rf"DOLAR\s+FECHA\s+{re.escape(display_date)}\s+a\s+{re.escape(display_date)}"
+        rf"\s+Fecha\s+Valor\s+{re.escape(row_date)}\s+([0-9]+\.[0-9]{{6}})",
+        page_text,
     )
     if not match:
         raise RuntimeError("DOF response does not contain the reviewed USD/date")
-    scaled = int(match.group(1).replace(".", ""))
-    if scaled != FX_MXN_TEN_THOUSANDTHS_PER_USD:
-        raise RuntimeError("DOF USD/MXN rate changed from the reviewed 17.3288")
+    published_rate = match.group(1)
+    if not published_rate.endswith("00"):
+        raise RuntimeError("DOF USD/MXN rate has unexpected precision")
+    scaled = int(published_rate[:-2].replace(".", ""))
+    if scaled != expected_scaled_rate:
+        expected_display = f"{expected_scaled_rate / 10_000:.4f}"
+        raise RuntimeError(f"DOF USD/MXN rate changed from the reviewed {expected_display}")
     return scaled
 
 
@@ -450,9 +543,134 @@ def coa_metadata(
     }
 
 
+def require_sha256(document: bytes, expected_sha256: str, source_url: str) -> str:
+    if not re.fullmatch(r"[0-9a-f]{64}", expected_sha256):
+        raise RuntimeError(f"{source_url}: reviewed evidence has no valid SHA-256 pin")
+    actual_sha256 = hashlib.sha256(document).hexdigest()
+    if actual_sha256 != expected_sha256:
+        raise RuntimeError(
+            f"{source_url}: reviewed evidence changed "
+            f"(expected SHA-256 {expected_sha256}, got {actual_sha256})"
+        )
+    return actual_sha256
+
+
+def sermorelin_record(verified_at: str, fx_mxn_ten_thousandths_per_usd: int) -> Dict[str, Any]:
+    """Build the independently reviewed Protide 5 mg variant and fail closed on drift."""
+    require_public_source_url(SERMORELIN_PRODUCT_URL, "/product/", PROTIDE_ORIGIN)
+    product_document = fetch(SERMORELIN_PRODUCT_URL)
+    product_html = product_document.decode("utf-8", "replace")
+    reviewed_product_markers = [
+        '"sku":"SQ8811330-5"',
+        '"name":"Sermorelin - 5mg"',
+        '"description":"5mg Lyophilized Powder in 3ml Vial"',
+        '"price":"55"',
+        '"priceCurrency":"USD"',
+        '"availability":"http://schema.org/InStock"',
+    ]
+    missing_product_markers = [marker for marker in reviewed_product_markers if marker not in product_html]
+    if missing_product_markers:
+        raise RuntimeError(
+            "Sermorelin 5 mg public variant evidence changed or is incomplete: "
+            + ", ".join(missing_product_markers)
+        )
+
+    coa_page = fetch(SERMORELIN_COA_PAGE_URL)
+    coa_html = coa_page.decode("utf-8", "replace")
+    coa_parser = PageParser()
+    coa_parser.feed(coa_html)
+    coa_text = " ".join(coa_parser.text)
+    reviewed_coa_markers = [
+        "Sermorelin 5mg",
+        "COA 2605280407",
+        "Reported 05/30/2026",
+        "99.21%",
+        "Sermorelin 5mg · Lot PH sm5 0327",
+    ]
+    missing_coa_markers = [marker for marker in reviewed_coa_markers if marker not in coa_text]
+    if missing_coa_markers:
+        raise RuntimeError(
+            "Sermorelin 5 mg COA page evidence changed or is incomplete: "
+            + ", ".join(missing_coa_markers)
+        )
+    linked_pdfs = list(dict.fromkeys(
+        link for link in coa_parser.links
+        if link.startswith(f"https://{PROTIDE_ORIGIN}/wp-content/uploads/")
+        and urlparse(link).path.lower().endswith(".pdf")
+    ))
+    if SERMORELIN_COA_PDF_URL not in linked_pdfs:
+        raise RuntimeError("Sermorelin 5 mg reviewed COA PDF is no longer linked from its certificate page")
+
+    coa_document = fetch(SERMORELIN_COA_PDF_URL)
+    if not coa_document.startswith(b"%PDF-"):
+        raise RuntimeError("Sermorelin 5 mg reviewed COA is not a PDF")
+    coa_sha256 = require_sha256(coa_document, SERMORELIN_COA_SHA256, SERMORELIN_COA_PDF_URL)
+
+    image_document = fetch(SERMORELIN_IMAGE_URL)
+    if not image_document.startswith(b"\x89PNG\r\n\x1a\n"):
+        raise RuntimeError("Sermorelin 5 mg reviewed source image is not a PNG")
+    image_sha256 = require_sha256(image_document, SERMORELIN_IMAGE_SHA256, SERMORELIN_IMAGE_URL)
+
+    price_centavos = base_price_centavos(5500, fx_mxn_ten_thousandths_per_usd)
+    if price_centavos != 170_000 or price_centavos == 155_000:
+        raise RuntimeError("Sermorelin 5 mg corrected price guard failed; expected exactly MXN 1,700")
+
+    return {
+        "code": SERMORELIN_SELECTION["code"],
+        "name": SERMORELIN_SELECTION["name"],
+        "presentation": SERMORELIN_SELECTION["presentation"],
+        "status": "available",
+        "researchArea": SERMORELIN_SELECTION["researchArea"],
+        "researchDescription": SERMORELIN_SELECTION["researchDescription"],
+        "brandSupplier": {
+            "brand": "Protide Health",
+            "role": "Marca / proveedor de referencia",
+            "notice": "La identificación de marca o proveedor no implica afiliación, autorización o distribución oficial.",
+        },
+        "source": {
+            "catalogUrl": SERMORELIN_PRODUCT_URL,
+            "productUrl": SERMORELIN_PRODUCT_URL,
+            "priceEvidenceUrl": SERMORELIN_PRODUCT_URL,
+            "sourceTitle": "Sermorelin - 5mg",
+            "sourcePresentation": "5mg Lyophilized Powder in 3ml Vial",
+            "fetchedAt": verified_at,
+        },
+        "stockQuantity": 0,
+        "purchaseEnabled": False,
+        "basePriceCentavos": price_centavos,
+        "image": {
+            "assetPath": "assets/images/products/sermorelin-5.png",
+            "sourceUrl": SERMORELIN_IMAGE_URL,
+            "sourceSha256": image_sha256,
+            "localizedSha256": SERMORELIN_LOCAL_IMAGE_SHA256,
+            "alt": "Fotografía de referencia Protide Health de Sermorelin 5 mg en vial",
+            "notice": "Imagen pública de referencia del catálogo fuente; no implica afiliación o autorización.",
+        },
+        "coa": {
+            "url": SERMORELIN_COA_PDF_URL,
+            "assetPath": "assets/documents/sermorelin-5-coa-2605280407.pdf",
+            "sourcePageUrl": SERMORELIN_COA_PAGE_URL,
+            "sourceSha256": coa_sha256,
+            "kind": "source-reference",
+            "label": "COA de referencia publicado por Protide Health",
+            "lot": "PH-sm5-0327",
+            "lab": "Freedom Diagnostics",
+            "methods": ["HPLC-MS"],
+            "purityPercent": "99.21%",
+            "reportedDate": "2026-05-30",
+            "sourceDocumentTitle": "Certificate of Analysis — Sermorelin 5 mg — 2605280407",
+            "verifiedAt": verified_at,
+        },
+    }
+
+
 def build_catalog() -> Dict[str, Any]:
     fetched_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
     fx_mxn_ten_thousandths_per_usd = fetch_exchange_rate()
+    sermorelin_fx_mxn_ten_thousandths_per_usd = fetch_exchange_rate(
+        SERMORELIN_FX_SOURCE_DATE,
+        SERMORELIN_FX_MXN_TEN_THOUSANDTHS_PER_USD,
+    )
     raw = json.loads(fetch(API_URL).decode("utf-8"))
     if not isinstance(raw, list) or len(raw) < 12:
         raise RuntimeError(f"Store API returned an unexpected product list ({type(raw).__name__}, count={len(raw) if isinstance(raw, list) else 'n/a'})")
@@ -479,21 +697,27 @@ def build_catalog() -> Dict[str, Any]:
         public_source_usd_cents = int(prices["price"])
         inventory_line = confirmed_inventory_line(selection["code"])
         source_usd_cents = inventory_line["unitUsdCents"] if inventory_line else public_source_usd_cents
-        price_centavos = base_price_centavos(
-            source_usd_cents, fx_mxn_ten_thousandths_per_usd
-        )
-        profit_margin = profit_margin_centavos(
-            source_usd_cents, price_centavos, fx_mxn_ten_thousandths_per_usd
-        )
-        if not ACCEPTED_EFFECTIVE_MARGIN_CENTAVOS[0] <= profit_margin <= ACCEPTED_EFFECTIVE_MARGIN_CENTAVOS[1]:
-            raise RuntimeError(f"{selection['slug']}: rounded effective margin MXN {profit_margin / 100:.2f} is outside guardrails")
+        price_centavos = APPROVED_EXISTING_PUBLIC_PRICES_CENTAVOS[selection["code"]]
+        if inventory_line:
+            computed_price = base_price_centavos(
+                source_usd_cents, fx_mxn_ten_thousandths_per_usd
+            )
+            if computed_price != price_centavos:
+                raise RuntimeError(
+                    f"{selection['slug']}: baseline FX no longer reproduces the approved public price"
+                )
+            profit_margin = profit_margin_centavos(
+                source_usd_cents, price_centavos, fx_mxn_ten_thousandths_per_usd
+            )
+            if not ACCEPTED_EFFECTIVE_MARGIN_CENTAVOS[0] <= profit_margin <= ACCEPTED_EFFECTIVE_MARGIN_CENTAVOS[1]:
+                raise RuntimeError(f"{selection['slug']}: rounded effective margin MXN {profit_margin / 100:.2f} is outside guardrails")
         product_url = product.get("permalink")
         if not product_url or not product_url.startswith(f"https://{SOURCE_ORIGIN}/product/"):
             raise RuntimeError(f"{selection['slug']}: missing or unexpected product URL")
         coa = coa_metadata(
             product_url,
             selection["coa"],
-            fetched_at,
+            EXISTING_RECORD_VERIFIED_AT,
             selection.get("sourceCoaReviewPending", False),
         )
         status = "available" if coa else "coa_pending"
@@ -524,7 +748,7 @@ def build_catalog() -> Dict[str, Any]:
                 "priceEvidenceUrl": product_url,
                 "sourceTitle": source_title,
                 "sourcePresentation": source_title,
-                "fetchedAt": fetched_at,
+                "fetchedAt": EXISTING_RECORD_VERIFIED_AT,
             },
             "stockQuantity": inventory_line["quantity"] if inventory_line else 0,
             "purchaseEnabled": inventory_line is not None,
@@ -547,22 +771,24 @@ def build_catalog() -> Dict[str, Any]:
                 "lab": None,
                 "methods": [],
                 "sourceDocumentTitle": None,
-                "verifiedAt": fetched_at,
+                "verifiedAt": EXISTING_RECORD_VERIFIED_AT,
             },
         }
         normalized.append(record)
 
+    normalized.append(sermorelin_record(fetched_at, sermorelin_fx_mxn_ten_thousandths_per_usd))
+
     return {
         "schemaVersion": 3,
         "generatedAt": fetched_at,
-        "sourceNotice": "Ascension Peptides public catalog data is a research input. No reseller, affiliate, authorization, or official-distributor relationship is implied.",
+        "sourceNotice": "Los datos públicos del catálogo del proveedor son una referencia de investigación. No se implica ninguna relación de reventa, afiliación, autorización o distribución oficial.",
         "pricingAssumptions": {
             "fxMxnTenThousandthsPerUsd": fx_mxn_ten_thousandths_per_usd,
             "fxSourceUrl": FX_SOURCE_URL,
             "fxSourceDate": FX_SOURCE_DATE,
             "ivaIncludedBasisPoints": IVA_BPS,
             "cleanPriceIncrementCentavos": CLEAN_INCREMENT_CENTAVOS,
-            "rule": "Public prices are IVA-inclusive and rounded to MXN 50. Checkout adds shipping only and extracts included IVA informationally.",
+            "rule": "Los precios públicos incluyen IVA y se redondean a MXN 50. El pago solo agrega envío y desglosa el IVA incluido con fines informativos.",
         },
         "products": normalized,
     }
