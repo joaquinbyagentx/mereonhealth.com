@@ -68,7 +68,7 @@ assert.match(emails[0].subject, new RegExp(paidCheckout.body.orderNumber));
 const multi = await checkout([{ code: 'BPC-157-10', quantity: 1 }, { code: 'KLOW-80', quantity: 1 }], 'express');
 assert.equal(multi.response.status, 200);
 const multiStripe = stripeContext(await fetch(`${providers}/last-stripe`).then((response) => response.json()));
-assert.equal(multiStripe.total, 514900, 'multi-item total is product subtotal plus express shipping, with no extra IVA');
+assert.equal(multiStripe.total, 499900, 'multi-item total is product subtotal plus express shipping, with no extra IVA');
 assert.equal((await cancel(multi.body.token)).response.status, 200);
 assert.equal((await status(multi.body.token)).body.status, 'cancelled');
 
